@@ -13,11 +13,11 @@ export function AuroraBlurBackground() {
     <AnimatePresence mode="wait">
       <div
         className="grid grid-cols-3 absolute size-screen
-     grid-rows-5 w-full h-full -translate-y-5 bg-transparent dark:brightness-50"
+     grid-rows-5 w-full h-full -z-50 -translate-y-5 bg-transparent dark:brightness-50"
       >
         <div
           style={{ backgroundColor: mainColor }}
-          className="-z-20 absolute size-full"
+          className="-z-50 absolute size-full"
         />
         {Array.from({ length: 15 }).map((_, index) => {
           const bgColor = bgColors ? bgColors[index] : "transparent";
