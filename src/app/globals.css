@@ -132,6 +132,6 @@
     @apply border-border outline-ring/50;
   }
   html {
-    @apply text-foreground bg-transparent;
+    @apply text-foreground bg-background;
   }
 }
