@@ -11,12 +11,14 @@ import { generateColorPalette } from "./utils";
 
 type ChatStateType = {
   chatId: string | null;
+  isChatActive: boolean;
   bgColors: string[] | null;
 };
 
 const DEFAULT_CHAT_STATE_VALUES: ChatStateType = {
   chatId: null,
   bgColors: null,
+  isChatActive: false,
 };
 
 export const ChatStateCtx = createContext<ChatStateType>(
@@ -33,6 +35,7 @@ export const ChatActionCtx = createContext<AdsListActionType | undefined>(
 
 export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const [bgColors, setBgColors] = useState<string[] | null>(null);
+  const [isChatActive, setChatActive] = useState<boolean>(true); // TEMP, originally set to false
   const chatId = null; // TEMP, TODO
 
   function setNewBgColors() {
@@ -48,6 +51,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   return (
     <ChatStateCtx.Provider
       value={{
+        isChatActive,
         bgColors,
         chatId,
       }}

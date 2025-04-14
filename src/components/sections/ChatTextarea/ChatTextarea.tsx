@@ -7,8 +7,11 @@ import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { MessageSymbolsCounter } from "./partials/MessageSymbolsCounter";
+import { useChatState } from "@/components/providers/ChatProvider";
 
 export function ChatTextarea() {
+  const { isChatActive } = useChatState();
+
   const [isTextareFocused, setTextareaFocused] = useState<boolean>(false);
   const [textareaValue, setTextareaValue] = useState<string>("");
 
@@ -22,7 +25,8 @@ export function ChatTextarea() {
   };
 
   const isTextareaEmpty = textareaValue.length === 0;
-  const hiddenButtonCondition = isTextareaEmpty && !isTextareFocused;
+  const hiddenButtonCondition =
+    (isTextareaEmpty && !isTextareFocused) || !isChatActive;
 
   return (
     <div className="flex flex-col gap-2 justify-center items-center w-full min-h-10 h-fit absolute bottom-28 left-0 p-2">
@@ -40,8 +44,9 @@ export function ChatTextarea() {
           </Button>
         </motion.div>
       )}
-      <div className="w-full bg-black/25 p-2 rounded-lg backdrop-blur-3xl">
+      <div className="w-full bg-card/50 p-2 rounded-lg backdrop-blur-3xl">
         <Textarea
+          disabled={!isChatActive}
           value={textareaValue}
           onChange={handleTextareaChange}
           onFocus={handleTextareaFocus}

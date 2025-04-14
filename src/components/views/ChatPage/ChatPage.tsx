@@ -1,5 +1,6 @@
 import { ChatProvider } from "@/components/providers/ChatProvider";
 import { AuroraBlurBackground } from "@/components/sections/AuroraBlurBackground";
+import { ChatHeader } from "@/components/sections/ChatHeader";
 import { ChatMessages } from "@/components/sections/ChatMessages";
 import { ChatTextarea } from "@/components/sections/ChatTextarea";
 
@@ -13,6 +14,7 @@ export default function ChatPage() {
       </div>
       <div className="w-full h-screen relative flex flex-col overflow-hidden safe-area bg-transparent rounded-t-3xl">
         <ChatProvider>
+          <ChatHeader />
           <ChatMessages />
           <ChatTextarea />
           <AuroraBlurBackground />
