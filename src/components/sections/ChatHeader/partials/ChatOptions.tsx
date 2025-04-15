@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/Button";
-import { X } from "lucide-react";
+import { Flag, SlidersHorizontal, UserCog, X } from "lucide-react";
 
 export function ChatOptions() {
   return (
@@ -10,7 +10,21 @@ export function ChatOptions() {
           Rozłącz
         </Button>
       </div>
-      <div></div>
+      <div className="ml-auto inline-flex gap-2">
+        <Button
+          variant={"outline"}
+          size={"sm"}
+          className="rounded-xl inline-flex"
+        >
+          <Flag />
+        </Button>
+        <Button size={"sm"} className="rounded-xl inline-flex">
+          Konto <UserCog className="ml-1" />
+        </Button>
+        <Button size={"sm"} className="rounded-xl inline-flex">
+          Filtry i kanały <SlidersHorizontal className="ml-1" />
+        </Button>
+      </div>
     </div>
   );
 }
