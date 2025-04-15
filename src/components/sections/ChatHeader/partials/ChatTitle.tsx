@@ -3,7 +3,7 @@ import { Flag } from "lucide-react";
 
 export function ChatTitle() {
   return (
-    <div className="border-b py-2 -full flex flex-row justify-between">
+    <div className="py-2 -full flex flex-row justify-between">
       <Button
         variant={"ghost"}
         size={"sm"}

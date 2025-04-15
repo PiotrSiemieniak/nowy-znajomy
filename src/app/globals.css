@@ -134,4 +134,7 @@
   html {
     @apply text-foreground bg-background;
   }
+  body {
+    @apply bg-background
+  }
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,15 +26,28 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <head>
+        <Script id="toggle-theme">
+          {`
+          const isDarkMode = localStorage.theme === "dark" ||
+            (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+          document.documentElement.classList.toggle("dark", isDarkMode);
+        `}
+        </Script>
         <meta
           name="viewport"
-          content="width=device-width, initial-scale=1, viewport-fit=cover"
+          content="width=device-width, initial-scale=1.0, viewport-fit=cover"
         />
+
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="theme-color" content="rgba(0,0,0,0)" />
+        <meta
+          name="apple-mobile-web-app-status-bar-style"
+          content="black-translucent"
+        />
+        <meta name="theme-color" content="rgba(0,0,0,1)" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased safe-area`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased safe-area bg-background`}
       >
         {children}
       </body>
