@@ -8,17 +8,21 @@ import {
   useState,
 } from "react";
 import { generateColorPalette } from "./utils";
+import { MessageType } from "./types";
+import { mocksMessages } from "./mocks";
 
 type ChatStateType = {
   chatId: string | null;
   isChatActive: boolean;
   bgColors: string[] | null;
+  messages: MessageType[];
 };
 
 const DEFAULT_CHAT_STATE_VALUES: ChatStateType = {
   chatId: null,
   bgColors: null,
   isChatActive: false,
+  messages: [],
 };
 
 export const ChatStateCtx = createContext<ChatStateType>(
@@ -36,6 +40,7 @@ export const ChatActionCtx = createContext<AdsListActionType | undefined>(
 export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const [bgColors, setBgColors] = useState<string[] | null>(null);
   const [isChatActive, setChatActive] = useState<boolean>(true); // TEMP, originally set to false
+  const [messages, setMessages] = useState<MessageType[]>(mocksMessages); // TEMP, TODO: remove when real data is available
   const chatId = null; // TEMP, TODO
 
   function setNewBgColors() {
@@ -54,6 +59,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
         isChatActive,
         bgColors,
         chatId,
+        messages,
       }}
     >
       <ChatActionCtx.Provider
