@@ -2,7 +2,7 @@ import { ChatMessageElement } from "./ChatMessageElement";
 
 export function ChatMessages() {
   return (
-    <div className="flex flex-col gap-4 h-full w-full p-2 fixed bottom-0 overflow-y-auto pt-52 pb-28">
+    <div className="flex flex-col gap-4 h-full w-full p-2 fixed bottom-0 overflow-y-auto pt-52 pb-20">
       <div className="flex items-center justify-center flex-col py-10">
         <p className="text-xl font-semibold text-gray-50/50">
           Rozpoczęto rozmowę

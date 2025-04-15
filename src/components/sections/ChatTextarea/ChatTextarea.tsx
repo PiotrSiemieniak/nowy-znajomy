@@ -53,7 +53,7 @@ export function ChatTextarea() {
           onBlur={handleTextareaBlur}
           maxLength={TEXTAREA_MAX_LENGTH}
           placeholder="Type your message here..."
-          className="max-h-48"
+          className="max-h-48 min-h-[2.5rem] h-10"
         />
       </div>
     </div>
