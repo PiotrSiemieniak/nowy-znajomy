@@ -11,13 +11,6 @@ export function ChatOptions() {
         </Button>
       </div>
       <div className="ml-auto inline-flex gap-2">
-        <Button
-          variant={"outline"}
-          size={"sm"}
-          className="rounded-xl inline-flex"
-        >
-          <Flag />
-        </Button>
         <Button size={"sm"} className="rounded-xl inline-flex">
           Konto <UserCog className="ml-1" />
         </Button>

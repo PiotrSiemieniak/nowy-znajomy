@@ -29,7 +29,7 @@ export function ChatTextarea() {
     (isTextareaEmpty && !isTextareFocused) || !isChatActive;
 
   return (
-    <div className="flex flex-col gap-2 justify-center items-center w-full min-h-10 h-fit absolute bottom-28 left-0 p-2">
+    <div className="flex flex-col gap-2 justify-center items-center w-full min-h-10 h-fit absolute bottom-28 sm:bottom-0 left-0 p-2">
       <MessageSymbolsCounter messageLength={textareaValue.length} />
       {!hiddenButtonCondition && (
         <motion.div
