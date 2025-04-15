@@ -1,3 +1,6 @@
+"use client";
+
+import { useChatState } from "@/components/providers/ChatProvider";
 import { cn } from "@/lib/utils";
 
 export function ChatMessageElement({
@@ -12,8 +15,8 @@ export function ChatMessageElement({
       className={cn(
         "text-xs bg-card/75 backdrop-blur-md p-2 rounded-t-lg w-fit max-w-96",
         {
-          "ml-auto rounded-bl-lg": isItMe,
-          "mr-auto rounded-br-lg": !isItMe,
+          "ml-auto rounded-bl-lg bg-card/25": isItMe,
+          "mr-auto rounded-br-lg bg-card/75": !isItMe,
         }
       )}
     >
