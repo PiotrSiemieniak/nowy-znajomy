@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/Button";
-import { Flag, SlidersHorizontal, UserCog, X } from "lucide-react";
+import { SlidersHorizontal, UserCog, X } from "lucide-react";
 
 export function ChatOptions() {
   return (

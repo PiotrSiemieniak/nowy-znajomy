@@ -1,18 +1,23 @@
 import { Button } from "@/components/ui/Button";
 import { Flag } from "lucide-react";
+import { div } from "motion/react-client";
 
 export function ChatTitle() {
   return (
     <div className="py-2 -full flex flex-row justify-between">
-      <Button
-        variant={"ghost"}
-        size={"sm"}
-        className="rounded-xl inline-flex size-4 text-muted-foreground"
-      >
-        <Flag />
-      </Button>
-      <p className="text-xs font-medium mx-auto">Nieznajomy</p>
-      <div></div>
+      <div className="w-1/4">
+        <Button
+          variant={"ghost"}
+          size={"sm"}
+          className="rounded-xl inline-flex size-4 text-muted-foreground"
+        >
+          <Flag />
+        </Button>
+      </div>
+      <div className="flex flex-row items-center justify-center w-1/2">
+        <p className="text-xs font-medium ">Nieznajomy</p>
+      </div>
+      <div className="w-1/4"></div>
     </div>
   );
 }
