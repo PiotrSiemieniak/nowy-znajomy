@@ -8,7 +8,7 @@ import { User } from "lucide-react";
 export default function ChatPage() {
   return (
     <div className="h-full w-full relative bg-black -z-50">
-      <div className="flex fixed top-0 bg-black justify-between flex-row p-2 gap-2 w-full text-white overflow-hidden">
+      <div className="flex fixed top-0 z-10 bg-black justify-between flex-row p-2 gap-2 w-full text-white overflow-hidden">
         <p className="text-xs font-medium w-1/3">Nwm</p>
         <p className="text-xs font-medium w-1/3 text-center">Nowy znajomy</p>
         <div className="text-xs font-medium w-1/3 text-right inline-flex">
