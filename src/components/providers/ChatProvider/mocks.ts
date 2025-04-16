@@ -1,95 +1,130 @@
-import { i } from "motion/react-client";
 import { MessageType } from "./types";
 
-export const mocksMessages: MessageType[]= [
+export const mocksMessages: MessageType[] = [
   {
     author: "Test",
     id: "0",
-    text: "Cześć",
+    text: "May I have your attention please?",
     date: "nic",
   },
   {
-    author: "Galicjusz",
+    author: "Test",
     id: "1",
-    text: "Chcesz to chodź. Przed nami długi lot",
+    text: "May I have your attention please?",
     date: "nic",
   },
   {
     author: "Galicjusz",
     id: "2",
-    text: "Miami miss dior",
+    text: "Will the real Slim Shady please stand up?",
     date: "nic",
   },
   {
     author: "Galicjusz",
     id: "3",
-    text: "Chcesz to chodź, chcesz to chodź.",
+    text: "I repeat, will the real Slim Shady please stand up?",
     date: "nic",
   },
   {
     author: "Test",
     id: "4",
-    text: "Puerto Rico czy Punta cana?",
-    date: "nic",
-  },
-  {
-    author: "Galicjusz",
-    id: "5",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+    text: "We're gonna have a problem here..",
     date: "nic",
   },
   {
     author: "Test",
-    id: "6",
-    text: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus
-        exercitationem sit rerum quidem impedit laudantium eveniet numquam, ex
-        doloremque incidunt ducimus aliquam magni corporis nulla ipsa veniam a
-        repellat reprehenderit.`,
+    id: "5",
+    text: "Y'all act like you never seen a white person before",
     date: "nic",
   },
   {
     author: "Galicjusz",
+    id: "6",
+    text: "Jaws all on the floor like Pam, like Tommy just burst in the door",
+    date: "nic",
+  },
+  {
+    author: "Test",
     id: "7",
-    text: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias
-        ratione tempora commodi sunt ex, repellendus laborum voluptatem tempore
-        autem et consequatur blanditiis iusto deserunt esse modi soluta ad
-        itaque impedit.`,
+    text: "and started whoopin her ass worse than before\nthey first were divorce, throwin her over furniture (Ahh!)",
     date: "nic",
   },
   {
     author: "Galicjusz",
     id: "8",
-    text: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias
-        ratione tempora commodi sunt ex, repellendus laborum voluptatem tempore
-        autem et consequatur blanditiis iusto deserunt esse modi soluta ad
-        itaque impedit.`,
+    text: 'It\'s the return of the... "Ah, wait, no way, you\'re kidding,\nhe didn\'t just say what I think he did, did he?"',
     date: "nic",
   },
   {
     author: "Test",
     id: "9",
-    text: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias
-        ratione tempora commodi sunt ex, repellendus laborum voluptatem tempore
-        autem et consequatur blanditiis iusto deserunt esse modi soluta ad
-        itaque impedit.`,
+    text: 'And Dr. Dre said... nothing you idiots!\nDr. Dre\'s dead, he\'s locked in my basement! (Ha-ha!)',
     date: "nic",
   },
   {
     author: "Galicjusz",
     id: "10",
-    text: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias
-        ratione tempora commodi sunt ex, repellendus laborum voluptatem tempore
-        autem et consequatur blanditiis iusto deserunt esse modi soluta ad
-        itaque impedit.`,
+    text: "Feminist women love Eminem\n[*vocal turntable: chigga chigga chigga*]",
     date: "nic",
   },
   {
     author: "Test",
     id: "11",
-    text: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias
-        ratione tempora commodi sunt ex, repellendus laborum voluptatem tempore
-        autem et consequatur blanditiis iusto deserunt esse modi soluta ad
-        itaque impedit.`,
+    text: '"Slim Shady, I\'m sick of him\nLook at him, walkin around grabbin his you-know-what\nFlippin the you-know-who," "Yeah, but he\'s so cute though!"',
     date: "nic",
   },
-]
+  {
+    author: "Galicjusz",
+    id: "12",
+    text: "Yeah, I probably got a couple of screws up in my head loose",
+    date: "nic",
+  },
+  {
+    author: "Test",
+    id: "13",
+    text: "But no worse, than what's goin on in your parents' bedrooms",
+    date: "nic",
+  },
+  {
+    author: "Galicjusz",
+    id: "14",
+    text: "Sometimes, I wanna get on TV and just let loose, but can't\nbut it's cool for Tom Green to hump a dead moose",
+    date: "nic",
+  },
+  {
+    author: "Test",
+    id: "15",
+    text: '"My bum is on your lips, my bum is on your lips"\nAnd if I\'m lucky, you might just give it a little kiss',
+    date: "nic",
+  },
+  {
+    author: "Galicjusz",
+    id: "16",
+    text: "And that's the message that we deliver to little kids\nAnd expect them not to know what a woman's clitoris is",
+    date: "nic",
+  },
+  {
+    author: "Test",
+    id: "17",
+    text: "Of course they gonna know what intercourse is\nBy the time they hit fourth grade\nThey got the Discovery Channel don't they?",
+    date: "nic",
+  },
+  {
+    author: "Galicjusz",
+    id: "18",
+    text: '"We ain\'t nothing but mammals.." Well, some of us cannibals\nwho cut other people open like cantaloupes [*SLURP*]',
+    date: "nic",
+  },
+  {
+    author: "Test",
+    id: "19",
+    text: "But if we can hump dead animals and antelopes\nthen there's no reason that a man and another man can't elope",
+    date: "nic",
+  },
+  {
+    author: "Galicjusz",
+    id: "20",
+    text: "[*EWWW!*] But if you feel like I feel, I got the antidote\nWomen wave your pantyhose, sing the chorus and it goes",
+    date: "nic",
+  },
+];

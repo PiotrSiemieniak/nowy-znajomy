@@ -1,11 +1,16 @@
+"use client";
+
 import { ChatProvider } from "@/components/providers/ChatProvider";
 import { AuroraBlurBackground } from "@/components/sections/AuroraBlurBackground";
 import { ChatHeader } from "@/components/sections/ChatHeader";
 import { ChatMessages } from "@/components/sections/ChatMessages";
 import { ChatTextarea } from "@/components/sections/ChatTextarea";
+import { useScrollDetection } from "@/lib/hooks/useScrollDetection";
 import { User } from "lucide-react";
 
 export default function ChatPage() {
+  const { isAtBottom, scrollToBottom, scrollRef } = useScrollDetection();
+
   return (
     <div className="h-full w-full relative bg-black -z-50">
       <div className="flex fixed top-0 z-10 bg-black justify-between flex-row p-2 gap-2 w-full text-white overflow-hidden">
@@ -20,8 +25,11 @@ export default function ChatPage() {
         <div className="w-full h-screen relative flex flex-col overflow-hidden safe-area bg-transparent rounded-t-3xl">
           <ChatProvider>
             <ChatHeader />
-            <ChatMessages />
-            <ChatTextarea />
+            <ChatMessages scrollRef={scrollRef} />
+            <ChatTextarea
+              isAtBottom={isAtBottom}
+              onScrollToBottom={scrollToBottom}
+            />
             <AuroraBlurBackground />
           </ChatProvider>
         </div>
