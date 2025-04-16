@@ -29,22 +29,22 @@ export function ChatTextarea() {
     (isTextareaEmpty && !isTextareFocused) || !isChatActive;
 
   return (
-    <div className="flex flex-col gap-2 justify-center items-center w-full min-h-10 h-fit fixed bottom-0 left-0 p-2">
-      <MessageSymbolsCounter messageLength={textareaValue.length} />
-      {!hiddenButtonCondition && (
-        <motion.div
-          className="w-full duration-500"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <Button disabled={isTextareaEmpty} className={cn("w-full")}>
-            Wyślij wiadomość
-          </Button>
-        </motion.div>
-      )}
-      <div className="w-full bg-card/50 p-2 rounded-lg backdrop-blur-3xl">
+    <div className="flex flex-col gap-2 justify-center items-center w-full min-h-10 h-fit fixed bottom-0 left-0 backdrop-blur-xs">
+      <div className="w-full relative p-2">
+        <MessageSymbolsCounter messageLength={textareaValue.length} />
+        {!hiddenButtonCondition && (
+          <motion.div
+            className="w-full duration-500"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Button disabled={isTextareaEmpty} className={cn("w-full")}>
+              Wyślij wiadomość
+            </Button>
+          </motion.div>
+        )}
         <Textarea
           disabled={!isChatActive}
           value={textareaValue}
@@ -53,7 +53,7 @@ export function ChatTextarea() {
           onBlur={handleTextareaBlur}
           maxLength={TEXTAREA_MAX_LENGTH}
           placeholder="Type your message here..."
-          className="max-h-48 min-h-[2.5rem] h-10"
+          className="max-h-48 bg-card/50 min-h-[2.5rem] h-10 backdrop-blur-sm"
         />
       </div>
     </div>
