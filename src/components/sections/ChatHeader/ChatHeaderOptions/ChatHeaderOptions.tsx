@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/Button";
-import { SlidersHorizontal, UserCog, X } from "lucide-react";
+import { Channels } from "./partials/Channels";
+import { UserCog, X } from "lucide-react";
 
-export function ChatOptions() {
+export function ChatHeaderOptions() {
   return (
     <div className="border-b border-border/50 py-2 flex flex-row justify-between">
       <div>
@@ -14,9 +15,7 @@ export function ChatOptions() {
         <Button size={"sm"} className="rounded-xl inline-flex">
           Konto <UserCog className="ml-1" />
         </Button>
-        <Button size={"sm"} className="rounded-xl inline-flex">
-          Filtry i kanały <SlidersHorizontal className="ml-1" />
-        </Button>
+        <Channels />
       </div>
     </div>
   );

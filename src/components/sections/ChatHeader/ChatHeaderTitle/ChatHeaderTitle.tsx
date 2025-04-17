@@ -1,8 +1,7 @@
 import { Button } from "@/components/ui/Button";
 import { Flag } from "lucide-react";
-import { div } from "motion/react-client";
 
-export function ChatTitle() {
+export function ChatHeaderTitle() {
   return (
     <div className="py-2 -full flex flex-row justify-between">
       <div className="w-1/4">
