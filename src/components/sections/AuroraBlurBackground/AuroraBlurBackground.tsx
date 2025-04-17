@@ -13,7 +13,7 @@ export function AuroraBlurBackground() {
     <AnimatePresence mode="wait">
       <div
         className="grid grid-cols-3 absolute size-screen
-     grid-rows-5 w-full h-full -z-40 -translate-y-5 bg-transparent dark:brightness-50"
+     grid-rows-5 w-full h-full -z-40 -translate-y-5 bg-transparent dark:brightness-[20%]"
       >
         <div
           style={{ backgroundColor: mainColor }}
