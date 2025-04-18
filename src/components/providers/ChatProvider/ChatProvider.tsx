@@ -16,6 +16,7 @@ type ChatStateType = {
   isChatActive: boolean;
   bgColors: string[] | null;
   messages: MessageType[];
+  isPopoverOpen: boolean;
 };
 
 const DEFAULT_CHAT_STATE_VALUES: ChatStateType = {
@@ -23,6 +24,7 @@ const DEFAULT_CHAT_STATE_VALUES: ChatStateType = {
   bgColors: null,
   isChatActive: false,
   messages: [],
+  isPopoverOpen: false,
 };
 
 export const ChatStateCtx = createContext<ChatStateType>(
@@ -31,6 +33,7 @@ export const ChatStateCtx = createContext<ChatStateType>(
 
 type AdsListActionType = {
   setNewBgColors: () => void;
+  handlePopoverOpen: (condition: boolean) => void;
 };
 
 export const ChatActionCtx = createContext<AdsListActionType | undefined>(
@@ -41,17 +44,26 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const [bgColors, setBgColors] = useState<string[] | null>(null);
   const [isChatActive, setChatActive] = useState<boolean>(true); // TEMP, originally set to false
   const [messages, setMessages] = useState<MessageType[]>(mocksMessages); // TEMP, TODO: remove when real data is available
+  const [isPopoverOpen, setPopoverOpen] = useState<boolean>(false);
   const chatId = null; // TEMP, TODO
 
   function setNewBgColors() {
     setBgColors(generateColorPalette(15));
   }
 
+  const handlePopoverOpen = (condition: boolean) => setPopoverOpen(condition);
+
+  const handlePopoverStateEffect = () => {
+    const node = document.getElementById("chat-container");
+    node?.setAttribute("data-ispopoveropen", String(isPopoverOpen));
+  };
+
   const handleEmptyBgColors = () => {
     if (bgColors === null) setNewBgColors();
   };
 
   useEffect(handleEmptyBgColors, [bgColors]);
+  useEffect(handlePopoverStateEffect, [isPopoverOpen]);
 
   return (
     <ChatStateCtx.Provider
@@ -60,11 +72,13 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
         bgColors,
         chatId,
         messages,
+        isPopoverOpen,
       }}
     >
       <ChatActionCtx.Provider
         value={{
           setNewBgColors,
+          handlePopoverOpen,
         }}
       >
         {children}
