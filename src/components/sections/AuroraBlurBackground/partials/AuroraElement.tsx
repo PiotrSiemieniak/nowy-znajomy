@@ -17,7 +17,7 @@ export function AuroraElement({
   return (
     <div key={index} className="relative">
       <motion.div
-        className="absolute size-[200%] blur-[100px] -z-10"
+        className="absolute size-[200%] -z-10"
         initial={{ opacity: 0 }}
         animate={{
           opacity: 1,
