@@ -13,7 +13,7 @@ export function ChatMessages({ scrollRef }: Props) {
   return (
     <div
       ref={scrollRef}
-      className="flex flex-col h-full w-full p-2 fixed bottom-0 overflow-y-auto pt-52 pb-20"
+      className="flex flex-col h-full relative w-full p-2 bottom-0 overflow-y-auto pt-52 pb-[10.5rem]"
     >
       <div className="flex items-center justify-center flex-col py-10">
         <p className="text-xl font-semibold text-gray-50/50">

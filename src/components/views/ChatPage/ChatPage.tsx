@@ -5,7 +5,6 @@ import { AuroraBlurBackground } from "@/components/sections/AuroraBlurBackground
 import { ChatHeader } from "@/components/sections/ChatHeader";
 import { ChatMessages } from "@/components/sections/ChatMessages";
 import { ChatTextarea } from "@/components/sections/ChatTextarea";
-import { getRandomNum } from "@/lib/getRandomNum";
 import { useScrollDetection } from "@/lib/hooks/useScrollDetection";
 import { cn } from "@/lib/utils";
 import { User } from "lucide-react";

@@ -8,8 +8,13 @@ import {
   useState,
 } from "react";
 import { generateColorPalette } from "./utils";
-import { MessageType } from "./types";
-import { mocksMessages } from "./mocks";
+import { ChannelsListData, MessageType, SelectedChannel } from "./types";
+import { mockRegions, mocksMessages } from "./mocks";
+import {
+  DEFAULT_CHANNELS_LIST_DATA,
+  DEFAULT_SELECTED_CHANNELS,
+} from "./consts";
+import { MAX_CHANNELS_FOR_NON_PREMIUM } from "@/configs/channels";
 
 type ChatStateType = {
   chatId: string | null;
@@ -17,6 +22,8 @@ type ChatStateType = {
   bgColors: string[] | null;
   messages: MessageType[];
   isPopoverOpen: boolean;
+  channelsListData: ChannelsListData;
+  selectedChannels: SelectedChannel[];
 };
 
 const DEFAULT_CHAT_STATE_VALUES: ChatStateType = {
@@ -25,6 +32,8 @@ const DEFAULT_CHAT_STATE_VALUES: ChatStateType = {
   isChatActive: false,
   messages: [],
   isPopoverOpen: false,
+  channelsListData: DEFAULT_CHANNELS_LIST_DATA,
+  selectedChannels: DEFAULT_SELECTED_CHANNELS,
 };
 
 export const ChatStateCtx = createContext<ChatStateType>(
@@ -34,6 +43,7 @@ export const ChatStateCtx = createContext<ChatStateType>(
 type AdsListActionType = {
   setNewBgColors: () => void;
   handlePopoverOpen: (condition: boolean) => void;
+  toggleChannelAsSelected: (channel: SelectedChannel) => void;
 };
 
 export const ChatActionCtx = createContext<AdsListActionType | undefined>(
@@ -45,11 +55,43 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const [isChatActive, setChatActive] = useState<boolean>(true); // TEMP, originally set to false
   const [messages, setMessages] = useState<MessageType[]>(mocksMessages); // TEMP, TODO: remove when real data is available
   const [isPopoverOpen, setPopoverOpen] = useState<boolean>(false);
+  const [channelsListData, setChannelsListData] = useState<ChannelsListData>(
+    DEFAULT_CHANNELS_LIST_DATA
+  ); // TEMP, TODO: remove when real data is available
+  const [selectedChannels, setSelectedChannels] = useState<SelectedChannel[]>(
+    DEFAULT_SELECTED_CHANNELS
+  ); // TEMP, TODO: remove when real data is available
   const chatId = null; // TEMP, TODO
 
   function setNewBgColors() {
     setBgColors(generateColorPalette(15));
   }
+
+  const updateChannelsList = () => {
+    // TODO. This function use mocked data
+
+    setChannelsListData({
+      regions: mockRegions,
+      topics: mockRegions,
+      group: mockRegions,
+    });
+  };
+
+  const toggleChannelAsSelected = (channel: SelectedChannel) => {
+    const inArrayIndex = selectedChannels.findIndex(
+      (selectedChannel) => selectedChannel.id === channel.id
+    );
+    const isChannelSelected = inArrayIndex !== -1;
+
+    if (isChannelSelected) {
+      // Remove
+      setSelectedChannels((prev) =>
+        prev.filter((_, index) => index !== inArrayIndex)
+      );
+    } else {
+      setSelectedChannels((prev) => [...prev, channel]);
+    }
+  };
 
   const handlePopoverOpen = (condition: boolean) => setPopoverOpen(condition);
 
@@ -64,6 +106,18 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(handleEmptyBgColors, [bgColors]);
   useEffect(handlePopoverStateEffect, [isPopoverOpen]);
+  useEffect(() => {
+    // Wywołaj funkcję na początku
+    updateChannelsList();
+
+    // Ustaw interwał, aby wywoływać funkcję co 2 minuty (120000 ms)
+    const interval = setInterval(() => {
+      updateChannelsList();
+    }, 120000);
+
+    // Wyczyść interwał przy odmontowaniu komponentu
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <ChatStateCtx.Provider
@@ -73,12 +127,15 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
         chatId,
         messages,
         isPopoverOpen,
+        channelsListData,
+        selectedChannels,
       }}
     >
       <ChatActionCtx.Provider
         value={{
           setNewBgColors,
           handlePopoverOpen,
+          toggleChannelAsSelected,
         }}
       >
         {children}

@@ -137,4 +137,10 @@
   body {
     @apply bg-background
   }
+  h6 {
+    @apply text-muted-foreground text-sm mx-4 mb-2 font-medium;
+  }
+  .muted {
+    @apply text-muted-foreground text-xs;
+  }
 }

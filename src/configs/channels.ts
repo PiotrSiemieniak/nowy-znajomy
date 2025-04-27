@@ -1,0 +1,1 @@
+export const MAX_CHANNELS_FOR_NON_PREMIUM = 5

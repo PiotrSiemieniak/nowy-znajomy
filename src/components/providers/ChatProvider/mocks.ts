@@ -1,4 +1,5 @@
-import { MessageType } from "./types";
+import { getRandomNum } from "@/lib/getRandomNum";
+import type { ChannelData, MessageType } from "./types";
 
 export const mocksMessages: MessageType[] = [
   {
@@ -127,4 +128,25 @@ export const mocksMessages: MessageType[] = [
     text: "[*EWWW!*] But if you feel like I feel, I got the antidote\nWomen wave your pantyhose, sing the chorus and it goes",
     date: "nic",
   },
+];
+
+export const mockRegions: ChannelData[] = [
+  { id: "0", name: "Cała Polska", onlineCount: getRandomNum(0, 1000) },
+  { id: "2", name: "Zagranica", onlineCount: getRandomNum(0, 1000) },
+  { id: "3", name: "Dolnośląskie", onlineCount: getRandomNum(0, 1000) },
+  { id: "4", name: "Kujawsko-Pomorskie", onlineCount: getRandomNum(0, 1000) },
+  { id: "5", name: "Lubelskie", onlineCount: getRandomNum(0, 1000) },
+  { id: "6", name: "Lubuskie", onlineCount: getRandomNum(0, 1000) },
+  { id: "7", name: "Łódzkie", onlineCount: getRandomNum(0, 1000) },
+  { id: "8", name: "Małopolskie", onlineCount: getRandomNum(0, 1000) },
+  { id: "9", name: "Mazowieckie", onlineCount: getRandomNum(0, 1000) },
+  { id: "10", name: "Opolskie", onlineCount: getRandomNum(0, 1000) },
+  { id: "11", name: "Podkarpackie", onlineCount: getRandomNum(0, 1000) },
+  { id: "12", name: "Podlaskie", onlineCount: getRandomNum(0, 1000) },
+  { id: "13", name: "Pomorskie", onlineCount: getRandomNum(0, 1000) },
+  { id: "14", name: "Śląskie", onlineCount: getRandomNum(0, 1000) },
+  { id: "15", name: "Świętokrzyskie", onlineCount: getRandomNum(0, 1000) },
+  { id: "16", name: "Warmińsko-Mazurskie", onlineCount: getRandomNum(0, 1000) },
+  { id: "17", name: "Wielkopolskie", onlineCount: getRandomNum(0, 1000) },
+  { id: "18", name: "Zachodniopomorskie", onlineCount: getRandomNum(0, 1000) },
 ];
