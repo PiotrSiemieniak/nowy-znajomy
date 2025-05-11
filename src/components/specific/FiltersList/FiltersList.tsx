@@ -28,8 +28,6 @@ export function FiltersList() {
       <Separator />
       <FiltersSlider min={MIN_WAGE} max={MAX_WAGE} label="Waga" unit="kg" />
       <Separator />
-      <FiltersSelect label="Sport" />
-      <Separator />
     </>
   );
 }
