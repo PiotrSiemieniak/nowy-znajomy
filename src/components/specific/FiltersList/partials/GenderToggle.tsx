@@ -23,10 +23,10 @@ export function GenderToggle() {
           type="single"
         >
           <ToggleGroupItem value={Gender.female} aria-label={Gender.female}>
-            <Mars className="h-4 w-4" />
+            <Venus className="h-4 w-4" />
           </ToggleGroupItem>
           <ToggleGroupItem value={Gender.male} aria-label={Gender.male}>
-            <Venus className="h-4 w-4" />
+            <Mars className="h-4 w-4" />
           </ToggleGroupItem>
           <ToggleGroupItem
             value={Gender.undefined}

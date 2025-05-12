@@ -8,10 +8,16 @@ import {
   useState,
 } from "react";
 import { generateColorPalette } from "./utils";
-import { ChannelsListData, MessageType, SelectedChannel } from "./types";
+import {
+  ChannelsListData,
+  Filters,
+  MessageType,
+  SelectedChannel,
+} from "./types";
 import { mockRegions, mocksMessages } from "./mocks";
 import {
   DEFAULT_CHANNELS_LIST_DATA,
+  DEFAULT_FILTERS,
   DEFAULT_SELECTED_CHANNELS,
 } from "./consts";
 import { MAX_CHANNELS_FOR_NON_PREMIUM } from "@/configs/channels";
@@ -24,6 +30,7 @@ type ChatStateType = {
   isPopoverOpen: boolean;
   channelsListData: ChannelsListData;
   selectedChannels: SelectedChannel[];
+  filters: Filters;
 };
 
 const DEFAULT_CHAT_STATE_VALUES: ChatStateType = {
@@ -34,6 +41,7 @@ const DEFAULT_CHAT_STATE_VALUES: ChatStateType = {
   isPopoverOpen: false,
   channelsListData: DEFAULT_CHANNELS_LIST_DATA,
   selectedChannels: DEFAULT_SELECTED_CHANNELS,
+  filters: DEFAULT_FILTERS,
 };
 
 export const ChatStateCtx = createContext<ChatStateType>(
@@ -44,6 +52,7 @@ type AdsListActionType = {
   setNewBgColors: () => void;
   handlePopoverOpen: (condition: boolean) => void;
   toggleChannelAsSelected: (channel: SelectedChannel) => void;
+  updateFilters: (newValue: Partial<Filters>) => void; // Dodano updateFilters
 };
 
 export const ChatActionCtx = createContext<AdsListActionType | undefined>(
@@ -61,6 +70,8 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const [selectedChannels, setSelectedChannels] = useState<SelectedChannel[]>(
     DEFAULT_SELECTED_CHANNELS
   ); // TEMP, TODO: remove when real data is available
+  const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
+
   const chatId = null; // TEMP, TODO
 
   function setNewBgColors() {
@@ -75,6 +86,13 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
       topics: mockRegions,
       group: mockRegions,
     });
+  };
+
+  const updateFilters = (newValue: Partial<Filters>) => {
+    setFilters((prevValue) => ({
+      ...prevValue,
+      ...newValue, // Aktualizacja tylko zmienionych wartości
+    }));
   };
 
   const toggleChannelAsSelected = (channel: SelectedChannel) => {
@@ -129,6 +147,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
         isPopoverOpen,
         channelsListData,
         selectedChannels,
+        filters,
       }}
     >
       <ChatActionCtx.Provider
@@ -136,6 +155,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
           setNewBgColors,
           handlePopoverOpen,
           toggleChannelAsSelected,
+          updateFilters,
         }}
       >
         {children}
@@ -148,7 +168,7 @@ export const useChatAction = () => {
   const ctx = useContext(ChatActionCtx);
 
   if (!ctx) {
-    throw new Error("useAdsListAction must be used within an AdsListProvider");
+    throw new Error("useChatAction must be used within a ChatProvider");
   }
   return ctx;
 };
@@ -157,7 +177,7 @@ export const useChatState = () => {
   const ctx = useContext(ChatStateCtx);
 
   if (!ctx) {
-    throw new Error("useAdsListState must be used within an AdsListProvider");
+    throw new Error("useChatState must be used within a ChatProvider");
   }
   return ctx;
 };

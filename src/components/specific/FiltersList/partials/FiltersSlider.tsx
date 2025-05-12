@@ -1,6 +1,10 @@
+import {
+  useChatAction,
+  useChatState,
+} from "@/components/providers/ChatProvider";
+import { Filters } from "@/components/providers/ChatProvider/types";
 import { Button } from "@/components/ui/Button";
 import { Slider } from "@/components/ui/Slider/Slider";
-import { useState } from "react";
 
 const getLabel = (
   wageState: number[],
@@ -41,39 +45,46 @@ export function FiltersSlider({
   max,
   label,
   unit,
+  filterKeyName,
 }: {
   min: number;
   max: number;
   label: string;
   unit: string;
+  filterKeyName: keyof Filters;
 }) {
-  const [range, setRange] = useState([min, max]);
+  const { filters } = useChatState();
+  const { updateFilters } = useChatAction();
+  const filterValue = filters[filterKeyName];
+  const range = Array.isArray(filterValue) // Check czy wartość jest tablicą [0, 1].
+    ? [filterValue[0], filterValue[1]]
+    : [min, max];
 
   const handleSliderChange = (newValue: number[]) => {
-    setRange(newValue);
+    updateFilters({
+      [filterKeyName]: [newValue[0], newValue[1]],
+    });
   };
 
-  const handleResetRange = () => setRange([min, max]);
+  // const handleResetRange = () =>
+  //   updateFilters({
+  //     [filterKeyName]: [min, max],
+  //   });
 
   return (
     <div>
       <h6>{label}</h6>
       <div className="w-full flex items-center flex-row mb-2">
-        <span className="muted text-center w-full">
+        <span className="muted text-left w-full ml-4">
           {getLabel(range, unit, min, max)}
         </span>
       </div>
       <Slider
         min={min}
         max={max}
-        value={[range[0], range[1]]}
+        value={range}
         onValueChange={handleSliderChange}
       />
-      <div className="w-full flex items-center flex-row mt-2">
-        <Button variant={"link"} className="mx-auto" onClick={handleResetRange}>
-          Ustaw dowolny
-        </Button>
-      </div>
     </div>
   );
 }
