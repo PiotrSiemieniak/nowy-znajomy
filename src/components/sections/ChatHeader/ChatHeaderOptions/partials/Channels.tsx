@@ -23,6 +23,7 @@ import { useChatAction } from "@/components/providers/ChatProvider";
 import { cn } from "@/lib/utils";
 import { ChannelsList } from "@/components/specific/ChannelsList";
 import { FiltersList } from "@/components/specific/FiltersList";
+import { ActiveChannelBadges } from "@/components/specific/ActiveChannelBadges/ActiveChannelBadges";
 
 function ChannelsTrigger() {
   return (
@@ -143,10 +144,11 @@ export function Channels() {
           <Carousel setApi={setApi} className="w-full">
             <CarouselContent className="h-full">
               <CarouselItem className="w-full h-full max-h-[75vh]">
-                <DrawerHeader>
-                  <DrawerTitle className="mb-2">Kanały</DrawerTitle>
+                <DrawerHeader className="space-y-2">
+                  <DrawerTitle>Kanały</DrawerTitle>
                   <ChannelsList />
-                  <DrawerDescription className="my-2">
+                  <ActiveChannelBadges />
+                  <DrawerDescription>
                     Wybierz <b>kanał tematyczny</b> 1 na 1, by połączyć się z
                     osobą o podobnych zainteresowaniach. Skorzystaj z{" "}
                     <b>kanałów regionalnych</b>, jeśli chcesz porozmawiać z kimś
@@ -157,10 +159,10 @@ export function Channels() {
                 </DrawerHeader>
               </CarouselItem>
               <CarouselItem className="w-full">
-                <DrawerHeader>
+                <DrawerHeader className="space-y-2">
                   <DrawerTitle>Filtry</DrawerTitle>
                   <FiltersList />
-                  <DrawerDescription className="mb-2">
+                  <DrawerDescription>
                     Filtry pozwalają Ci określić preferencje wobec rozmówcy w
                     kanałach 1 na 1 – od wieku i płci, po zainteresowania i inne
                     cechy. Dzięki temu trafiasz na osoby, z którymi łatwiej

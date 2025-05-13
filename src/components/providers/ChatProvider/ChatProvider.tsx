@@ -78,6 +78,8 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
     setBgColors(generateColorPalette(15));
   }
 
+  // ---==--- CHANNELS ---==---
+
   const updateChannelsList = () => {
     // TODO. This function use mocked data
 
@@ -86,13 +88,6 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
       topics: mockRegions,
       group: mockRegions,
     });
-  };
-
-  const updateFilters = (newValue: Partial<Filters>) => {
-    setFilters((prevValue) => ({
-      ...prevValue,
-      ...newValue, // Aktualizacja tylko zmienionych wartości
-    }));
   };
 
   const toggleChannelAsSelected = (channel: SelectedChannel) => {
@@ -109,6 +104,15 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
     } else {
       setSelectedChannels((prev) => [...prev, channel]);
     }
+  };
+
+  // ---==--- CHANNELS END ---==---
+
+  const updateFilters = (newValue: Partial<Filters>) => {
+    setFilters((prevValue) => ({
+      ...prevValue,
+      ...newValue, // Aktualizacja tylko zmienionych wartości
+    }));
   };
 
   const handlePopoverOpen = (condition: boolean) => setPopoverOpen(condition);
