@@ -18,6 +18,7 @@ export function ChatPageContent() {
   const isChatInitial = chatStage === ChatStage.Initial;
   const isChatConnected = chatStage === ChatStage.Connected;
   const isChatSearching = chatStage === ChatStage.Searching;
+  const isChatDisconnected = chatStage === ChatStage.Disconnected;
 
   console.log("chatPage", chatStage);
 
@@ -32,7 +33,8 @@ export function ChatPageContent() {
       >
         <ChatHeader />
         {isChatInitial && <ChatInitialScreen />}
-        {isChatConnected && <ChatMessages scrollRef={scrollRef} />}
+        {isChatConnected ||
+          (isChatDisconnected && <ChatMessages scrollRef={scrollRef} />)}
         {isChatSearching && <ChatSearchingScreen />}
         <ChatTextarea
           isAtBottom={isAtBottom}
