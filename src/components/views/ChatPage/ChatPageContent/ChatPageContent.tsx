@@ -6,6 +6,7 @@ import { AuroraBlurBackground } from "@/components/sections/AuroraBlurBackground
 import { ChatHeader } from "@/components/sections/ChatHeader";
 import { ChatInitialScreen } from "@/components/sections/ChatInitialScreen";
 import { ChatMessages } from "@/components/sections/ChatMessages";
+import { ChatSearchingScreen } from "@/components/sections/ChatSearchingScreen";
 import { ChatTextarea } from "@/components/sections/ChatTextarea";
 import { useScrollDetection } from "@/lib/hooks/useScrollDetection";
 import { cn } from "@/lib/utils";
@@ -16,6 +17,7 @@ export function ChatPageContent() {
 
   const isChatInitial = chatStage === ChatStage.Initial;
   const isChatConnected = chatStage === ChatStage.Connected;
+  const isChatSearching = chatStage === ChatStage.Searching;
 
   console.log("chatPage", chatStage);
 
@@ -31,6 +33,7 @@ export function ChatPageContent() {
         <ChatHeader />
         {isChatInitial && <ChatInitialScreen />}
         {isChatConnected && <ChatMessages scrollRef={scrollRef} />}
+        {isChatSearching && <ChatSearchingScreen />}
         <ChatTextarea
           isAtBottom={isAtBottom}
           onScrollToBottom={scrollToBottom}
