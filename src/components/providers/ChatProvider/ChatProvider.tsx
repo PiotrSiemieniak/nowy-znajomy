@@ -10,6 +10,7 @@ import {
 import { generateColorPalette } from "./utils";
 import {
   ChannelsListData,
+  ChatStage,
   Filters,
   MessageType,
   SelectedChannel,
@@ -24,6 +25,7 @@ import { MAX_CHANNELS_FOR_NON_PREMIUM } from "@/configs/channels";
 
 type ChatStateType = {
   chatId: string | null;
+  chatStage: ChatStage;
   isChatActive: boolean;
   bgColors: string[] | null;
   messages: MessageType[];
@@ -37,6 +39,7 @@ const DEFAULT_CHAT_STATE_VALUES: ChatStateType = {
   chatId: null,
   bgColors: null,
   isChatActive: false,
+  chatStage: ChatStage.Initial,
   messages: [],
   isPopoverOpen: false,
   channelsListData: DEFAULT_CHANNELS_LIST_DATA,
@@ -49,6 +52,7 @@ export const ChatStateCtx = createContext<ChatStateType>(
 );
 
 type AdsListActionType = {
+  changeChatState: (stage: ChatStage) => void;
   setNewBgColors: () => void;
   handlePopoverOpen: (condition: boolean) => void;
   toggleChannelAsSelected: (channel: SelectedChannel) => void;
@@ -61,7 +65,7 @@ export const ChatActionCtx = createContext<AdsListActionType | undefined>(
 
 export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const [bgColors, setBgColors] = useState<string[] | null>(null);
-  const [isChatActive, setChatActive] = useState<boolean>(true); // TEMP, originally set to false
+  const [chatStage, setChatStage] = useState<ChatStage>(ChatStage.Initial);
   const [messages, setMessages] = useState<MessageType[]>(mocksMessages); // TEMP, TODO: remove when real data is available
   const [isPopoverOpen, setPopoverOpen] = useState<boolean>(false);
   const [channelsListData, setChannelsListData] = useState<ChannelsListData>(
@@ -73,10 +77,13 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
 
   const chatId = null; // TEMP, TODO
+  const isChatActive = chatStage === ChatStage.Connected;
 
   function setNewBgColors() {
     setBgColors(generateColorPalette(15));
   }
+
+  const changeChatState = (stage: ChatStage) => setChatStage(stage);
 
   // ---==--- CHANNELS ---==---
 
@@ -144,6 +151,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   return (
     <ChatStateCtx.Provider
       value={{
+        chatStage,
         isChatActive,
         bgColors,
         chatId,
@@ -160,6 +168,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
           handlePopoverOpen,
           toggleChannelAsSelected,
           updateFilters,
+          changeChatState,
         }}
       >
         {children}

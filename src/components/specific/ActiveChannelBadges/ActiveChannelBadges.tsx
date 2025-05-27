@@ -3,11 +3,12 @@ import {
   useChatAction,
 } from "@/components/providers/ChatProvider";
 import { Badge } from "@/components/ui/Badge";
+import { cn } from "@/lib/utils";
 import { RotateCcw, X } from "lucide-react";
 
 const COUNT_TO_SHOW_RESET = 2;
 
-export function ActiveChannelBadges() {
+export function ActiveChannelBadges({ className }: { className?: string }) {
   const { selectedChannels } = useChatState();
   const { toggleChannelAsSelected } = useChatAction();
 
@@ -15,7 +16,7 @@ export function ActiveChannelBadges() {
   const isAnyChannel = selectedChannels.length;
 
   return (
-    <div className="flex flex-row flex-wrap gap-2">
+    <div className={cn("flex flex-row flex-wrap gap-2", className)}>
       <p className="text-xs my-auto w-full">Aktywne kanały:</p>
       {!isAnyChannel && <Badge className="group">Cała Polska</Badge>}
       {selectedChannels.map((channel) => (

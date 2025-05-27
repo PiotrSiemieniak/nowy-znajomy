@@ -29,3 +29,10 @@ export type Filters = {
   heightRange: [number, number],
   weightRange: [number, number]
 }
+
+export enum ChatStage {
+  Initial = "initial",
+  Connected = "connected",
+  Disconnected = "disconnected",
+  Searching = "searching"
+} 
