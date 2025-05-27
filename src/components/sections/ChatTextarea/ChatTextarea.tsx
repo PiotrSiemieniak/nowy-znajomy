@@ -7,8 +7,14 @@ import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { MessageSymbolsCounter } from "./partials/MessageSymbolsCounter";
-import { useChatState } from "@/components/providers/ChatProvider";
+import {
+  useChatAction,
+  useChatState,
+} from "@/components/providers/ChatProvider";
 import { ArrowDown } from "lucide-react";
+import { ChatStage } from "@/components/providers/ChatProvider/types";
+import { SearchStageButton } from "./partials/SearchStageButton";
+import { SendButton } from "./partials/SendButton";
 
 type Props = {
   onScrollToBottom: () => void;
@@ -16,13 +22,15 @@ type Props = {
 };
 
 export function ChatTextarea({ isAtBottom, onScrollToBottom }: Props) {
-  const { isChatActive } = useChatState();
+  const { isChatActive, chatStage } = useChatState();
+  const { changeChatState } = useChatAction();
 
   const [isTextareFocused, setTextareaFocused] = useState<boolean>(false);
   const [textareaValue, setTextareaValue] = useState<string>("");
 
   const handleTextareaFocus = () => setTextareaFocused(true);
   const handleTextareaBlur = () => setTextareaFocused(false);
+  const handleSetSearchingState = () => changeChatState(ChatStage.Searching);
 
   const handleTextareaChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>
@@ -30,6 +38,8 @@ export function ChatTextarea({ isAtBottom, onScrollToBottom }: Props) {
     setTextareaValue(event.target.value);
   };
 
+  const isChatInitial = chatStage === ChatStage.Initial;
+  const isChatSearching = chatStage === ChatStage.Searching;
   const isTextareaEmpty = textareaValue.length === 0;
   const hiddenButtonCondition =
     (isTextareaEmpty && !isTextareFocused) || !isChatActive;
@@ -48,30 +58,25 @@ export function ChatTextarea({ isAtBottom, onScrollToBottom }: Props) {
         )}
         <MessageSymbolsCounter messageLength={textareaValue.length} />
         {!hiddenButtonCondition && (
-          <motion.div
-            className="w-full duration-500 m-2"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <Button disabled={isTextareaEmpty} className={cn("w-full")}>
-              Wyślij wiadomość
-            </Button>
+          <SendButton disabled={hiddenButtonCondition} />
+        )}
+        {isChatInitial && (
+          <SearchStageButton onClick={handleSetSearchingState} />
+        )}
+        {isChatSearching && (
+          <motion.div className="w-full h-fit p-2">
+            <Textarea
+              disabled={!isChatActive}
+              value={textareaValue}
+              onChange={handleTextareaChange}
+              onFocus={handleTextareaFocus}
+              onBlur={handleTextareaBlur}
+              maxLength={TEXTAREA_MAX_LENGTH}
+              placeholder="Type your message here..."
+              className="max-h-48 bg-card/50 min-h-[2.5rem] h-10 backdrop-blur-sm"
+            />
           </motion.div>
         )}
-        <div className="w-full h-fit p-2">
-          <Textarea
-            disabled={!isChatActive}
-            value={textareaValue}
-            onChange={handleTextareaChange}
-            onFocus={handleTextareaFocus}
-            onBlur={handleTextareaBlur}
-            maxLength={TEXTAREA_MAX_LENGTH}
-            placeholder="Type your message here..."
-            className="max-h-48 bg-card/50 min-h-[2.5rem] h-10 backdrop-blur-sm"
-          />
-        </div>
       </div>
     </div>
   );
