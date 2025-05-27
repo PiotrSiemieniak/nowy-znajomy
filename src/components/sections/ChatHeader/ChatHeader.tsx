@@ -9,10 +9,6 @@ export function ChatHeader() {
           <ChatHeaderOptions />
           <ChatHeaderTitle />
         </div>
-
-        {/* <div className="w-full h-20 bg-red-400 absolute">
-          <div className="h-5 w-full" />
-        </div> */}
       </div>
     </div>
   );

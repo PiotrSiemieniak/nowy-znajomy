@@ -20,8 +20,6 @@ export function ChatPageContent() {
   const isChatSearching = chatStage === ChatStage.Searching;
   const isChatDisconnected = chatStage === ChatStage.Disconnected;
 
-  console.log("chatPage", chatStage);
-
   return (
     <div className="bg-black h-full w-full fixed top-6">
       <div
