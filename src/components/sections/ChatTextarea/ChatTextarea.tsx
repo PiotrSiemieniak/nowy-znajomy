@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { Textarea } from "@/components/ui/Textarea/Textarea";
 import { TEXTAREA_MAX_LENGTH } from "@/configs/chatTextarea";
 import { cn } from "@/lib/utils";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import { MessageSymbolsCounter } from "./partials/MessageSymbolsCounter";
 import {
@@ -39,7 +39,7 @@ export function ChatTextarea({ isAtBottom, onScrollToBottom }: Props) {
   };
 
   const isChatInitial = chatStage === ChatStage.Initial;
-  const isChatSearching = chatStage === ChatStage.Searching;
+  const isChatConnected = chatStage === ChatStage.Connected;
   const isTextareaEmpty = textareaValue.length === 0;
   const hiddenButtonCondition =
     (isTextareaEmpty && !isTextareFocused) || !isChatActive;
@@ -47,36 +47,44 @@ export function ChatTextarea({ isAtBottom, onScrollToBottom }: Props) {
   return (
     <div className="flex flex-col gap-2 scroll-smooth justify-center items-center w-full min-h-10 h-fit fixed bottom-0 left-0">
       <div className="w-full relative ">
-        {!isAtBottom && (
-          <Button
-            onClick={onScrollToBottom}
-            size={"icon"}
-            className="ml-auto mx-2"
+        <AnimatePresence mode="wait">
+          {!isAtBottom && (
+            <Button
+              onClick={onScrollToBottom}
+              size={"icon"}
+              className="ml-auto mx-2"
+            >
+              <ArrowDown />
+            </Button>
+          )}
+          <MessageSymbolsCounter messageLength={textareaValue.length} />
+          {!hiddenButtonCondition && (
+            <SendButton disabled={hiddenButtonCondition} />
+          )}
+          <motion.div
+            key={"TextareaStage-" + chatStage}
+            initial={{ filter: "blur(7px)", opacity: 0 }}
+            animate={{ filter: "blur(0px)", opacity: 1 }}
+            exit={{ filter: "blur(7px)", opacity: 0 }}
+            className="w-full h-fit p-2"
           >
-            <ArrowDown />
-          </Button>
-        )}
-        <MessageSymbolsCounter messageLength={textareaValue.length} />
-        {!hiddenButtonCondition && (
-          <SendButton disabled={hiddenButtonCondition} />
-        )}
-        {isChatInitial && (
-          <SearchStageButton onClick={handleSetSearchingState} />
-        )}
-        {isChatSearching && (
-          <motion.div className="w-full h-fit p-2">
-            <Textarea
-              disabled={!isChatActive}
-              value={textareaValue}
-              onChange={handleTextareaChange}
-              onFocus={handleTextareaFocus}
-              onBlur={handleTextareaBlur}
-              maxLength={TEXTAREA_MAX_LENGTH}
-              placeholder="Type your message here..."
-              className="max-h-48 bg-card/50 min-h-[2.5rem] h-10 backdrop-blur-sm"
-            />
+            {isChatInitial && (
+              <SearchStageButton onClick={handleSetSearchingState} />
+            )}
+            {isChatConnected && (
+              <Textarea
+                disabled={!isChatActive}
+                value={textareaValue}
+                onChange={handleTextareaChange}
+                onFocus={handleTextareaFocus}
+                onBlur={handleTextareaBlur}
+                maxLength={TEXTAREA_MAX_LENGTH}
+                placeholder="Type your message here..."
+                className="max-h-48 bg-card/50 min-h-[2.5rem] h-10 backdrop-blur-sm"
+              />
+            )}
           </motion.div>
-        )}
+        </AnimatePresence>
       </div>
     </div>
   );

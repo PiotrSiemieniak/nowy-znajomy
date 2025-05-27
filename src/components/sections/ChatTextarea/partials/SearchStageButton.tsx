@@ -23,7 +23,7 @@ export function SearchStageButton({ onClick }: { onClick: () => void }) {
   }, [shakeTrigger, controls]);
 
   return (
-    <motion.div className="w-full h-fit p-2" animate={controls}>
+    <motion.div className="w-full h-fit" animate={controls}>
       <Button onClick={onClick} className="w-full">
         Wyszukaj nowego znajomego
       </Button>
