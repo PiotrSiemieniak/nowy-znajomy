@@ -4,7 +4,6 @@ import { cn } from "@/lib/utils";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/ToggleGroup";
 import { setTheme } from "@/lib/appOptions/setTheme";
 import { ComputerIcon, Moon, Sun } from "lucide-react";
-import { Button } from "@/components/ui/Button";
 
 export function ThemeSwitcher({ className }: { className?: string }) {
   const theme = localStorage.theme;
