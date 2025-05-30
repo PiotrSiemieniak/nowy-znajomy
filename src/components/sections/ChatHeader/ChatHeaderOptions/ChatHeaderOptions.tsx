@@ -1,11 +1,10 @@
-import { Button } from "@/components/ui/Button";
 import { Channels } from "./partials/Channels";
-import { UserCog } from "lucide-react";
 import { DisconnectBtn } from "./partials/DisconnectBtn";
 import { useChatState } from "@/components/providers/ChatProvider";
 import { ChatStage } from "@/components/providers/ChatProvider/types";
 import { SearchingBtn } from "./partials/SearchingBtn";
 import { AnimatePresence, motion } from "motion/react";
+import { AccountBtn } from "./partials/AccountBtn";
 
 export function ChatHeaderOptions() {
   const { chatStage } = useChatState();
@@ -30,9 +29,7 @@ export function ChatHeaderOptions() {
         </AnimatePresence>
       </div>
       <div className="ml-auto inline-flex gap-2">
-        <Button size={"sm"} className="rounded-xl inline-flex">
-          Konto <UserCog className="ml-1" />
-        </Button>
+        <AccountBtn />
         <Channels />
       </div>
     </div>

@@ -9,7 +9,7 @@ export const authOptions: AuthOptions = {
     DiscordProvider({
       clientId: '1377735368224542760',
       clientSecret: 'wjwhfentxjfVZpuy2HFlvCFd1SZOQx0t',
-    }),
+    })
     // ...add more providers here
   ],
   callbacks: {
