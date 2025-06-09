@@ -1,10 +1,23 @@
-export function apiFetch(url: string, options: RequestInit){
-  // const headers = {
-  //   ...options.headers,
-  //   ...(true && {
-  //     Authorization: `${tokenType} ${token}`
-  //   })
-  // }
+export async function apiFetch<TRequest, TResponse>(
+  url: string,
+  options: RequestInit = {},
+  body?: TRequest
+): Promise<TResponse> {
+  const headers = {
+    'Content-Type': 'application/json',
+    ...(options.headers || {})
+  };
 
-  return fetch(`/api`, { ...options })
+  const response = await fetch(`/api${url}`, {
+    ...options,
+    method: options.method || 'POST',
+    headers,
+    body: body ? JSON.stringify(body) : undefined,
+  });
+
+  if (!response.ok) {
+    throw new Error(`Request failed with status ${response.status}`);
+  }
+
+  return response.json() as Promise<TResponse>;
 }
