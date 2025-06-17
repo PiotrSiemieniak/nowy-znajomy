@@ -57,6 +57,24 @@ async function isUserIn(sessionKey: string): Promise<boolean> {
   }
 }
 
+// Sprawdza czy użytkownik jest już połączony
+async function isUserMatched(sessionKey: string): Promise<boolean> {
+  try {
+    const users = await queryFirestore<WaitingUser>(
+      WAITING_ROOM_COLLECTION,
+      {
+        constraints: [where('sessionKey', '==', sessionKey)]
+      }
+    );
+    const isMatched = Array.isArray(users) && users.length > 0 ? Boolean(users[0].isMatched) : false;
+    
+    return isMatched
+  } catch (error) {
+    console.error('Błąd podczas sprawdzania użytkownika:', error);
+    return false;
+  }
+}
+
 // Znajduje dopasowanego użytkownika na podstawie preferencji
 async function findUser(sessionKey: string, userFilters: Filters): Promise<WaitingUser | null> {
   try {
@@ -117,26 +135,19 @@ async function findUser(sessionKey: string, userFilters: Filters): Promise<Waiti
 }
 
 // Dodaje użytkownika do poczekalni
-async function queueUser(sessionKey: string, filters: Filters): Promise<boolean> {
+async function queueUser(sessionKey: string, filters: Filters, isMatched: boolean = false): Promise<boolean> {
   try {
-    // Sprawdzamy czy użytkownik już nie jest w poczekalni
-    const alreadyInQueue = await isUserIn(sessionKey);
-    if (alreadyInQueue) {
-      console.log('Użytkownik już jest w poczekalni');
-      return false;
-    }
-
     const docId = await addDocumentToFirestore(WAITING_ROOM_COLLECTION, {
       sessionKey,
+      isMatched,
       filters,
-      isMatched: false
     }, sessionKey);
     
     if (docId) {
       console.log('Użytkownik dodany do poczekalni z ID:', docId);
       return true;
     }
-    
+    console.log('queue', docId)
     return false;
   } catch (error) {
     console.error('Błąd podczas dodawania do poczekalni:', error);
@@ -201,6 +212,7 @@ function calculateMatchScore(filters1: Filters, filters2: Filters): number {
 }
 
 export {
+  isUserMatched,
   clearOldRecords,
   isUserIn, 
   findUser,

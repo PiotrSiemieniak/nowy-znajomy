@@ -1,6 +1,6 @@
 import type { Filters } from "@/components/providers/ChatProvider/types";
-import { createRoom } from "@/lib/services/queries/room";
-import { clearOldRecords, findUser, queueUser, isUserIn } from "@/lib/services/queries/waitingRoom";
+import { createRoom, getRoom } from "@/lib/services/queries/room";
+import { clearOldRecords, findUser, queueUser, isUserIn, isUserMatched } from "@/lib/services/queries/waitingRoom";
 
 export enum WaitingRoomStatuses {
   matched = 'matched',
@@ -32,29 +32,12 @@ export async function POST(req: Request): WaitingRoomRes {
     await clearOldRecords();
     
     // Sprawdzenie czy użytkownik już jest w poczekalni
-    const userInLobby = await isUserIn(sessionKey);
+    const isMatched = await isUserMatched(sessionKey);
     
-    if (userInLobby) {
-      // Użytkownik już czeka, sprawdzamy czy znaleźliśmy mu kogoś
-      const match = await findUser(sessionKey, filters);
-      console.log('match', match)
+    if (isMatched) {
+      const roomId = await getRoom({ sessionKey })
       
-      if (match) {
-        const roomId = await createRoom({ userSessionKeys: [{
-          id: 'null',
-          sessionKey: sessionKey
-        }, {
-          id: 'null',
-          sessionKey: match.sessionKey
-        }] })
-
-        return Response.json({ 
-          status: WaitingRoomStatuses.matched, 
-          roomId
-        });
-      }
-      
-      return Response.json({ status: WaitingRoomStatuses.waiting });
+      return Response.json({ status: WaitingRoomStatuses.matched, roomId });
     }
     
     // Nowy użytkownik - najpierw szukamy dopasowania
@@ -62,13 +45,15 @@ export async function POST(req: Request): WaitingRoomRes {
     
     if (match) {
       // Znaleźliśmy natychmiastowe dopasowanie
-      const roomId = await createRoom({ userSessionKeys: [{
-        id: 'null', // TODO: user id
-        sessionKey: sessionKey
-      }, {
-        id: 'null', // TODO: user id
-        sessionKey: match.sessionKey
-      }] })
+      // Nadpisujemy jako 'matched' naszych userów
+      await queueUser(sessionKey, filters, true);
+      await queueUser(match.sessionKey, filters, true);
+
+      // Tworzymy pokój
+      const roomId = await createRoom({
+        userIds: [null, null],
+        userSessionKeys: [sessionKey, match.sessionKey]
+      })
 
       return Response.json({ 
         status: WaitingRoomStatuses.matched, 
