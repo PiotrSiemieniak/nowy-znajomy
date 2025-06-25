@@ -15,6 +15,7 @@ import { ArrowDown } from "lucide-react";
 import { ChatStage } from "@/components/providers/ChatProvider/types";
 import { SearchStageButton } from "./partials/SearchStageButton";
 import { SendButton } from "./partials/SendButton";
+import { useMessages } from "@ably/chat/react";
 
 type Props = {
   onScrollToBottom: () => void;
@@ -24,6 +25,11 @@ type Props = {
 export function ChatTextarea({ isAtBottom, onScrollToBottom }: Props) {
   const { isChatActive, chatStage } = useChatState();
   const { changeChatState } = useChatAction();
+  const { send: sendMessage } = useMessages({
+    listener: (payload) => {
+      console.log("New message received:", payload);
+    },
+  });
 
   const [isTextareFocused, setTextareaFocused] = useState<boolean>(false);
   const [textareaValue, setTextareaValue] = useState<string>("");
@@ -36,6 +42,10 @@ export function ChatTextarea({ isAtBottom, onScrollToBottom }: Props) {
     event: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
     setTextareaValue(event.target.value);
+  };
+
+  const handleClick = () => {
+    sendMessage(textareaValue);
   };
 
   const isChatInitial = chatStage === ChatStage.Initial;
@@ -59,7 +69,10 @@ export function ChatTextarea({ isAtBottom, onScrollToBottom }: Props) {
           )}
           <MessageSymbolsCounter messageLength={textareaValue.length} />
           {!hiddenButtonCondition && (
-            <SendButton disabled={hiddenButtonCondition} />
+            <SendButton
+              onClick={handleClick}
+              disabled={hiddenButtonCondition}
+            />
           )}
           <motion.div
             key={"TextareaStage-" + chatStage}

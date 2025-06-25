@@ -81,3 +81,5 @@ export async function POST(req: Request): WaitingRoomRes {
     );
   }
 }
+
+export const revalidate = 0

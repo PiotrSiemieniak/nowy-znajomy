@@ -1,6 +1,8 @@
 import { ChatProvider } from "@/components/providers/ChatProvider";
 import { User } from "lucide-react";
 import { ChatPageContent } from "./ChatPageContent";
+import { AblyClientProvider } from "@/components/providers/AblyClientProvider";
+import { AblyRoomProvider } from "@/components/providers/AblyRoomProvider";
 
 export default function ChatPage() {
   return (
@@ -13,9 +15,11 @@ export default function ChatPage() {
           <User className="size-3 my-auto ml-1" />
         </div>
       </div>
-      <ChatProvider>
-        <ChatPageContent />
-      </ChatProvider>
+      <AblyClientProvider>
+        <ChatProvider>
+          <ChatPageContent />
+        </ChatProvider>
+      </AblyClientProvider>
     </div>
   );
 }

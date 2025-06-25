@@ -3,6 +3,7 @@
 import { useChatState } from "@/components/providers/ChatProvider";
 import { ChatMessageElement } from "./ChatMessageElement";
 import { RefObject } from "react";
+import { useMessages } from "@ably/chat/react";
 
 type Props = {
   scrollRef: RefObject<HTMLDivElement | null>;

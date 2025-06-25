@@ -21,7 +21,11 @@ import {
   DEFAULT_FILTERS,
   DEFAULT_SELECTED_CHANNELS,
 } from "./consts";
+import * as Ably from "ably";
 import { MAX_CHANNELS_FOR_NON_PREMIUM } from "@/configs/channels";
+import { AblyProvider } from "../AblyClientProvider";
+import { useMessages } from "@ably/chat/react";
+import { AblyRoomProvider } from "../AblyRoomProvider";
 
 type ChatStateType = {
   chatId: string | null;
@@ -57,6 +61,8 @@ type AdsListActionType = {
   handlePopoverOpen: (condition: boolean) => void;
   toggleChannelAsSelected: (channel: SelectedChannel) => void;
   updateFilters: (newValue: Partial<Filters>) => void; // Dodano updateFilters
+  changeChatId: (value: string | null) => void;
+  sendMessage: (text: string) => Promise<void>;
 };
 
 export const ChatActionCtx = createContext<AdsListActionType | undefined>(
@@ -66,6 +72,7 @@ export const ChatActionCtx = createContext<AdsListActionType | undefined>(
 export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const [bgColors, setBgColors] = useState<string[] | null>(null);
   const [chatStage, setChatStage] = useState<ChatStage>(ChatStage.Initial);
+  const [chatId, setChatId] = useState<string | null>(null);
   const [messages, setMessages] = useState<MessageType[]>(mocksMessages); // TEMP, TODO: remove when real data is available
   const [isPopoverOpen, setPopoverOpen] = useState<boolean>(false);
   const [channelsListData, setChannelsListData] = useState<ChannelsListData>(
@@ -75,8 +82,6 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
     DEFAULT_SELECTED_CHANNELS
   ); // TEMP, TODO: remove when real data is available
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
-
-  const chatId = null; // TEMP, TODO
   const isChatActive = chatStage === ChatStage.Connected;
 
   function setNewBgColors() {
@@ -84,6 +89,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const changeChatState = (stage: ChatStage) => setChatStage(stage);
+  const changeChatId = (value: string | null) => setChatId(value);
 
   // ---==--- CHANNELS ---==---
 
@@ -133,6 +139,15 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
     if (bgColors === null) setNewBgColors();
   };
 
+  // const messageHandlerHook = chatId
+  //   ? useMessages({
+  //       listener: (payload) => {
+  //         const newMessage = payload.message;
+  //         setMessages((prevMessages) => ({ ...prevMessages, newMessage }));
+  //       },
+  //     })
+  //   : { send: null };
+
   useEffect(handleEmptyBgColors, [bgColors]);
   useEffect(handlePopoverStateEffect, [isPopoverOpen]);
   useEffect(() => {
@@ -149,31 +164,34 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   return (
-    <ChatStateCtx.Provider
-      value={{
-        chatStage,
-        isChatActive,
-        bgColors,
-        chatId,
-        messages,
-        isPopoverOpen,
-        channelsListData,
-        selectedChannels,
-        filters,
-      }}
-    >
-      <ChatActionCtx.Provider
+    <AblyRoomProvider chatId={chatId}>
+      <ChatStateCtx.Provider
         value={{
-          setNewBgColors,
-          handlePopoverOpen,
-          toggleChannelAsSelected,
-          updateFilters,
-          changeChatState,
+          chatStage,
+          isChatActive,
+          bgColors,
+          chatId,
+          messages,
+          isPopoverOpen,
+          channelsListData,
+          selectedChannels,
+          filters,
         }}
       >
-        {children}
-      </ChatActionCtx.Provider>
-    </ChatStateCtx.Provider>
+        <ChatActionCtx.Provider
+          value={{
+            setNewBgColors,
+            handlePopoverOpen,
+            toggleChannelAsSelected,
+            updateFilters,
+            changeChatState,
+            changeChatId,
+          }}
+        >
+          {children}
+        </ChatActionCtx.Provider>
+      </ChatStateCtx.Provider>
+    </AblyRoomProvider>
   );
 };
 

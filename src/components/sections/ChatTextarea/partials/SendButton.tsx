@@ -1,25 +1,30 @@
-"use client";
-
+// partials/SendButton.tsx
 import { Button } from "@/components/ui/Button";
-import { cn } from "@/lib/utils";
-import { motion } from "motion/react";
+import { Send, Loader2 } from "lucide-react";
 
 type Props = {
   disabled?: boolean;
+  onClick?: () => void;
+  isLoading?: boolean;
 };
 
-export function SendButton({ disabled }: Props) {
+export function SendButton({
+  disabled = false,
+  onClick,
+  isLoading = false,
+}: Props) {
   return (
-    <motion.div
-      className="w-full duration-500 m-2"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
+    <Button
+      onClick={onClick}
+      disabled={disabled || isLoading}
+      size="icon"
+      className="absolute right-4 top-1/2 transform -translate-y-1/2 z-10"
     >
-      <Button disabled={disabled} className={cn("w-full")}>
-        Wyślij wiadomość
-      </Button>
-    </motion.div>
+      {isLoading ? (
+        <Loader2 className="h-4 w-4 animate-spin" />
+      ) : (
+        <Send className="h-4 w-4" />
+      )}
+    </Button>
   );
 }
