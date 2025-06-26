@@ -69,7 +69,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const [bgColors, setBgColors] = useState<string[] | null>(null);
   const [chatStage, setChatStage] = useState<ChatStage>(ChatStage.Initial);
   const [chatId, setChatId] = useState<string | null>(null);
-  const [messages, setMessages] = useState<MessageType[]>([]); // TEMP, TODO: remove when real data is available
+  const [messages, setMessages] = useState<MessageType[]>([]);
   const [isPopoverOpen, setPopoverOpen] = useState<boolean>(false);
   const [channelsListData, setChannelsListData] = useState<ChannelsListData>(
     DEFAULT_CHANNELS_LIST_DATA
