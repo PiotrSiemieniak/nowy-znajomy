@@ -7,7 +7,7 @@ import { ChatHeader } from "@/components/sections/ChatHeader";
 import { ChatInitialScreen } from "@/components/sections/ChatInitialScreen";
 import { ChatMessages } from "@/components/sections/ChatMessages";
 import { ChatSearchingScreen } from "@/components/sections/ChatSearchingScreen";
-import { ChatTextarea } from "@/components/sections/ChatTextarea";
+import { ChatActionBar } from "@/components/sections/ChatActionBar";
 import { useScrollDetection } from "@/lib/hooks/useScrollDetection";
 import { cn } from "@/lib/utils";
 
@@ -29,15 +29,22 @@ export function ChatPageContent() {
           "w-full h-screen relative flex flex-col overflow-hidden bg-transparent rounded-t-3xl transition-all duration-1000 data-[ispopoveropen=true]:scale-95"
         )}
       >
+        {/* TOP */}
         <ChatHeader />
+        {/* MIDDLE */}
+        {"Stage: " + chatStage}
         {isChatInitial && <ChatInitialScreen />}
-        {isChatConnected ||
-          (isChatDisconnected && <ChatMessages scrollRef={scrollRef} />)}
+        {!!(isChatConnected || isChatDisconnected) && (
+          <ChatMessages scrollRef={scrollRef} />
+        )}
         {isChatSearching && <ChatSearchingScreen />}
-        <ChatTextarea
+        {/* BOTTOM */}
+        <ChatActionBar
           isAtBottom={isAtBottom}
           onScrollToBottom={scrollToBottom}
         />
+
+        {/* ABSOLUTE */}
         <AuroraBlurBackground />
       </div>
     </div>

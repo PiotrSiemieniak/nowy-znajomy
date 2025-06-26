@@ -7,14 +7,14 @@ import * as Ably from "ably";
 import { getUUID } from "@/lib/crypto/getUUID";
 
 const KEY_STR = "SESSION_KEY";
-const DOMAIN = process.env.DOMAIN_URL;
+// const DOMAIN = process.env.DOMAIN_URL;
 
 export function AblyClientProvider({ children }: { children?: ReactNode }) {
   const sessionKey = getUUID();
 
   const realtimeClient = new Ably.Realtime({
     clientId: sessionKey,
-    authUrl: DOMAIN + "/api/chatAuth",
+    authUrl: "/api/chatAuth",
     authMethod: "GET",
     authParams: {
       clientId: sessionKey,

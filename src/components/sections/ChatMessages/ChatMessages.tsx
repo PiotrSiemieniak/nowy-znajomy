@@ -3,13 +3,16 @@
 import { useChatState } from "@/components/providers/ChatProvider";
 import { ChatMessageElement } from "./ChatMessageElement";
 import { RefObject } from "react";
-import { useMessages } from "@ably/chat/react";
 
 type Props = {
   scrollRef: RefObject<HTMLDivElement | null>;
 };
+
+const KEY_STR = "SESSION_KEY";
+
 export function ChatMessages({ scrollRef }: Props) {
   const { messages } = useChatState();
+  const sessionKey = sessionStorage.getItem(KEY_STR);
 
   return (
     <div
@@ -23,7 +26,6 @@ export function ChatMessages({ scrollRef }: Props) {
         <p className="text-gray-50/50">Kanał: xxx</p>
         <p className="text-gray-50/50 text-xs">Napisz coś, aby się przywitać</p>
       </div>
-
       {messages.map((message, index) => {
         const prevMessage = messages[index - 1];
         const isSameAuthor = prevMessage?.author === message.author;
@@ -33,7 +35,7 @@ export function ChatMessages({ scrollRef }: Props) {
             key={message.id}
             text={message.text}
             isPrevMessageSameAuthor={isSameAuthor}
-            isItMe={message.author === "Test"} // TEMP, TODO: replace with real data
+            isItMe={message.author === sessionKey} // TEMP, TODO: replace with real data
           />
         );
       })}

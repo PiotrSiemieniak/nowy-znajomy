@@ -12,5 +12,9 @@ export function AblyRoomProvider({
 }) {
   if (!chatId) return <>{children}</>;
 
-  return <ChatRoomProvider name={chatId}>{children}</ChatRoomProvider>;
+  return (
+    <ChatRoomProvider release attach name={chatId}>
+      {children}
+    </ChatRoomProvider>
+  );
 }

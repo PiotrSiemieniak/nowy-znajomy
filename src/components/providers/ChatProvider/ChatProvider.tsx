@@ -15,16 +15,12 @@ import {
   MessageType,
   SelectedChannel,
 } from "./types";
-import { mockRegions, mocksMessages } from "./mocks";
+import { mockRegions } from "./mocks";
 import {
   DEFAULT_CHANNELS_LIST_DATA,
   DEFAULT_FILTERS,
   DEFAULT_SELECTED_CHANNELS,
 } from "./consts";
-import * as Ably from "ably";
-import { MAX_CHANNELS_FOR_NON_PREMIUM } from "@/configs/channels";
-import { AblyProvider } from "../AblyClientProvider";
-import { useMessages } from "@ably/chat/react";
 import { AblyRoomProvider } from "../AblyRoomProvider";
 
 type ChatStateType = {
@@ -62,7 +58,7 @@ type AdsListActionType = {
   toggleChannelAsSelected: (channel: SelectedChannel) => void;
   updateFilters: (newValue: Partial<Filters>) => void; // Dodano updateFilters
   changeChatId: (value: string | null) => void;
-  sendMessage: (text: string) => Promise<void>;
+  sendMessage: (msg: Omit<MessageType, "id">) => void;
 };
 
 export const ChatActionCtx = createContext<AdsListActionType | undefined>(
@@ -73,7 +69,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const [bgColors, setBgColors] = useState<string[] | null>(null);
   const [chatStage, setChatStage] = useState<ChatStage>(ChatStage.Initial);
   const [chatId, setChatId] = useState<string | null>(null);
-  const [messages, setMessages] = useState<MessageType[]>(mocksMessages); // TEMP, TODO: remove when real data is available
+  const [messages, setMessages] = useState<MessageType[]>([]); // TEMP, TODO: remove when real data is available
   const [isPopoverOpen, setPopoverOpen] = useState<boolean>(false);
   const [channelsListData, setChannelsListData] = useState<ChannelsListData>(
     DEFAULT_CHANNELS_LIST_DATA
@@ -120,6 +116,12 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // ---==--- CHANNELS END ---==---
+
+  const sendMessage = (el: Omit<MessageType, "id">) => {
+    const newMessage: MessageType = { ...el, id: String(messages.length + 1) };
+
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
+  };
 
   const updateFilters = (newValue: Partial<Filters>) => {
     setFilters((prevValue) => ({
@@ -186,9 +188,10 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
             updateFilters,
             changeChatState,
             changeChatId,
+            sendMessage,
           }}
         >
-          {children}
+          <AblyRoomProvider chatId={chatId}>{children}</AblyRoomProvider>
         </ChatActionCtx.Provider>
       </ChatStateCtx.Provider>
     </AblyRoomProvider>
