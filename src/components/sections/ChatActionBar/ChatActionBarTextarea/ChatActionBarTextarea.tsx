@@ -31,6 +31,10 @@ export function ChatActionBarTextarea() {
   const hiddenButtonCondition =
     (isTextareaEmpty && !isTextareFocused) || !isChatActive;
 
+  // =========
+  // Handlers
+  // =========
+
   const handleTextareaFocus = () => setTextareaFocused(true);
   const handleTextareaBlur = () => setTextareaFocused(false);
 
@@ -41,13 +45,29 @@ export function ChatActionBarTextarea() {
   };
 
   const handleSendButtonClick = () => {
+    if (isTextareaEmpty || !isChatActive) return;
     send({
       text: textareaValue,
     });
+    setTextareaValue("");
+  };
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleSendButtonClick();
+  };
+
+  const handleTextareaKeyDown = (
+    e: React.KeyboardEvent<HTMLTextAreaElement>
+  ) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSendButtonClick();
+    }
   };
 
   return (
-    <>
+    <form onSubmit={handleFormSubmit}>
       <MessageSymbolsCounter messageLength={textareaValue.length} />
       {!hiddenButtonCondition && (
         <SendButton
@@ -64,7 +84,8 @@ export function ChatActionBarTextarea() {
         maxLength={TEXTAREA_MAX_LENGTH}
         placeholder="Type your message here..."
         className="max-h-48 bg-card/50 min-h-[2.5rem] h-10 backdrop-blur-sm"
+        onKeyDown={handleTextareaKeyDown}
       />
-    </>
+    </form>
   );
 }
