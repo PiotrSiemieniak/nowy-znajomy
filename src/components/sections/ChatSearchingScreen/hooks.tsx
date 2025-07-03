@@ -11,7 +11,7 @@ import { useEffect, useRef } from "react";
 const KEY_STR = "SESSION_KEY";
 
 export const useSearchPooling = () => {
-  const { changeChatState, changeChatId } = useChatAction();
+  const { changeChatState, changeChatId, setNewBgColors } = useChatAction();
   const { filters } = useChatState();
 
   const retryCountRef = useRef(0);
@@ -38,8 +38,10 @@ export const useSearchPooling = () => {
         switch (res?.status) {
           case WaitingRoomStatuses.matched:
             changeChatState(ChatStage.Connected);
-            if (res.roomId) changeChatId(res.roomId);
-            console.log("res.roomId", res.roomId);
+            if (res.room) {
+              changeChatId(res.room.channelId);
+              setNewBgColors(res.room.bgColors);
+            }
             if (timeoutRef.current) clearTimeout(timeoutRef.current);
             return;
 

@@ -53,7 +53,7 @@ export const ChatStateCtx = createContext<ChatStateType>(
 
 type AdsListActionType = {
   changeChatState: (stage: ChatStage) => void;
-  setNewBgColors: () => void;
+  setNewBgColors: (bgArray?: string[]) => void;
   handlePopoverOpen: (condition: boolean) => void;
   toggleChannelAsSelected: (channel: SelectedChannel) => void;
   updateFilters: (newValue: Partial<Filters>) => void; // Dodano updateFilters
@@ -80,8 +80,9 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
   const isChatActive = chatStage === ChatStage.Connected;
 
-  function setNewBgColors() {
-    setBgColors(generateColorPalette(15));
+  function setNewBgColors(bgArray?: string[]) {
+    if (bgArray) setBgColors(bgArray);
+    else setBgColors(generateColorPalette(15));
   }
 
   const changeChatState = (stage: ChatStage) => setChatStage(stage);

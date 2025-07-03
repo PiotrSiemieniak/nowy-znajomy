@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 
 export function ChatPageContent() {
   const { isAtBottom, scrollToBottom, scrollRef } = useScrollDetection();
-  const { chatStage } = useChatState();
+  const { chatStage, chatId } = useChatState();
 
   const isChatInitial = chatStage === ChatStage.Initial;
   const isChatConnected = chatStage === ChatStage.Connected;
@@ -33,6 +33,7 @@ export function ChatPageContent() {
         <ChatHeader />
         {/* MIDDLE */}
         {"Stage: " + chatStage}
+        {"ID: " + String(chatId)}
         {isChatInitial && <ChatInitialScreen />}
         {!!(isChatConnected || isChatDisconnected) && (
           <ChatMessages scrollRef={scrollRef} />

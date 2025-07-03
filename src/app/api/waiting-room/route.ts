@@ -1,6 +1,6 @@
 import type { Filters } from "@/components/providers/ChatProvider/types";
-import { createRoom, getRoom } from "@/lib/services/queries/room";
-import { clearOldRecords, findUser, queueUser, isUserIn, isUserMatched } from "@/lib/services/queries/waitingRoom";
+import { createRoom, getRoom, RoomResponseData } from "@/lib/services/queries/room";
+import { clearOldRecords, findUser, queueUser, isUserMatched } from "@/lib/services/queries/waitingRoom";
 
 export enum WaitingRoomStatuses {
   matched = 'matched',
@@ -13,7 +13,7 @@ export type WaitingRoomReq = {
 }
 export type WaitingRoomRes = Promise<{
   status: WaitingRoomStatuses | number;
-  roomId?: string
+  room?: RoomResponseData
 }>
 
 export async function POST(req: Request): WaitingRoomRes {
@@ -35,9 +35,9 @@ export async function POST(req: Request): WaitingRoomRes {
     const isMatched = await isUserMatched(sessionKey);
     
     if (isMatched) {
-      const roomId = await getRoom({ sessionKey })
+      const room = await getRoom({ sessionKey })
       
-      return Response.json({ status: WaitingRoomStatuses.matched, roomId });
+      return Response.json({ status: WaitingRoomStatuses.matched, room });
     }
     
     // Nowy użytkownik - najpierw szukamy dopasowania
@@ -50,14 +50,14 @@ export async function POST(req: Request): WaitingRoomRes {
       await queueUser(match.sessionKey, filters, true);
 
       // Tworzymy pokój
-      const roomId = await createRoom({
+      const room = await createRoom({
         userIds: [null, null],
         userSessionKeys: [sessionKey, match.sessionKey]
       })
-
+// TODO: Zrobić try-catch bo to jest porażka. createRoom pyta dwa środowiska - jak jedno z nich się wyjedzie, to user zostaje z niczym [!!!]
       return Response.json({ 
         status: WaitingRoomStatuses.matched, 
-        roomId
+        room
       });
     }
     

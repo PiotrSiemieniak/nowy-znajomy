@@ -33,7 +33,7 @@ type QueryOptions = {
 export async function queryFirestore<T = DocumentData>(
   collectionName: string,
   options?: QueryOptions
-): Promise<T | T[] | null> {
+): Promise<T[] | null> {
   try {
     const colRef = collection(db, collectionName);
 
@@ -42,7 +42,7 @@ export async function queryFirestore<T = DocumentData>(
       const docRef = doc(colRef, options.docId);
       const docSnap = await getDoc(docRef);
       if (!docSnap.exists()) return null;
-      return { id: docSnap.id, ...docSnap.data() } as T;
+      return [{ id: docSnap.id, ...docSnap.data() }] as T[];
     }
 
     // Jeśli podano constraints (where, orderBy, itd.)
