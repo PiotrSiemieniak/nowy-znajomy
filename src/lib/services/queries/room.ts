@@ -3,7 +3,6 @@ import { addDocumentToFirestore, queryFirestore } from "../adapters/firebase/uti
 import Ably from "ably";
 import { generateColorPalette } from "@/components/providers/ChatProvider/utils";
 import { getUUID } from "@/lib/crypto/getUUID";
-import { error } from "console";
 
 const COLLECTION = 'room'
 
@@ -19,7 +18,6 @@ type CreateRoomProps = {
   userSessionKeys: string[]
   userIds: Array<string | null>
 }
-type Records = RoomCollectionType
 
 export async function createRoom({ userSessionKeys, userIds }: CreateRoomProps): Promise<RoomResponseData> {
   try {
