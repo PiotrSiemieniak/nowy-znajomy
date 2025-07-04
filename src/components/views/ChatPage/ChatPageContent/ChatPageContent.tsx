@@ -14,7 +14,8 @@ import { usePresence } from "@ably/chat/react";
 import { ChatConversationScreen } from "@/components/sections/ChatConversationScreen";
 
 export function ChatPageContent() {
-  const { isAtBottom, scrollToBottom, scrollRef } = 
+  const { isAtBottom, scrollToBottom, scrollRef } = useScrollDetection();
+  const { chatStage, chatId } = useChatState();
 
   const isChatInitial = chatStage === ChatStage.Initial;
   const isChatConnected = chatStage === ChatStage.Connected;
@@ -33,7 +34,6 @@ export function ChatPageContent() {
         {/* TOP */}
         <ChatHeader />
         {/* MIDDLE */}
-        {"Room status: " + roomStatus}
         {"ID: " + String(chatId)}
         {isChatInitial && <ChatInitialScreen />}
         {!!(isChatConnected || isChatDisconnected) && (
