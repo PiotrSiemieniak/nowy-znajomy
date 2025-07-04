@@ -18,7 +18,7 @@ export function SendButton({
       onClick={onClick}
       disabled={disabled || isLoading}
       size="icon"
-      className="absolute right-4 top-1/2 transform -translate-y-1/2 z-10"
+      className="w-full z-10"
     >
       {isLoading ? (
         <Loader2 className="h-4 w-4 animate-spin" />
