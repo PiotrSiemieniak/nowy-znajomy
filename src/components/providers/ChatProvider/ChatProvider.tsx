@@ -83,7 +83,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
   const isChatActive = chatStage === ChatStage.Connected;
 
-  const { presence } = usePresence();
+  // const { presence } = usePresence();
 
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -220,7 +220,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
             disconnect,
           }}
         >
-          {children}
+          <AblyRoomProvider chatId={chatId}>{children}</AblyRoomProvider>
         </ChatActionCtx.Provider>
       </ChatStateCtx.Provider>
     </AblyRoomProvider>

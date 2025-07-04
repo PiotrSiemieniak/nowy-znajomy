@@ -16,11 +16,11 @@ export default function ChatPage({ chatId }: { chatId?: string }) {
         </div>
       </div>
       <AblyClientProvider>
-        <AblyRoomProvider chatId={chatId || null}>
-          <ChatProvider>
-            <ChatPageContent />
-          </ChatProvider>
-        </AblyRoomProvider>
+        {/* <AblyRoomProvider chatId={chatId || null}> */}
+        <ChatProvider>
+          <ChatPageContent />
+        </ChatProvider>
+        {/* </AblyRoomProvider> */}
       </AblyClientProvider>
     </div>
   );
