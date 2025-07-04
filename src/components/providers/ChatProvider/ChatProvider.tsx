@@ -22,6 +22,8 @@ import {
   DEFAULT_SELECTED_CHANNELS,
 } from "./consts";
 import { AblyRoomProvider } from "../AblyRoomProvider";
+import { usePresence } from "@ably/chat/react";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
 
 type ChatStateType = {
   chatId: string | null;
@@ -59,6 +61,7 @@ type AdsListActionType = {
   updateFilters: (newValue: Partial<Filters>) => void; // Dodano updateFilters
   changeChatId: (value: string | null) => void;
   sendMessage: (msg: Omit<MessageType, "id">) => void;
+  disconnect: () => void;
 };
 
 export const ChatActionCtx = createContext<AdsListActionType | undefined>(
@@ -79,6 +82,12 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   ); // TEMP, TODO: remove when real data is available
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
   const isChatActive = chatStage === ChatStage.Connected;
+
+  const { presence } = usePresence();
+
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
   function setNewBgColors(bgArray?: string[]) {
     if (bgArray) setBgColors(bgArray);
@@ -142,6 +151,11 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
     if (bgColors === null) setNewBgColors();
   };
 
+  const disconnect = () => {
+    setChatStage(ChatStage.Disconnected);
+    presence?.leave();
+  };
+
   // const messageHandlerHook = chatId
   //   ? useMessages({
   //       listener: (payload) => {
@@ -165,6 +179,19 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
     // Wyczyść interwał przy odmontowaniu komponentu
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const params = new URLSearchParams(searchParams?.toString() || "");
+    if (chatId) {
+      params.set("id", chatId);
+    } else {
+      params.delete("id");
+    }
+    const newUrl = `${pathname}${params.toString() ? `?${params}` : ""}`;
+    router.replace(newUrl);
+  }, [chatId, pathname, searchParams, router]);
 
   return (
     <AblyRoomProvider chatId={chatId}>
@@ -190,9 +217,10 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
             changeChatState,
             changeChatId,
             sendMessage,
+            disconnect,
           }}
         >
-          <AblyRoomProvider chatId={chatId}>{children}</AblyRoomProvider>
+          {children}
         </ChatActionCtx.Provider>
       </ChatStateCtx.Provider>
     </AblyRoomProvider>

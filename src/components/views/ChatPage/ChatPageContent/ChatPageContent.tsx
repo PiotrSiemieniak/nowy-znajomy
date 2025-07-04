@@ -10,10 +10,11 @@ import { ChatSearchingScreen } from "@/components/sections/ChatSearchingScreen";
 import { ChatActionBar } from "@/components/sections/ChatActionBar";
 import { useScrollDetection } from "@/lib/hooks/useScrollDetection";
 import { cn } from "@/lib/utils";
+import { usePresence } from "@ably/chat/react";
+import { ChatConversationScreen } from "@/components/sections/ChatConversationScreen";
 
 export function ChatPageContent() {
-  const { isAtBottom, scrollToBottom, scrollRef } = useScrollDetection();
-  const { chatStage, chatId } = useChatState();
+  const { isAtBottom, scrollToBottom, scrollRef } = 
 
   const isChatInitial = chatStage === ChatStage.Initial;
   const isChatConnected = chatStage === ChatStage.Connected;
@@ -32,11 +33,11 @@ export function ChatPageContent() {
         {/* TOP */}
         <ChatHeader />
         {/* MIDDLE */}
-        {"Stage: " + chatStage}
+        {"Room status: " + roomStatus}
         {"ID: " + String(chatId)}
         {isChatInitial && <ChatInitialScreen />}
         {!!(isChatConnected || isChatDisconnected) && (
-          <ChatMessages scrollRef={scrollRef} />
+          <ChatConversationScreen scrollRef={scrollRef} />
         )}
         {isChatSearching && <ChatSearchingScreen />}
         {/* BOTTOM */}
