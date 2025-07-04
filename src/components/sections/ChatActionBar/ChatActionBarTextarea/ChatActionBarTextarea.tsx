@@ -67,7 +67,7 @@ export function ChatActionBarTextarea() {
   };
 
   return (
-    <form onSubmit={handleFormSubmit}>
+    <form onSubmit={handleFormSubmit} className="space-y-2">
       <MessageSymbolsCounter messageLength={textareaValue.length} />
       {!hiddenButtonCondition && (
         <SendButton
@@ -82,8 +82,8 @@ export function ChatActionBarTextarea() {
         onFocus={handleTextareaFocus}
         onBlur={handleTextareaBlur}
         maxLength={TEXTAREA_MAX_LENGTH}
-        placeholder="Type your message here..."
-        className="max-h-48 bg-card/50 min-h-[2.5rem] h-10 backdrop-blur-sm"
+        placeholder="Napisz swoją wiadomość..."
+        className="max-h-48 bg-card/50 min-h-[2.5rem] h-fit backdrop-blur-sm"
         onKeyDown={handleTextareaKeyDown}
       />
     </form>
