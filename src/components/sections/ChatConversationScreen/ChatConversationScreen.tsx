@@ -2,14 +2,11 @@
 
 import { RefObject } from "react";
 import { ChatMessages } from "../ChatMessages";
-import { useChatState } from "@/components/providers/ChatProvider";
 
 type Props = {
   scrollRef: RefObject<HTMLDivElement | null>;
 };
 export function ChatConversationScreen({ scrollRef }: Props) {
-  const { bgColors } = useChatState();
-
   return (
     <div
       ref={scrollRef}
@@ -22,9 +19,6 @@ export function ChatConversationScreen({ scrollRef }: Props) {
         <p className="text-gray-50/50">Kanał: xxx</p>
         <p className="text-gray-50/50 text-xs">Napisz coś, aby się przywitać</p>
       </div>
-      {bgColors?.map((c) => (
-        <p>{c}</p>
-      ))}
       <ChatMessages />
     </div>
   );

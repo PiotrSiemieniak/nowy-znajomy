@@ -10,10 +10,10 @@ export function AblyRoomProvider({
   chatId: string | null;
   children?: ReactNode;
 }) {
-  // if (!chatId) return <>{children}</>;
+  if (!chatId) return <>{children}</>;
 
   return (
-    <ChatRoomProvider release attach name={chatId ?? "waiting-room"}>
+    <ChatRoomProvider release attach={Boolean(chatId)} name={chatId}>
       {children}
     </ChatRoomProvider>
   );

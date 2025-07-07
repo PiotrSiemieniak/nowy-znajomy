@@ -15,11 +15,10 @@ export function ChatActionBarTextarea() {
   const { isChatActive } = useChatState();
   const { sendMessage } = useChatAction();
   const { send } = useMessages({
-    listener: ({ message }) => {
+    listener: async ({ message }) => {
       sendMessage({
+        ...message,
         author: message.clientId,
-        date: message.createdAt,
-        text: message.text,
       });
     },
   });
@@ -48,6 +47,9 @@ export function ChatActionBarTextarea() {
     if (isTextareaEmpty || !isChatActive) return;
     send({
       text: textareaValue,
+      headers: {
+        type: "message",
+      },
     });
     setTextareaValue("");
   };

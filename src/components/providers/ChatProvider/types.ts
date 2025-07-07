@@ -1,11 +1,30 @@
 import { Gender } from "@/lib/globalTypes/personal/gender";
+import type { Message } from "@ably/chat";
 
-export type MessageType = {
-  id: string;
-  text: string;
-  author: string;
-  date: Date;
+// Prosto z typu Ably
+export declare enum MessageType {
+    /** Fires when a new chat message is received. */
+    Created = "message.created",
+    /** Fires when a chat message is updated. */
+    Updated = "message.updated",
+    /** Fires when a chat message is deleted. */
+    Deleted = "message.deleted"
 }
+
+export type MessageState = {
+  id: string;
+  author: string;
+  
+  // text: string;
+  // author: string;
+  // createdAt: Date;
+  // timestamp: Date;
+  // type: MessageType;
+  // version: string;
+  // headers: {
+  //   [x: string]: string | number | boolean | null | undefined
+  // };
+} & Message
 
 // Channels
 

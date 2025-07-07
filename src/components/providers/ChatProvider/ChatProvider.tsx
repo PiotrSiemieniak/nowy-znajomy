@@ -12,7 +12,7 @@ import {
   ChannelsListData,
   ChatStage,
   Filters,
-  MessageType,
+  MessageState,
   SelectedChannel,
 } from "./types";
 import { mockRegions } from "./mocks";
@@ -22,7 +22,6 @@ import {
   DEFAULT_SELECTED_CHANNELS,
 } from "./consts";
 import { AblyRoomProvider } from "../AblyRoomProvider";
-import { usePresence } from "@ably/chat/react";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 
 type ChatStateType = {
@@ -30,7 +29,7 @@ type ChatStateType = {
   chatStage: ChatStage;
   isChatActive: boolean;
   bgColors: string[] | null;
-  messages: MessageType[];
+  messages: MessageState[];
   isPopoverOpen: boolean;
   channelsListData: ChannelsListData;
   selectedChannels: SelectedChannel[];
@@ -60,19 +59,22 @@ type AdsListActionType = {
   toggleChannelAsSelected: (channel: SelectedChannel) => void;
   updateFilters: (newValue: Partial<Filters>) => void; // Dodano updateFilters
   changeChatId: (value: string | null) => void;
-  sendMessage: (msg: Omit<MessageType, "id">) => void;
-  disconnect: () => void;
+  sendMessage: (msg: Omit<MessageState, "id">) => void;
+  disconnect: (message: Omit<MessageState, "id">) => void;
 };
 
 export const ChatActionCtx = createContext<AdsListActionType | undefined>(
   undefined
 );
-
+// KARRAMBA
+// 1.W ABLYROOMPROVIDER TRZEBA ZROBIĆ KOLEJNY PROVIDER
+// 2. TEN PROVIDER/KOMPONENT POWINIEN WZYWAĆ AKCJE I STAN Z TEGO PROVIDERA
+// 3. POWINIEN UŻYWAĆ AKCJE DO SWOICH WYDARZEŃ
 export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const [bgColors, setBgColors] = useState<string[] | null>(null);
   const [chatStage, setChatStage] = useState<ChatStage>(ChatStage.Initial);
   const [chatId, setChatId] = useState<string | null>(null);
-  const [messages, setMessages] = useState<MessageType[]>([]);
+  const [messages, setMessages] = useState<MessageState[]>([]);
   const [isPopoverOpen, setPopoverOpen] = useState<boolean>(false);
   const [channelsListData, setChannelsListData] = useState<ChannelsListData>(
     DEFAULT_CHANNELS_LIST_DATA
@@ -97,7 +99,9 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const changeChatState = (stage: ChatStage) => setChatStage(stage);
   const changeChatId = (value: string | null) => setChatId(value);
 
-  // ---==--- CHANNELS ---==---
+  // ==========
+  // CHANNELS
+  // ==========
 
   const updateChannelsList = () => {
     // TODO. This function use mocked data
@@ -127,10 +131,28 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
 
   // ---==--- CHANNELS END ---==---
 
-  const sendMessage = (el: Omit<MessageType, "id">) => {
-    const newMessage: MessageType = { ...el, id: String(messages.length + 1) };
+  const disconnect = (el: Omit<MessageState, "id">) => {
+    const isMsgNonDisconnectType = el.headers.type !== "disconnect";
+    const isDisconnected = chatStage === ChatStage.Disconnected;
+
+    if (isMsgNonDisconnectType || isDisconnected) return null;
+
+    const newMessage: MessageState = { ...el, id: String(messages.length + 1) };
 
     setMessages((prevMessages) => [...prevMessages, newMessage]);
+    setChatStage(ChatStage.Disconnected);
+  };
+
+  const sendMessage = async (el: Omit<MessageState, "id">) => {
+    const isMessageType = el.headers.type === "message";
+
+    if (!isMessageType || !isChatActive) return null;
+
+    const newMessage: MessageState = { ...el, id: String(messages.length + 1) };
+
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
+
+    return;
   };
 
   const updateFilters = (newValue: Partial<Filters>) => {
@@ -151,19 +173,9 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
     if (bgColors === null) setNewBgColors();
   };
 
-  const disconnect = () => {
-    setChatStage(ChatStage.Disconnected);
-    presence?.leave();
-  };
-
-  // const messageHandlerHook = chatId
-  //   ? useMessages({
-  //       listener: (payload) => {
-  //         const newMessage = payload.message;
-  //         setMessages((prevMessages) => ({ ...prevMessages, newMessage }));
-  //       },
-  //     })
-  //   : { send: null };
+  // ==========
+  // useFX
+  // ==========
 
   useEffect(handleEmptyBgColors, [bgColors]);
   useEffect(handlePopoverStateEffect, [isPopoverOpen]);

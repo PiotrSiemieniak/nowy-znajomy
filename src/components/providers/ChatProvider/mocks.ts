@@ -1,7 +1,7 @@
 import { getRandomNum } from "@/lib/getRandomNum";
-import type { ChannelData, MessageType } from "./types";
+import type { ChannelData, Message } from "./types";
 
-export const mocksMessages: MessageType[] = [
+export const mocksMessages: Message[] = [
   {
     author: "Test",
     id: "0",
