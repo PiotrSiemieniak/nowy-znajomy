@@ -2,9 +2,8 @@ import { ChatProvider } from "@/components/providers/ChatProvider";
 import { User } from "lucide-react";
 import { ChatPageContent } from "./ChatPageContent";
 import { AblyClientProvider } from "@/components/providers/AblyClientProvider";
-import { AblyRoomProvider } from "@/components/providers/AblyRoomProvider";
 
-export default function ChatPage({ chatId }: { chatId?: string }) {
+export default function ChatPage() {
   return (
     <div className="h-full w-full relative bg-black -z-50">
       <div className="flex fixed top-0 z-10 bg-black justify-between flex-row py-1 px-2 gap-2 w-full text-white overflow-hidden">
@@ -16,11 +15,9 @@ export default function ChatPage({ chatId }: { chatId?: string }) {
         </div>
       </div>
       <AblyClientProvider>
-        {/* <AblyRoomProvider chatId={chatId || null}> */}
         <ChatProvider>
           <ChatPageContent />
         </ChatProvider>
-        {/* </AblyRoomProvider> */}
       </AblyClientProvider>
     </div>
   );

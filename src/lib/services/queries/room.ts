@@ -1,5 +1,5 @@
 import { where } from "firebase/firestore";
-import { addDocumentToFirestore, queryFirestore } from "../adapters/firebase/utils/queryFirestore";
+import { addDocumentToFirestore, deleteDocumentFromFirestore, queryFirestore } from "../adapters/firebase/utils/queryFirestore";
 import Ably from "ably";
 import { generateColorPalette } from "@/components/providers/ChatProvider/utils";
 import { getUUID } from "@/lib/crypto/getUUID";
@@ -68,4 +68,25 @@ export async function getRoom({ sessionKey }: { sessionKey: string }): Promise<R
     
     return null;
   }
+}
+
+type DeleteRoomProps = {
+  sessionKey: string;
+  roomId: string;
+};
+
+export async function deleteRoom({ sessionKey, roomId }: DeleteRoomProps): Promise<boolean> {
+  // Pobierz dokument po ID
+  const records = await queryFirestore<RoomCollectionType>("room", {
+    docId: roomId,
+  });
+
+  const room = records?.[0];
+  if (!room) return false;
+
+  // Sprawdź, czy sessionKey jest w userSessionKeys
+  if (!room.userSessionKeys.includes(sessionKey)) return false;
+
+  // Usuń dokument po roomId
+  return await deleteDocumentFromFirestore("room", roomId);
 }
