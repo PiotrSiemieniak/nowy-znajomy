@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { useMessages, useRoom } from "@ably/chat/react";
 import { X } from "lucide-react";
 import { useEffect } from "react";
+import { useSendDisconnectOnUnload } from "../hooks";
 
 export function DisconnectBtn() {
   const { chatStage } = useChatState();
@@ -20,19 +21,19 @@ export function DisconnectBtn() {
       });
     },
   });
-
-  const handleClickButton = () => {
+  const sendDisconnectBind = () =>
     sendDisconnect({
       text: "disconnect",
-      headers: {
-        type: "disconnect",
-      },
+      headers: { type: "disconnect" },
     });
-  };
+
+  const handleClickButton = sendDisconnectBind;
 
   useEffect(() => {
     if (chatStage === ChatStage.Disconnected) detach();
   }, [chatStage]);
+
+  useSendDisconnectOnUnload(sendDisconnectBind);
 
   return (
     <Button

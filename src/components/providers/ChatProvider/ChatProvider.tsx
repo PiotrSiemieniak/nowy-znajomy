@@ -23,6 +23,8 @@ import {
 } from "./consts";
 import { AblyRoomProvider } from "../AblyRoomProvider";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { disconnectRoom } from "@/lib/services/api/room";
+import { getSessionKey } from "@/lib/getSessionKey";
 
 type ChatStateType = {
   chatId: string | null;
@@ -137,10 +139,17 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
 
     if (isMsgNonDisconnectType || isDisconnected) return null;
 
+    const sessionKey = getSessionKey();
     const newMessage: MessageState = { ...el, id: String(messages.length + 1) };
 
     setMessages((prevMessages) => [...prevMessages, newMessage]);
     setChatStage(ChatStage.Disconnected);
+    if (chatId) {
+      disconnectRoom({
+        sessionKey,
+        roomId: chatId,
+      });
+    }
   };
 
   const sendMessage = async (el: Omit<MessageState, "id">) => {
@@ -204,6 +213,8 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
     const newUrl = `${pathname}${params.toString() ? `?${params}` : ""}`;
     router.replace(newUrl);
   }, [chatId, pathname, searchParams, router]);
+
+  // useDeleteRoomOnDisconnectEffect(chatStage, chatId);
 
   return (
     <AblyRoomProvider chatId={chatId}>
