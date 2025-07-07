@@ -11,6 +11,6 @@ export function getSessionKey(){
     sessionKey = getUUID();
     sessionStorage.setItem(KEY_STR, sessionKey);
   }
-console.log('sessionKey', sessionKey)
+  
   return sessionKey
 }
