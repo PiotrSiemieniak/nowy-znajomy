@@ -3,14 +3,13 @@
 import { useChatState } from "@/components/providers/ChatProvider";
 import { ChatMessageElement } from "./ChatMessageElement";
 import { ChatMessageDisconectLabel } from "./ChatMessageDisconectLabel";
+import { getSessionKey } from "@/lib/getSessionKey";
 
 type Props = {};
 
-const KEY_STR = "SESSION_KEY";
-
 export function ChatMessages({}: Props) {
   const { messages } = useChatState();
-  const sessionKey = sessionStorage.getItem(KEY_STR);
+  const sessionKey = getSessionKey();
 
   return messages.map((message, index) => {
     const prevMessage = messages[index - 1];

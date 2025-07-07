@@ -4,11 +4,9 @@ import {
   useChatState,
 } from "@/components/providers/ChatProvider";
 import { ChatStage } from "@/components/providers/ChatProvider/types";
-import { getUUID } from "@/lib/crypto/getUUID";
+import { getSessionKey } from "@/lib/getSessionKey";
 import { createWaitingRoom } from "@/lib/services/api/waitingRoom";
 import { useEffect, useRef } from "react";
-
-const KEY_STR = "SESSION_KEY";
 
 export const useSearchPooling = () => {
   const { changeChatState, changeChatId, setNewBgColors } = useChatAction();
@@ -16,23 +14,13 @@ export const useSearchPooling = () => {
 
   const retryCountRef = useRef(0);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const sessionKeyRef = useRef<string | null>(null);
 
   useEffect(() => {
-    if (!sessionKeyRef.current) {
-      let sessionKey = sessionStorage.getItem(KEY_STR);
-      if (!sessionKey) {
-        sessionKey = getUUID();
-        sessionStorage.setItem(KEY_STR, sessionKey);
-      }
-      sessionKeyRef.current = sessionKey;
-    }
-
     const fetchWithRetry = async () => {
       try {
         const res = await createWaitingRoom({
           filters,
-          sessionKey: String(sessionKeyRef.current),
+          sessionKey: getSessionKey(),
         });
 
         switch (res?.status) {
