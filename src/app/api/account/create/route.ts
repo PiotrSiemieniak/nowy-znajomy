@@ -1,15 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAccount, createAccountDetails, deleteExpiredUnconfirmedAccounts, isEmailTaken, isUsernameTaken } from "@/lib/services/queries/account";
 import { checkLimiter } from "@/lib/services/checkLimiter";
-import {
-  USERNAME_MIN_LENGTH,
-  USERNAME_MAX_LENGTH,
-  EMAIL_MIN_LENGTH,
-  EMAIL_MAX_LENGTH,
-  PASSWORD_MIN_LENGTH,
-  PASSWORD_MAX_LENGTH
-} from "@/configs/accountRegister";
-
+import { validateAccountFields } from "./utils";
 
 export async function POST(req: NextRequest) {
   checkLimiter({
@@ -18,40 +10,15 @@ export async function POST(req: NextRequest) {
 
   try {
     // Usuń stare niezatwierdzone konta
+    // TODO: utworzyć api cron jobs i przenieść ten szit do cronów
     await deleteExpiredUnconfirmedAccounts();
 
     const { username, email, password } = await req.json();
 
-    // Ograniczenie długości maila i hasła
-    if (
-      typeof username !== "string" ||
-      username.length < USERNAME_MIN_LENGTH ||
-      username.length > USERNAME_MAX_LENGTH
-    ) {
-      return NextResponse.json(
-        { ok: false, code: "USERNAME_LENGTH", message: `Nazwa użytkownika musi mieć od ${USERNAME_MIN_LENGTH} do ${USERNAME_MAX_LENGTH} znaków.` },
-        { status: 400 }
-      );
-    }
-    if (
-      typeof email !== "string" ||
-      email.length < EMAIL_MIN_LENGTH ||
-      email.length > EMAIL_MAX_LENGTH
-    ) {
-      return NextResponse.json(
-        { ok: false, code: "EMAIL_LENGTH", message: `Adres e-mail musi mieć od ${EMAIL_MIN_LENGTH} do ${EMAIL_MAX_LENGTH} znaków.` },
-        { status: 400 }
-      );
-    }
-    if (
-      typeof password !== "string" ||
-      password.length < PASSWORD_MIN_LENGTH ||
-      password.length > PASSWORD_MAX_LENGTH
-    ) {
-      return NextResponse.json(
-        { ok: false, code: "PASSWORD_LENGTH", message: `Hasło musi mieć od ${PASSWORD_MIN_LENGTH} do ${PASSWORD_MAX_LENGTH} znaków.` },
-        { status: 400 }
-      );
+    // Walidacja długości pól
+    const validationError = validateAccountFields({ username, email, password });
+    if (validationError) {
+      return NextResponse.json(validationError.body, { status: validationError.status });
     }
 
     // Sprawdzenie zajętości emaila i username
