@@ -15,9 +15,15 @@ export async function apiFetch<TRequest, TResponse>(
     body: body ? JSON.stringify(body) : undefined,
   });
 
-  if (!response.ok) {
-    throw new Error(`Request failed with status ${response.status}`);
-  }
+  const res = await response.json()
 
-  return response.json() as Promise<TResponse>;
+  try {
+    return res
+  } catch {
+    // Zwróć zawsze obiekt z ok: false
+    return {
+      ok: false,
+      message: res.message || 'Nieprawidłowa odpowiedź z serwera',
+    } as TResponse;
+  }
 }

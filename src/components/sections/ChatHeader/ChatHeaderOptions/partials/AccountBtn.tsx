@@ -10,6 +10,7 @@ import { LoginContent } from "@/components/specific/LoginContent/LoginContent";
 import { UserCog } from "lucide-react";
 import { AccountTrigger } from "@/components/specific/AccountTrigger";
 import { Separator } from "@/components/ui/Separator";
+import { RegisterContent } from "@/components/specific/RegisterContent";
 
 export function AccountBtn() {
   return (
@@ -23,10 +24,8 @@ export function AccountBtn() {
         <div className={cn("grid gap-4")}>
           <div className="flex space-x-4">
             <AccountTrigger />
-            {/* <LoginContent />
-            <Button size={"sm"} className="flex-1">
-              Zarejestruj
-            </Button> */}
+            <LoginContent />
+            <RegisterContent />
           </div>
           <Separator />
           <div className="space-y-2">
