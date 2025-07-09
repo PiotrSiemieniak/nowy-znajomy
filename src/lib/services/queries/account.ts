@@ -36,6 +36,8 @@ export type AccountDetails = {
   weight?: number;
 };
 
+export type CreateAccountResult = { ok: boolean; code?: string; message?: string; id?: string; confirmationSlug?: string; confirmationCode?: string };
+
 // Sprawdza, czy email jest już zajęty (case-insensitive)
 export async function isEmailTaken(email: string): Promise<boolean> {
   const emailLower = email.trim().toLowerCase();
@@ -61,7 +63,7 @@ export async function createAccount(data: {
   username: string;
   email: string;
   password: string;
-}): Promise<{ ok: boolean; code?: string; message?: string; id?: string }> {
+}): Promise<CreateAccountResult> {
   // Walidacja pól
   if (!data.username || typeof data.username !== "string" || data.username.length < 3 || data.username.length > 20) {
     return { ok: false, code: "INVALID_USERNAME", message: "Nieprawidłowa nazwa użytkownika" };
@@ -104,7 +106,7 @@ export async function createAccount(data: {
   if (!id) {
     return { ok: false, code: "CREATE_FAILED", message: "Nie udało się utworzyć konta" };
   }
-  return { ok: true, id };
+  return { ok: true, id, confirmationSlug, confirmationCode };
 }
 
 // Tworzy rekord w kolekcji accountDetails

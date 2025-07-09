@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createAccount, createAccountDetails, deleteExpiredUnconfirmedAccounts, isEmailTaken, isUsernameTaken } from "@/lib/services/queries/account";
 import { checkLimiter } from "@/lib/services/checkLimiter";
 import { validateAccountFields } from "./utils";
+import { sendRegistrationConfirmationMail } from "./utils";
 
 export async function POST(req: NextRequest) {
   checkLimiter({
@@ -55,8 +56,25 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(detailsRes, { status: 500 });
     }
 
+    // Wysyłka maila potwierdzającego rejestrację (nie blokuje rejestracji)
+    (async () => {
+      try {
+        const { confirmationSlug, confirmationCode } = result;
+        await sendRegistrationConfirmationMail({
+          to: email,
+          username,
+          confirmationSlug: confirmationSlug ?? '',
+          confirmationCode: confirmationCode ?? '',
+        });
+      } catch (e) {
+        // Błąd wysyłki maila nie wpływa na rejestrację
+        console.error("Mail send error (nie blokuje rejestracji)", e);
+      }
+    })();
+
     return NextResponse.json({ ok: true, id: result.id }, { status: 201 });
-  } catch {
+  } catch (error) {
+    console.error("Error /account/create", error);
     return NextResponse.json(
       { ok: false, code: "SERVER_ERROR", message: "Błąd serwera" },
       { status: 500 }
