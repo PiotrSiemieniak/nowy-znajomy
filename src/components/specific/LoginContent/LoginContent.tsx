@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/Button";
 import {
   DialogHeader,
@@ -20,7 +22,6 @@ export function LoginContent() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const { data: session, status } = useSession();
-  console.log("[LoginContent] session", session, status);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,11 +52,6 @@ export function LoginContent() {
         <DialogHeader>
           <DialogTitle className="text-left">Logowanie</DialogTitle>
         </DialogHeader>
-        <div className="text-xs text-muted-foreground">
-          <b>Session status:</b> {status}
-          <br />
-          <b>Session:</b> {JSON.stringify(session)}
-        </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="login-email">Adres e-mail</Label>
@@ -110,12 +106,6 @@ export function LoginContent() {
             </Button>
           </DialogFooter>
         </form>
-        <div className="mt-2 text-xs text-muted-foreground">
-          <div>Session status: {status}</div>
-          <pre className="whitespace-pre-wrap break-all">
-            {JSON.stringify(session, null, 2)}
-          </pre>
-        </div>
       </DialogContent>
     </Dialog>
   );
