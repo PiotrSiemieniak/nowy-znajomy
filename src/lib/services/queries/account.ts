@@ -2,6 +2,7 @@ import { addDocumentToFirestore, deleteDocumentFromFirestore, queryFirestore, up
 import { where } from "firebase/firestore";
 import { getUUID } from "@/lib/crypto/getUUID";
 import bcrypt from "bcryptjs";
+import { AccountDetails, UserAccount } from "@/lib/globalTypes/account";
 
 const COLLECTION = "accounts";
 
@@ -11,29 +12,6 @@ export const getConfirmationExpireDate = () => {
   const date = new Date();
   date.setDate(date.getDate() + CONFIRMATION_EXPIRATION_DAYS);
   return date.toISOString();
-};
-
-export type UserAccount = {
-  username: string;
-  usernameLower?: string;
-  email: string;
-  password: string;
-  confirmation: {
-    isConfirmed: boolean;
-    confirmationSlug: string;
-    confirmationCode: string;
-    expireAt: string; // data do kiedy można potwierdzić konto (ISO)
-  };
-};
-
-export type AccountDetails = {
-  accountId: string;
-  birthDate?: string;
-  firstName?: string;
-  lastName?: string;
-  height?: number;
-  nationality?: string;
-  weight?: number;
 };
 
 export type CreateAccountResult = { ok: boolean; code?: string; message?: string; id?: string; confirmationSlug?: string; confirmationCode?: string };
