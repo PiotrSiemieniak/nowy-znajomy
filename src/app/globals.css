@@ -138,7 +138,7 @@
     @apply bg-background
   }
   h6 {
-    @apply text-muted-foreground text-sm mx-4 mb-2 font-medium;
+    @apply text-muted-foreground text-sm mb-2 font-medium;
   }
   blockquote {
     @apply mt-6 border-l-2 pl-6 italic
@@ -148,6 +148,12 @@
   }
   code {
     @apply bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold
+  }
+  .bg-cardGlass { 
+    @apply bg-card/75 backdrop-blur-xl;
+  }
+  .bg-popoverGlass { 
+    @apply bg-popover/75 backdrop-blur-xl;
   }
   .muted {
     @apply text-muted-foreground text-xs;
