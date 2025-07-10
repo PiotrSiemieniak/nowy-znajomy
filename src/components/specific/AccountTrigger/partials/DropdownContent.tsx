@@ -38,7 +38,7 @@ export function DropdownContent() {
       <DropdownMenuSeparator />
       <DropdownMenuItem
         className="hover:bg-red-200 dark:bg-red-900 hover:dark:bg-red-800"
-        onClick={() => signOut()}
+        onClick={() => signOut({ redirect: false })}
       >
         Wyloguj
         <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>

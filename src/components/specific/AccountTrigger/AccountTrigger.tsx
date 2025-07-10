@@ -45,13 +45,9 @@ export function AccountTrigger({ className }: { className?: string }) {
               {user?.email || "Brak adresu e-mail"}
             </Typography>
           </div>
-          <Button
-            size={"icon"}
-            variant={"ghost"}
-            className="ml-auto p-0  h-8 w-8"
-          >
+          <span className="ml-auto p-0 h-8 w-8 flex items-center justify-center">
             <MoreVertical />
-          </Button>
+          </span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownContent />
