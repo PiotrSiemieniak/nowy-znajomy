@@ -150,10 +150,10 @@
     @apply bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold
   }
   .bg-cardGlass { 
-    @apply bg-card/75 backdrop-blur-xl;
+    @apply bg-card/75 backdrop-blur-xl backdrop-saturate-200;
   }
   .bg-popoverGlass { 
-    @apply bg-popover/75 backdrop-blur-xl;
+    @apply bg-popover/75 backdrop-blur-xl backdrop-saturate-200;
   }
   .muted {
     @apply text-muted-foreground text-xs;

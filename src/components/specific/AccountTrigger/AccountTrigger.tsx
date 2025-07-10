@@ -1,25 +1,14 @@
 import { Button } from "@/components/ui/Button";
-import {
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-} from "@/components/ui/DropdownMenu";
 import { Typography } from "@/components/ui/Typography";
 import { cn } from "@/lib/utils";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuLabel,
-  DropdownMenuPortal,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger,
-} from "@/components/ui/DropdownMenu";
 import { MoreVertical } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+} from "@/components/ui/DropdownMenu";
+import { DropdownContent } from "./partials/DropdownContent";
 
 export function AccountTrigger({ className }: { className?: string }) {
   const { data: session } = useSession();
@@ -65,36 +54,7 @@ export function AccountTrigger({ className }: { className?: string }) {
           </Button>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="start">
-        <DropdownMenuLabel>Moje konto</DropdownMenuLabel>
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            Edytuj
-            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            Znajomi
-            <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            Historia wiadomości
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            Ulepsz do Pro
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>Udostępnij aplikację</DropdownMenuItem>
-        <DropdownMenuItem>Pobierz aplikację</DropdownMenuItem>
-        <DropdownMenuItem disabled>API</DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem className="hover:bg-red-200 dark:bg-red-900 hover:dark:bg-red-800">
-          Log out
-          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
+      <DropdownContent />
     </DropdownMenu>
   );
 }
