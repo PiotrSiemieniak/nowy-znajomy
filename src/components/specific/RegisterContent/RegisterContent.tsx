@@ -8,15 +8,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/Dialog";
-import { Input } from "@/components/ui/Input";
-import { Label } from "@/components/ui/Label/Label";
-import { DiscordLogoIcon } from "@radix-ui/react-icons";
 import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useRef, useState } from "react";
 import { validateUsername, registerAccount } from "@/lib/services/api/account";
+import { Content } from "./partials/Content";
+import { ConfirmAccountContent } from "../ConfirmAccountContent";
+import { toast } from "sonner";
+import { appNotification } from "@/components/ui/Sonner/appNotification";
 
 const REGISTER_SCHEMA = z
   .object({
@@ -79,8 +80,13 @@ export function RegisterContent() {
   });
 
   // Stan na komunikat z backendu dla username
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [usernameError, setUsernameError] = useState<string | null>(null);
   const [usernameAvailable, setUsernameAvailable] = useState<boolean>(false);
+  const [registerError, setRegisterError] = useState<string | null>(null);
+  const [registerSuccess, setRegisterSuccess] = useState<boolean>(false);
+  const [confirmedEmail, setConfirmedEmail] = useState<string>("");
+  const [confirmedPassword, setConfirmedPassword] = useState<string>("");
   const usernameValue = form.watch("username");
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
@@ -115,9 +121,6 @@ export function RegisterContent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [usernameValue]);
 
-  const [registerError, setRegisterError] = useState<string | null>(null);
-  const [registerSuccess, setRegisterSuccess] = useState<boolean>(false);
-
   const onSubmit = async (data: RegisterFormValues) => {
     setRegisterError(null);
     setRegisterSuccess(false);
@@ -126,19 +129,25 @@ export function RegisterContent() {
       email: data.email,
       password: data.password,
     });
-    console.log("res", res);
+
     if (!res || !res.ok) {
       setRegisterError(res?.message || "Błąd rejestracji");
       setRegisterSuccess(false);
     } else {
       setRegisterSuccess(true);
       setRegisterError(null);
+      setConfirmedEmail(data.email); // Zapisz email przed resetem
+      setConfirmedPassword(data.password); // Zapisz hasło przed resetem
       form.reset();
     }
   };
 
+  const handleDialogOpenChange = (open: boolean) => {
+    setDialogOpen(open);
+  };
+
   return (
-    <Dialog>
+    <Dialog open={dialogOpen} onOpenChange={handleDialogOpenChange}>
       <DialogTrigger asChild>
         <Button size={"sm"} className="flex-1">
           Zarejestruj
@@ -148,78 +157,24 @@ export function RegisterContent() {
         <DialogHeader>
           <DialogTitle className="text-left">Rejestracja</DialogTitle>
         </DialogHeader>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mb-0">
-          {/* Komunikaty globalne */}
-          {registerError && (
-            <p className="text-xs text-destructive">{registerError}</p>
-          )}
-          {registerSuccess && (
-            <p className="text-xs text-success">
-              Konto utworzone! Sprawdź e-mail w celu potwierdzenia.
-            </p>
-          )}
-          <div className="space-y-4">
-            {FIELDS.map((field) => (
-              <div className="space-y-2" key={field.name}>
-                <Label htmlFor={field.name}>{field.label}</Label>
-                <Input
-                  id={field.name}
-                  {...field}
-                  {...form.register(field.name as keyof RegisterFormValues)}
-                />
-                {/* Komunikaty walidacji */}
-                {form.formState.errors[
-                  field.name as keyof RegisterFormValues
-                ] && (
-                  <p className="text-xs text-destructive">
-                    {
-                      form.formState.errors[
-                        field.name as keyof RegisterFormValues
-                      ]?.message as string
-                    }
-                  </p>
-                )}
-                {/* Komunikat z backendu dla username */}
-                {field.name === "username" && usernameError && (
-                  <p className="text-xs text-destructive">{usernameError}</p>
-                )}
-                {/* Komunikat o dostępności nazwy użytkownika */}
-                {field.name === "username" &&
-                  !usernameError &&
-                  usernameAvailable && (
-                    <p className="text-xs text-success">
-                      Nazwa użytkownika jest dostępna
-                    </p>
-                  )}
-              </div>
-            ))}
-          </div>
-          <div className="flex space-x-4">
-            <div className="h-px flex-1 bg-muted my-auto" />
-            <p className="text-muted-foreground text-xs my-auto">
-              lub za pomocą
-            </p>
-            <div className="h-px flex-1 bg-muted my-auto" />
-          </div>
-          <div className="flex justify-center gap-4">
-            <Button
-              size={"icon"}
-              variant={"outline"}
-              type="button"
-              onClick={() => signIn("discord")}
-            >
-              <DiscordLogoIcon />
-            </Button>
-          </div>
-          <DialogFooter className="flex flex-row justify-end mb-0">
-            <DialogClose asChild>
-              <Button variant="outline" type="button">
-                Anuluj
-              </Button>
-            </DialogClose>
-            <Button type="submit">Utwórz konto</Button>
-          </DialogFooter>
-        </form>
+        {registerSuccess ? (
+          <ConfirmAccountContent
+            callback={() => setDialogOpen(false)}
+            email={confirmedEmail}
+            password={confirmedPassword}
+          />
+        ) : (
+          <Content
+            form={form}
+            onSubmit={form.handleSubmit(onSubmit)}
+            registerError={registerError}
+            registerSuccess={registerSuccess}
+            usernameError={usernameError}
+            usernameAvailable={usernameAvailable}
+            FIELDS={FIELDS}
+            signIn={signIn}
+          />
+        )}
       </DialogContent>
     </Dialog>
   );

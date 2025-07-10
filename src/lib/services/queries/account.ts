@@ -1,4 +1,4 @@
-import { addDocumentToFirestore, deleteDocumentFromFirestore, queryFirestore } from "@/lib/services/adapters/firebase/utils/queryFirestore";
+import { addDocumentToFirestore, deleteDocumentFromFirestore, queryFirestore, updateDocumentInFirestore } from "@/lib/services/adapters/firebase/utils/queryFirestore";
 import { where } from "firebase/firestore";
 import { getUUID } from "@/lib/crypto/getUUID";
 import bcrypt from "bcryptjs";
@@ -140,4 +140,33 @@ export async function deleteExpiredUnconfirmedAccounts(): Promise<number> {
     }
   }
   return deleted;
+}
+
+// Potwierdza konto na podstawie kodu (z użyciem updateDocumentInFirestore)
+export async function confirmAccountByCode(email: string, code: string) {
+  const users = await queryFirestore("accounts", {
+    constraints: [where("email", "==", email.trim().toLowerCase())]
+  });
+  if (!users || users.length === 0) {
+    return { ok: false, code: "NOT_FOUND", message: "Nie znaleziono konta" };
+  }
+  const user = users[0] as UserAccount & { id?: string };
+  const confirmation = user.confirmation;
+  if (!confirmation || confirmation.isConfirmed) {
+    return { ok: false, code: "ALREADY_CONFIRMED", message: "Konto już potwierdzone" };
+  }
+  if (confirmation.confirmationCode !== code) {
+    return { ok: false, code: "INVALID_CODE", message: "Nieprawidłowy kod potwierdzający" };
+  }
+  // Zaktualizuj confirmation.isConfirmed na true
+  const docId = (user as any).id || user.email;
+  const updateOk = await updateDocumentInFirestore(
+    "accounts",
+    docId,
+    { confirmation: { ...confirmation, isConfirmed: true } }
+  );
+  if (!updateOk) {
+    return { ok: false, code: "UPDATE_FAILED", message: "Nie udało się potwierdzić konta" };
+  }
+  return { ok: true };
 }

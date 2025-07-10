@@ -37,13 +37,8 @@ type RegisterAccountPayload = {
 async function registerAccount(payload: RegisterAccountPayload): Promise<RegisterAccountRes | null> {
   if (!payload.password) return null;
 
-  const saltRounds = 10;
-  const hashedPass = await bcrypt.hash(payload.password, saltRounds);
-
-  // Przekazujemy tylko zahaszowane hasło
   const payloadToSend = {
     ...payload,
-    password: hashedPass,
     confirmPassword: undefined, // nie wysyłaj confirmPassword do backendu
   };
 
@@ -56,3 +51,17 @@ async function registerAccount(payload: RegisterAccountPayload): Promise<Registe
 }
 
 export { validateUsername, registerAccount };
+
+export async function confirmAccount({ email, code }: { email: string; code: string }) {
+  if (!email || !code) {
+    return {
+      ok: false,
+      code: "MISSING_PARAMS",
+      message: "Brak wymaganych parametrów",
+    };
+  }
+
+  return apiFetch("/account/confirmRegistration", {
+    method: "POST",
+  }, { email, code });
+}

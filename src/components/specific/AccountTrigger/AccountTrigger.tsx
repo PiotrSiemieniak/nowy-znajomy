@@ -4,6 +4,7 @@ import Image from "next/image";
 
 export function AccountTrigger({ className }: { className?: string }) {
   const { data: session } = useSession();
+  console.log("AccountTrigger session:", session);
 
   if (!session) return null;
 

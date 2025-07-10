@@ -6,7 +6,7 @@ import {
   PASSWORD_MIN_LENGTH,
   PASSWORD_MAX_LENGTH
 } from "@/configs/accountRegister";
-import { sendMail } from "@/utils/mail"; // Adjust the import based on your project structure
+import { sendMail } from "@/lib/serverActions/sendMail";
 
 type ValidationErrorBody = {
   ok: false;

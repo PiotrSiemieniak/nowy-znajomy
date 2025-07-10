@@ -5,11 +5,12 @@ import { cn } from "@/lib/utils";
 const typographyVariants = cva("", {
   variants: {
     variant: {
-      muted: "text-muted-foreground text-sm",
+      muted: "text-muted-foreground text-xs",
       small: "text-sm leading-none font-medium",
       large: "text-lg font-semibold",
       lead: "text-muted-foreground text-xl",
-      default: "leading-7 [&:not(:first-child)]:mt-6",
+      default:
+        "leading-7 [&:not(:first-child)]:mt-2 text-[15px] text-foreground",
     },
   },
   defaultVariants: {
