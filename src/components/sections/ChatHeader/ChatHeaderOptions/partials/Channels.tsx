@@ -24,6 +24,7 @@ import { cn } from "@/lib/utils";
 import { ChannelsList } from "@/components/specific/ChannelsList";
 import { FiltersList } from "@/components/specific/FiltersList";
 import { ActiveChannelBadges } from "@/components/specific/ActiveChannelBadges/ActiveChannelBadges";
+import { ChannelCreator } from "@/components/specific/ChannelCreator";
 
 function ChannelsTrigger() {
   return (
@@ -145,7 +146,10 @@ export function Channels() {
             <CarouselContent className="h-full">
               <CarouselItem className="w-full h-full max-h-[75vh]">
                 <DrawerHeader className="space-y-2">
-                  <DrawerTitle>Kanały</DrawerTitle>
+                  <div className="inline-flex items-center justify-between w-full">
+                    <DrawerTitle>Kanały</DrawerTitle>
+                    <ChannelCreator />
+                  </div>
                   <ChannelsList />
                   <ActiveChannelBadges />
                   <DrawerDescription>

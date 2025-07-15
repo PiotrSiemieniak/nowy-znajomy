@@ -1,15 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import dynamic from "next/dynamic";
-
-const AnimatePresence = dynamic(
-  () => import("framer-motion").then((m) => m.AnimatePresence),
-  { ssr: false }
-);
-const MotionP = dynamic(() => import("framer-motion").then((m) => m.motion.p), {
-  ssr: false,
-});
+import { AnimatePresence, motion } from "framer-motion";
 
 type Props = {
   desc?: string;
@@ -17,28 +8,23 @@ type Props = {
 };
 
 export function Desc({ desc, errorLabel }: Props) {
-  const [display, setDisplay] = useState<"desc" | "error" | null>(null);
-  useEffect(() => {
-    if (errorLabel) setDisplay("error");
-    else if (desc) setDisplay("desc");
-    else setDisplay(null);
-  }, [desc, errorLabel]);
+  const display = errorLabel ? "error" : desc ? "desc" : null;
 
   return (
     <AnimatePresence mode="wait" initial={false}>
       {display === "error" && errorLabel ? (
-        <MotionP
+        <motion.p
           key="error"
           initial={{ opacity: 0, filter: "blur(6px)" }}
           animate={{ opacity: 1, filter: "blur(0px)" }}
           exit={{ opacity: 0, filter: "blur(6px)" }}
           transition={{ duration: 0.3 }}
-          className="text-xs text-destructive"
+          className="text-xs text-destructive font-semibold"
         >
           {errorLabel}
-        </MotionP>
+        </motion.p>
       ) : display === "desc" && desc ? (
-        <MotionP
+        <motion.p
           key="desc"
           initial={{ opacity: 0, filter: "blur(6px)" }}
           animate={{ opacity: 1, filter: "blur(0px)" }}
@@ -47,7 +33,7 @@ export function Desc({ desc, errorLabel }: Props) {
           className="text-xs text-muted-foreground"
         >
           {desc}
-        </MotionP>
+        </motion.p>
       ) : null}
     </AnimatePresence>
   );

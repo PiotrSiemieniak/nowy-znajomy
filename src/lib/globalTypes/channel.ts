@@ -1,4 +1,8 @@
-export type ChannelType = "regional" | "thematic" | "group";
+export enum ChannelType {
+  REGIONAL = "regional",
+  THEMATIC = "thematic",
+  GROUP = "group",
+}
 
 export type ChannelSettings = {
   maxUsers?: number;         // Maksymalna liczba osób w kanale (opcjonalnie)

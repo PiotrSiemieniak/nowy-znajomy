@@ -2,6 +2,7 @@ import * as React from "react";
 import { X, Eye, EyeClosed } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { useId } from "react";
 
 // Props rozszerzone o clearable i showPasswordToggle
 type InputProps = React.ComponentProps<"input"> & {
@@ -18,6 +19,7 @@ function Input({
 }: InputProps) {
   const [inputType, setInputType] = React.useState(type);
   const inputRef = React.useRef<HTMLInputElement>(null);
+  const uid = useId();
 
   // Obsługa controlled/uncontrolled value
   const isControlled = props.value !== undefined;
@@ -69,8 +71,10 @@ function Input({
   };
 
   return (
-    <div className="relative">
+    <div className="relative w-full">
       <input
+        id={"input-" + uid}
+        name={"input-" + uid}
         ref={inputRef}
         type={inputType}
         data-slot="input"
