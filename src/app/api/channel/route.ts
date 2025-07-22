@@ -6,8 +6,11 @@ import { authOptions } from "@/configs/authConfig";
 import { queryFirestore, addDocumentToFirestore } from "@/lib/services/adapters/firebase/utils/queryFirestore";
 import { isChannelNameTaken } from "@/lib/services/queries/channel";
 import { validateChannelName, getUserIdFromSession } from "./utils";
+import { checkLimiter } from "@/lib/services/checkLimiter";
 
 export async function POST(req: NextRequest) {
+  checkLimiter({ req });
+
   const session = await getServerSession(authOptions);
   const userId = (session?.user as { id?: string } | undefined)?.id || null;
   if (!session || !userId) {
@@ -32,13 +35,15 @@ export async function POST(req: NextRequest) {
 
     // Przygotuj dane do kolekcji channels (tylko podstawowe pola)
     const now = new Date().toISOString();
-    const channelId = data.id;
+    // Jeśli nie ma id, generujemy nowe (np. przez crypto.randomUUID)
+    const channelId = data.id || (typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2));
     const channelDoc: Channel = {
       id: channelId,
       name: data.name,
       type: data.type,
       isActive: true,
-      regionCode: data.regionCode,
+      // regionCode tylko jeśli istnieje
+      ...(data.regionCode ? { regionCode: data.regionCode } : {}),
       estimatedUsers: data.estimatedUsers ?? 0,
       tags: data.tags,
       settings: data.settings,
@@ -50,7 +55,7 @@ export async function POST(req: NextRequest) {
     if (!id) {
       return NextResponse.json({ error: "Channel creation failed" }, { status: 500 });
     }
-    
+
     // Przygotuj dane do channelDetails
     const details = {
       createdAt: now,

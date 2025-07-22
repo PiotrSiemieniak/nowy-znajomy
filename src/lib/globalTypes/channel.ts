@@ -8,6 +8,9 @@ export type ChannelSettings = {
   maxUsers?: number;         // Maksymalna liczba osób w kanale (opcjonalnie)
   isAdultOnly?: boolean;     // Kanał +18
   isModerated?: boolean;     // Czy kanał ma moderatora
+  showNicknames?: boolean; // Czy pokazywać nicki użytkowników
+  onlyLoggedIn?: boolean; // Czy tylko zalogowani mogą dołączyć
+  timeoutBetweenMessages?: number; // Czas pomiędzy wiadomościami (w sekundach, opcjonalnie)
   [key: string]: any;        // Inne przyszłe ustawienia
 };
 
