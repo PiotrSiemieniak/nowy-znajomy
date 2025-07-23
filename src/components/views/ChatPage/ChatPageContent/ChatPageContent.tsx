@@ -10,7 +10,6 @@ import { ChatSearchingScreen } from "@/components/sections/ChatSearchingScreen";
 import { ChatActionBar } from "@/components/sections/ChatActionBar";
 import { useScrollDetection } from "@/lib/hooks/useScrollDetection";
 import { cn } from "@/lib/utils";
-import { usePresence } from "@ably/chat/react";
 import { ChatConversationScreen } from "@/components/sections/ChatConversationScreen";
 
 export function ChatPageContent() {
