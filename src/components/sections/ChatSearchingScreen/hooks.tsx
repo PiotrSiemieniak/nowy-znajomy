@@ -14,8 +14,12 @@ export const useSearchPooling = () => {
 
   const retryCountRef = useRef(0);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const calledRef = useRef(false); // avoiding fucking double calls on dev/react strict mode
 
   useEffect(() => {
+    if (calledRef.current) return; // avoiding fucking double calls on dev/react strict mode
+    calledRef.current = true; // avoiding fucking double calls on dev/react strict mode
+
     const fetchWithRetry = async () => {
       try {
         const res = await createWaitingRoom({
