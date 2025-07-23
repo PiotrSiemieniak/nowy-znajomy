@@ -13,6 +13,7 @@ import {
   ChatStage,
   Filters,
   MessageState,
+  RoomUsersInfo,
   SelectedChannel,
 } from "./types";
 import { mockRegions } from "./mocks";
@@ -25,6 +26,7 @@ import { AblyRoomProvider } from "../AblyRoomProvider";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { disconnectRoom } from "@/lib/services/api/room";
 import { getSessionKey } from "@/lib/getSessionKey";
+import { usePresence } from "@ably/chat/react";
 
 type ChatStateType = {
   chatId: string | null;
@@ -85,9 +87,11 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
     DEFAULT_SELECTED_CHANNELS
   ); // TEMP, TODO: remove when real data is available
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
+  const [roomUsersInfo, setRoomUsersInfo] = useState<RoomUsersInfo>({
+    me: {},
+    others: {},
+  });
   const isChatActive = chatStage === ChatStage.Connected;
-
-  // const { presence } = usePresence();
 
   const pathname = usePathname();
   const searchParams = useSearchParams();

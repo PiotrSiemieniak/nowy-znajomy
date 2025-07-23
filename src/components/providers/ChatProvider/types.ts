@@ -1,3 +1,4 @@
+import type { AccountDetails, UserAccount } from "@/lib/globalTypes/account";
 import { Gender } from "@/lib/globalTypes/personal/gender";
 import type { Message } from "@ably/chat";
 
@@ -55,3 +56,16 @@ export enum ChatStage {
   Disconnected = "disconnected",
   Searching = "searching"
 } 
+
+
+export type RoomUserData = Partial<Pick<UserAccount, "username">> & {
+  accountId?: string;
+  cliendId?: string;
+  details?: Omit<AccountDetails, "accountId">;
+}
+export type RoomUsersInfo = {
+  me: RoomUserData,
+  others: {
+    [userId: string]: RoomUserData
+  }
+}

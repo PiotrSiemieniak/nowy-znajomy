@@ -1,3 +1,7 @@
+import { MusicGenre } from "./personal/musicGenre";
+import { SpecialFeatures } from "./personal/specialFeatures";
+import { SportType } from "./personal/sports";
+
 export type UserAccount = {
   username: string;
   usernameLower?: string;
@@ -19,4 +23,7 @@ export type AccountDetails = {
   height?: number;
   nationality?: string;
   weight?: number;
+  sports?: SportType[];
+  specialFeatures?: SpecialFeatures[];
+  musicGenres?: MusicGenre[];
 };
