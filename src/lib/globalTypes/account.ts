@@ -1,3 +1,4 @@
+import { Gender } from "./personal/gender";
 import { MusicGenre } from "./personal/musicGenre";
 import { SpecialFeatures } from "./personal/specialFeatures";
 import { SportType } from "./personal/sports";
@@ -26,4 +27,5 @@ export type AccountDetails = {
   sports?: SportType[];
   specialFeatures?: SpecialFeatures[];
   musicGenres?: MusicGenre[];
+  gender?: Gender;
 };
