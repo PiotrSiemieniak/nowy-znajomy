@@ -29,6 +29,10 @@ import { AblyRoomProvider } from "../AblyRoomProvider";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { disconnectRoom } from "@/lib/services/api/room";
 import { getSessionKey } from "@/lib/getSessionKey";
+import {
+  useDeleteRoomOnDisconnectEffect,
+  useResetProviderOnSearching,
+} from "./hooks";
 
 type ChatStateType = {
   chatId: string | null;
@@ -209,6 +213,11 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
     setRoomUsersInfo(obj);
   };
 
+  const resetProvidersToDefault = () => {
+    setMessages([]);
+    setChatId(null);
+  };
+
   // ==========
   // useFX
   // ==========
@@ -241,7 +250,9 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
     router.replace(newUrl);
   }, [chatId, pathname, searchParams, router]);
 
-  // useDeleteRoomOnDisconnectEffect(chatStage, chatId);
+  useDeleteRoomOnDisconnectEffect(chatStage, chatId);
+
+  useResetProviderOnSearching(chatStage, resetProvidersToDefault);
 
   return (
     <ChatStateCtx.Provider
