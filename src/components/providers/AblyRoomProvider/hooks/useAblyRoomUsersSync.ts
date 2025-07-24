@@ -18,7 +18,7 @@ export function useAblyRoomUsersInfo() {
     },
   });
 
-  // Listener na update'y i wydarzenia
+  // Listener na pojedyncze eventy presence
   usePresenceListener({
     listener: (presenceData) => {
       const { clientId, data } = presenceData.member;
