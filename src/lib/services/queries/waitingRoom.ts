@@ -158,6 +158,31 @@ async function queueUser(sessionKey: string, filters: Filters, isMatched: boolea
   }
 }
 
+// Usuwa użytkownika z poczekalni na podstawie sessionKey
+async function removeUserFromWaitingRoom(sessionKey: string): Promise<boolean> {
+  try {
+    const users = await queryFirestore<WaitingUser>(
+      WAITING_ROOM_COLLECTION,
+      {
+        constraints: [where('sessionKey', '==', sessionKey)]
+      }
+    );
+    if (!users || users.length === 0) return false;
+    // Usuwamy wszystkie rekordy z tym sessionKey (na wszelki wypadek)
+    let allDeleted = true;
+    for (const user of users) {
+      if (user.id) {
+        const deleted = await deleteDocumentFromFirestore(WAITING_ROOM_COLLECTION, user.id);
+        if (!deleted) allDeleted = false;
+      }
+    }
+    return allDeleted;
+  } catch (error) {
+    console.error('Błąd podczas usuwania użytkownika z poczekalni:', error);
+    return false;
+  }
+}
+
 // Oblicza punkty dopasowania między dwoma zestawami filtrów
 function calculateMatchScore(filters1: Filters, filters2: Filters): number {
   let score = 0;
@@ -220,4 +245,5 @@ export {
   isUserIn, 
   findUser,
   queueUser,
+  removeUserFromWaitingRoom,
 }

@@ -1,6 +1,6 @@
 import type { Filters } from "@/components/providers/ChatProvider/types";
 import { createRoom, getRoom, RoomResponseData } from "@/lib/services/queries/room";
-import { clearOldRecords, findUser, queueUser, isUserMatched } from "@/lib/services/queries/waitingRoom";
+import { clearOldRecords, findUser, queueUser, isUserMatched, removeUserFromWaitingRoom } from "@/lib/services/queries/waitingRoom";
 
 export enum WaitingRoomStatuses {
   matched = 'matched',
@@ -36,7 +36,8 @@ export async function POST(req: Request): WaitingRoomRes {
     
     if (isMatched) {
       const room = await getRoom({ sessionKey })
-      
+      // tu usuwanie użytkownika z poczekalni
+      await removeUserFromWaitingRoom(sessionKey);
       return Response.json({ status: WaitingRoomStatuses.matched, room });
     }
     
@@ -46,7 +47,7 @@ export async function POST(req: Request): WaitingRoomRes {
     if (match) {
       // Znaleźliśmy natychmiastowe dopasowanie
       // Nadpisujemy jako 'matched' naszych userów
-      await queueUser(sessionKey, filters, true);
+      // await queueUser(sessionKey, filters, true);
       await queueUser(match.sessionKey, filters, true);
 
       // Tworzymy pokój
@@ -54,7 +55,9 @@ export async function POST(req: Request): WaitingRoomRes {
         userIds: [null, null],
         userSessionKeys: [sessionKey, match.sessionKey]
       })
-// TODO: Zrobić try-catch bo to jest porażka. createRoom pyta dwa środowiska - jak jedno z nich się wyjedzie, to user zostaje z niczym [!!!]
+      // tu usuwanie użytkownika z poczekalni
+      await removeUserFromWaitingRoom(sessionKey);
+      // TODO: Zrobić try-catch bo to jest porażka. createRoom pyta dwa środowiska - jak jedno z nich się wyjedzie, to user zostaje z niczym [!!!]
       return Response.json({ 
         status: WaitingRoomStatuses.matched, 
         room
