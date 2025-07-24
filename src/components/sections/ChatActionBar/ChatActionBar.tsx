@@ -16,7 +16,7 @@ type Props = {
 };
 
 export function ChatActionBar({ isAtBottom, onScrollToBottom }: Props) {
-  const { chatStage } = useChatState();
+  const { chatStage, chatId } = useChatState();
   const { changeChatState } = useChatAction();
 
   const handleSetSearchingState = () => changeChatState(ChatStage.Searching);
@@ -42,7 +42,7 @@ export function ChatActionBar({ isAtBottom, onScrollToBottom }: Props) {
             {isChatInitial && (
               <SearchStageButton onClick={handleSetSearchingState} />
             )}
-            {isChatConnected && <ChatActionBarTextarea />}
+            {!!(isChatConnected && chatId) && <ChatActionBarTextarea />}
           </motion.div>
         </AnimatePresence>
       </div>
