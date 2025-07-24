@@ -1,7 +1,10 @@
 import { NextRequest } from "next/server";
 import { deleteRoom } from "@/lib/services/queries/room";
+import { checkLimiter } from "@/lib/services/checkLimiter";
 
 export async function POST(req: NextRequest) {
+  checkLimiter({ req })
+
   try {
     const { sessionKey, roomId } = await req.json();
 
