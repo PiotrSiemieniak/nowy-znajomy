@@ -15,7 +15,7 @@ type DisconnectRoomRes = {
 export async function disconnectRoom(data: DisconnectRoomReq): Promise<DisconnectRoomRes | null> {
   try {
     const res = await apiFetch<DisconnectRoomReq, DisconnectRoomRes>(
-      "/room",
+      "/room/delete",
       { method: "POST" },
       data
     );
