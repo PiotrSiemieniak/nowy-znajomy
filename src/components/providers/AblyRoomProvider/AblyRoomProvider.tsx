@@ -2,6 +2,7 @@
 
 import { ReactNode } from "react";
 import { ChatRoomProvider } from "@ably/chat/react";
+import { AblyHookDispatcher } from "./partials/AblyHookDispatcher";
 
 export function AblyRoomProvider({
   chatId,
@@ -14,7 +15,7 @@ export function AblyRoomProvider({
 
   return (
     <ChatRoomProvider release attach={Boolean(chatId)} name={chatId}>
-      {children}
+      <AblyHookDispatcher>{children}</AblyHookDispatcher>
     </ChatRoomProvider>
   );
 }
