@@ -244,39 +244,37 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   // useDeleteRoomOnDisconnectEffect(chatStage, chatId);
 
   return (
-    <AblyRoomProvider chatId={chatId}>
-      <ChatStateCtx.Provider
+    <ChatStateCtx.Provider
+      value={{
+        chatStage,
+        isChatActive,
+        bgColors,
+        chatId,
+        messages,
+        isPopoverOpen,
+        channelsListData,
+        selectedChannels,
+        filters,
+        roomUsersInfo,
+      }}
+    >
+      <ChatActionCtx.Provider
         value={{
-          chatStage,
-          isChatActive,
-          bgColors,
-          chatId,
-          messages,
-          isPopoverOpen,
-          channelsListData,
-          selectedChannels,
-          filters,
-          roomUsersInfo,
+          setNewBgColors,
+          handlePopoverOpen,
+          toggleChannelAsSelected,
+          updateFilters,
+          changeChatState,
+          changeChatId,
+          sendMessage,
+          disconnect,
+          updateRoomUsersInfo,
+          initializeRoomUsersInfo,
         }}
       >
-        <ChatActionCtx.Provider
-          value={{
-            setNewBgColors,
-            handlePopoverOpen,
-            toggleChannelAsSelected,
-            updateFilters,
-            changeChatState,
-            changeChatId,
-            sendMessage,
-            disconnect,
-            updateRoomUsersInfo,
-            initializeRoomUsersInfo,
-          }}
-        >
-          <AblyRoomProvider chatId={chatId}>{children}</AblyRoomProvider>
-        </ChatActionCtx.Provider>
-      </ChatStateCtx.Provider>
-    </AblyRoomProvider>
+        <AblyRoomProvider chatId={chatId}>{children}</AblyRoomProvider>
+      </ChatActionCtx.Provider>
+    </ChatStateCtx.Provider>
   );
 };
 
