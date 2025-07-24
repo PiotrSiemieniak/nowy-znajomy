@@ -1,10 +1,26 @@
+"use client";
+
 import { Button } from "@/components/ui/Button";
 import { Flag } from "lucide-react";
+import { PartnerInfo } from "./partials/PartnerInfo";
+import { useChatState } from "@/components/providers/ChatProvider";
+import { ChatStage } from "@/components/providers/ChatProvider/types";
+import { cn } from "@/lib/utils";
 
 export function ChatHeaderTitle() {
+  const { chatStage } = useChatState();
+
+  const isRender =
+    chatStage === ChatStage.Connected || chatStage === ChatStage.Disconnected;
+
   return (
-    <div className="py-2 -full flex flex-row justify-between">
-      <div className="w-1/4">
+    <div
+      className={cn("py-2 -full flex flex-row justify-between", {
+        // "opacity-0": !isRender,
+      })}
+    >
+      <div className="flex-1">
+        {/* TODO: zgłaszanie */}
         <Button
           variant={"ghost"}
           size={"sm"}
@@ -13,10 +29,8 @@ export function ChatHeaderTitle() {
           <Flag />
         </Button>
       </div>
-      <div className="flex flex-row items-center justify-center w-1/2">
-        <p className="text-xs font-medium ">Nieznajomy</p>
-      </div>
-      <div className="w-1/4"></div>
+      <PartnerInfo />
+      <div className="flex-1"></div>
     </div>
   );
 }
