@@ -60,12 +60,9 @@ export enum ChatStage {
 
 export type RoomUserData = Partial<Pick<UserAccount, "username">> & {
   accountId?: string;
-  cliendId?: string;
+  clientId?: string;
   details?: Omit<AccountDetails, "accountId">;
 }
-export type RoomUsersInfo = {
-  me: RoomUserData,
-  others: {
-    [userId: string]: RoomUserData
-  }
-}
+export type RoomUsersInfo = { [userId: string]: RoomUserData }
+export type UpdateRoomUsersInfo = (clientId: string, newData: RoomUserData) => void;
+export type InitializeRoomUsersInfo = (obj: RoomUsersInfo) => void;

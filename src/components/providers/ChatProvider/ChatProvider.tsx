@@ -12,21 +12,23 @@ import {
   ChannelsListData,
   ChatStage,
   Filters,
+  InitializeRoomUsersInfo,
   MessageState,
   RoomUsersInfo,
   SelectedChannel,
+  UpdateRoomUsersInfo,
 } from "./types";
 import { mockRegions } from "./mocks";
 import {
   DEFAULT_CHANNELS_LIST_DATA,
   DEFAULT_FILTERS,
+  DEFAULT_ROOM_USERS_INFO,
   DEFAULT_SELECTED_CHANNELS,
 } from "./consts";
 import { AblyRoomProvider } from "../AblyRoomProvider";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { disconnectRoom } from "@/lib/services/api/room";
 import { getSessionKey } from "@/lib/getSessionKey";
-import { usePresence } from "@ably/chat/react";
 
 type ChatStateType = {
   chatId: string | null;
@@ -38,6 +40,7 @@ type ChatStateType = {
   channelsListData: ChannelsListData;
   selectedChannels: SelectedChannel[];
   filters: Filters;
+  roomUsersInfo: RoomUsersInfo;
 };
 
 const DEFAULT_CHAT_STATE_VALUES: ChatStateType = {
@@ -50,6 +53,7 @@ const DEFAULT_CHAT_STATE_VALUES: ChatStateType = {
   channelsListData: DEFAULT_CHANNELS_LIST_DATA,
   selectedChannels: DEFAULT_SELECTED_CHANNELS,
   filters: DEFAULT_FILTERS,
+  roomUsersInfo: DEFAULT_ROOM_USERS_INFO,
 };
 
 export const ChatStateCtx = createContext<ChatStateType>(
@@ -65,6 +69,8 @@ type AdsListActionType = {
   changeChatId: (value: string | null) => void;
   sendMessage: (msg: Omit<MessageState, "id">) => void;
   disconnect: (message: Omit<MessageState, "id">) => void;
+  updateRoomUsersInfo: UpdateRoomUsersInfo;
+  initializeRoomUsersInfo: InitializeRoomUsersInfo;
 };
 
 export const ChatActionCtx = createContext<AdsListActionType | undefined>(
@@ -87,10 +93,9 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
     DEFAULT_SELECTED_CHANNELS
   ); // TEMP, TODO: remove when real data is available
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
-  const [roomUsersInfo, setRoomUsersInfo] = useState<RoomUsersInfo>({
-    me: {},
-    others: {},
-  });
+  const [roomUsersInfo, setRoomUsersInfo] = useState<RoomUsersInfo>(
+    DEFAULT_ROOM_USERS_INFO
+  );
   const isChatActive = chatStage === ChatStage.Connected;
 
   const pathname = usePathname();
@@ -186,6 +191,24 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
     if (bgColors === null) setNewBgColors();
   };
 
+  const updateRoomUsersInfo: UpdateRoomUsersInfo = (clientId, newData) => {
+    setRoomUsersInfo((state) => {
+      const oldValue = String(state[clientId]);
+      const newValue = String(newData);
+
+      if (oldValue === newValue) return state; // Jeśli dane się nie zmieniły, nie aktualizuj stanu
+
+      return {
+        ...state,
+        [clientId]: newData,
+      };
+    });
+  };
+  // TODO: trzeba dorobić funkcję inicjującą ten stan od zera
+  const initializeRoomUsersInfo: InitializeRoomUsersInfo = (obj) => {
+    setRoomUsersInfo(obj);
+  };
+
   // ==========
   // useFX
   // ==========
@@ -233,6 +256,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
           channelsListData,
           selectedChannels,
           filters,
+          roomUsersInfo,
         }}
       >
         <ChatActionCtx.Provider
@@ -245,6 +269,8 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
             changeChatId,
             sendMessage,
             disconnect,
+            updateRoomUsersInfo,
+            initializeRoomUsersInfo,
           }}
         >
           <AblyRoomProvider chatId={chatId}>{children}</AblyRoomProvider>
