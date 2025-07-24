@@ -21,5 +21,6 @@ export function useDeleteRoomOnDisconnectEffect(chatStage: ChatStage, chatId: st
 export function useResetProviderOnSearching(chatStage: ChatStage, callback: () => void) {
   useEffect(() => {
     if (chatStage === ChatStage.Searching) callback()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatStage]);
 }
