@@ -11,6 +11,7 @@ import { ChatActionBar } from "@/components/sections/ChatActionBar";
 import { useScrollDetection } from "@/lib/hooks/useScrollDetection";
 import { cn } from "@/lib/utils";
 import { ChatConversationScreen } from "@/components/sections/ChatConversationScreen";
+import { getSessionKey } from "@/lib/getSessionKey";
 
 export function ChatPageContent() {
   const { isAtBottom, scrollToBottom, scrollRef } = useScrollDetection();
@@ -33,7 +34,9 @@ export function ChatPageContent() {
         {/* TOP */}
         <ChatHeader />
         {/* MIDDLE */}
-        {"ID: " + String(chatId)}
+        {"ID: " + String(chatId) + "  " + chatStage}
+        <br />
+        {"UID: " + String(getSessionKey())}
         {isChatInitial && <ChatInitialScreen />}
         {!!(isChatConnected || isChatDisconnected) && (
           <ChatConversationScreen scrollRef={scrollRef} />
