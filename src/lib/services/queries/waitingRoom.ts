@@ -63,7 +63,10 @@ async function isUserMatched(sessionKey: string): Promise<boolean> {
     const users = await queryFirestore<WaitingUser>(
       WAITING_ROOM_COLLECTION,
       {
-        constraints: [where('sessionKey', '==', sessionKey)]
+        constraints: [
+          where('sessionKey', '==', sessionKey), 
+          orderBy('createdAt', 'asc')
+        ]
       }
     );
     const isMatched = Array.isArray(users) && users.length > 0 ? Boolean(users[0].isMatched) : false;
