@@ -21,5 +21,5 @@ export function useDeleteRoomOnDisconnectEffect(chatStage: ChatStage, chatId: st
 export function useResetProviderOnSearching(chatStage: ChatStage, callback: () => void) {
   useEffect(() => {
     if (chatStage === ChatStage.Searching) callback()
-  }, [chatStage, callback]);
+  }, [chatStage]);
 }
