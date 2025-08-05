@@ -20,6 +20,7 @@ import {
   UserRoundPlus,
 } from "lucide-react";
 import { useState } from "react";
+import { InterlocutorInfoNickname } from "./InterlocutorInfoNickname";
 
 const NICKNAME_SX = "text-xs font-medium my-auto";
 
@@ -35,7 +36,7 @@ export function InterlocutorInfo() {
               <UserRound className="dark:text-muted text-muted-foreground" />
             </AvatarFallback>
           </Avatar>
-          <p className={NICKNAME_SX}>Nieznajomy</p>
+          <InterlocutorInfoNickname />
         </div>
         <div className="inline-flex w-full space-x-2">
           <Button className="flex-1" variant={"outline"}>

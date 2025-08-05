@@ -1,6 +1,7 @@
 "use client";
 
 import { InterlocutorInfo } from "@/components/specific/InterlocutorInfo";
+import { InterlocutorInfoNickname } from "@/components/specific/InterlocutorInfo/InterlocutorInfoNickname";
 import {
   Popover,
   PopoverContent,
@@ -19,7 +20,7 @@ export function PartnerInfo() {
     <Popover onOpenChange={setIsOpen} open={isOpen}>
       <PopoverTrigger>
         <div className="flex flex-row items-center justify-center flex-1">
-          <p className={NICKNAME_SX}>Nieznajomy</p>
+          <InterlocutorInfoNickname />
           <ChevronUp
             className={cn(
               "text-foreground size-3 ml-1 my-auto transition-transform",
