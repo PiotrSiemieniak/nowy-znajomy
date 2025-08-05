@@ -22,8 +22,6 @@ import {
 import { useState } from "react";
 import { InterlocutorInfoNickname } from "./InterlocutorInfoNickname";
 
-const NICKNAME_SX = "text-xs font-medium my-auto";
-
 export function InterlocutorInfo() {
   return (
     <div className="flex flex-col w-full gap-4">

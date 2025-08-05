@@ -11,8 +11,6 @@ import { cn } from "@/lib/utils";
 import { ChevronUp } from "lucide-react";
 import { useState } from "react";
 
-const NICKNAME_SX = "text-xs font-medium my-auto";
-
 export function PartnerInfo() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
