@@ -19,10 +19,14 @@ import {
   UserRoundPen,
   UserRoundPlus,
 } from "lucide-react";
-import { useState } from "react";
 import { InterlocutorInfoNickname } from "./InterlocutorInfoNickname";
+import { InterlocutorInfoDialog } from "./InterlocutorInfoDialog";
+import { useChatAction } from "@/components/providers/ChatProvider";
+import { DataRecord } from "./InterlocutorInfoNickname/partials/DataRecord";
 
 export function InterlocutorInfo() {
+  const {} = useChatAction();
+
   return (
     <div className="flex flex-col w-full gap-4">
       {/* Nick */}
@@ -49,42 +53,15 @@ export function InterlocutorInfo() {
       </div>
       {/* Wiek, płeć, wzrost, waga */}
       <div className="flex flex-col gap-2 rounded-md bg-card p-4 border">
-        <FormElement label="Wiek">
-          <div className="flex justify-between items-center">
-            <p className="text-muted-foreground text-sm">21 lat</p>
-            <Button variant={"outline"} size={"sm"}>
-              Zapytaj
-            </Button>
-          </div>
-        </FormElement>
+        <DataRecord value={"birthDate"} />
         <Separator />
-        <FormElement label="Płeć">
-          <div className="flex justify-between items-center">
-            <p className="text-muted-foreground text-sm">Kobieta</p>
-            <Button variant={"outline"} size={"sm"}>
-              Zapytaj
-            </Button>
-          </div>
-        </FormElement>
+        <DataRecord value={"gender"} />
         <Separator />
-        <FormElement label="Wzrost">
-          <div className="flex justify-between items-center">
-            <p className="text-muted-foreground text-sm">Kobieta</p>
-            <Button variant={"outline"} size={"sm"}>
-              Zapytaj
-            </Button>
-          </div>
-        </FormElement>
+        <DataRecord value={"height"} />
         <Separator />
-        <FormElement label="Waga">
-          <div className="flex justify-between items-center">
-            <p className="text-muted-foreground text-sm">Kobieta</p>
-            <Button variant={"outline"} size={"sm"}>
-              Zapytaj
-            </Button>
-          </div>
-        </FormElement>
+        <DataRecord value={"weight"} />
       </div>
+      <InterlocutorInfoDialog />
     </div>
   );
 }

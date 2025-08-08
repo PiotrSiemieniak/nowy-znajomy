@@ -9,6 +9,7 @@ import {
 } from "react";
 import { generateColorPalette } from "./utils";
 import {
+  ChangeTradeDataPopoverOpen,
   ChannelsListData,
   ChatStage,
   Filters,
@@ -16,6 +17,7 @@ import {
   MessageState,
   RoomUsersInfo,
   SelectedChannel,
+  TradeDataPopoverOpen,
   UpdateRoomUsersInfo,
 } from "./types";
 import { mockRegions } from "./mocks";
@@ -45,6 +47,7 @@ type ChatStateType = {
   selectedChannels: SelectedChannel[];
   filters: Filters;
   roomUsersInfo: RoomUsersInfo;
+  tradeDataPopoverOpen: TradeDataPopoverOpen;
 };
 
 const DEFAULT_CHAT_STATE_VALUES: ChatStateType = {
@@ -58,6 +61,7 @@ const DEFAULT_CHAT_STATE_VALUES: ChatStateType = {
   selectedChannels: DEFAULT_SELECTED_CHANNELS,
   filters: DEFAULT_FILTERS,
   roomUsersInfo: DEFAULT_ROOM_USERS_INFO,
+  tradeDataPopoverOpen: null,
 };
 
 export const ChatStateCtx = createContext<ChatStateType>(
@@ -75,6 +79,7 @@ type AdsListActionType = {
   disconnect: (message: Omit<MessageState, "id">) => void;
   updateRoomUsersInfo: UpdateRoomUsersInfo;
   initializeRoomUsersInfo: InitializeRoomUsersInfo;
+  changeTradeDataPopoverOpen: ChangeTradeDataPopoverOpen;
 };
 
 export const ChatActionCtx = createContext<AdsListActionType | undefined>(
@@ -90,6 +95,8 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const [chatId, setChatId] = useState<string | null>(null);
   const [messages, setMessages] = useState<MessageState[]>([]);
   const [isPopoverOpen, setPopoverOpen] = useState<boolean>(false);
+  const [tradeDataPopoverOpen, setTradeDataPopoverOpen] =
+    useState<TradeDataPopoverOpen>("nationality");
   const [channelsListData, setChannelsListData] = useState<ChannelsListData>(
     DEFAULT_CHANNELS_LIST_DATA
   ); // TEMP, TODO: remove when real data is available
@@ -218,6 +225,10 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
     setChatId(null);
   };
 
+  const changeTradeDataPopoverOpen: ChangeTradeDataPopoverOpen = (value) => {
+    setTradeDataPopoverOpen(value);
+  };
+
   // ==========
   // useFX
   // ==========
@@ -267,6 +278,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
         selectedChannels,
         filters,
         roomUsersInfo,
+        tradeDataPopoverOpen,
       }}
     >
       <ChatActionCtx.Provider
@@ -281,6 +293,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
           disconnect,
           updateRoomUsersInfo,
           initializeRoomUsersInfo,
+          changeTradeDataPopoverOpen,
         }}
       >
         <AblyRoomProvider chatId={chatId}>{children}</AblyRoomProvider>

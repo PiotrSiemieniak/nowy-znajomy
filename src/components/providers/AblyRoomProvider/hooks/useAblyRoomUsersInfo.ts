@@ -19,7 +19,8 @@ export function useAblyRoomUsersInfo() {
   const { presence } = usePresence({
     enterWithData: {
       clientId: getSessionKey(),
-    },
+      username: 'Jacuś'
+    } satisfies RoomUserData,
   });
 
   // Listener na update'y i wydarzenia

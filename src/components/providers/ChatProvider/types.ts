@@ -66,3 +66,8 @@ export type RoomUserData = Partial<Pick<UserAccount, "username">> & {
 export type RoomUsersInfo = { [userId: string]: RoomUserData }
 export type UpdateRoomUsersInfo = (clientId: string, newData: RoomUserData) => void;
 export type InitializeRoomUsersInfo = (obj: RoomUsersInfo) => void;
+
+type UsernameFromAccount = keyof Pick<UserAccount, "username">
+type AccountDetailsKeysStrings = keyof AccountDetails
+export type TradeDataPopoverOpen = AccountDetailsKeysStrings | UsernameFromAccount | null
+export type ChangeTradeDataPopoverOpen = (value: TradeDataPopoverOpen) => void;
