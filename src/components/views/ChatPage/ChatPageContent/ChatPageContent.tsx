@@ -5,7 +5,6 @@ import { ChatStage } from "@/components/providers/ChatProvider/types";
 import { AuroraBlurBackground } from "@/components/sections/AuroraBlurBackground";
 import { ChatHeader } from "@/components/sections/ChatHeader";
 import { ChatInitialScreen } from "@/components/sections/ChatInitialScreen";
-import { ChatMessages } from "@/components/sections/ChatMessages";
 import { ChatSearchingScreen } from "@/components/sections/ChatSearchingScreen";
 import { ChatActionBar } from "@/components/sections/ChatActionBar";
 import { useScrollDetection } from "@/lib/hooks/useScrollDetection";

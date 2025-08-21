@@ -1,0 +1,65 @@
+{
+  "common": {
+    "loading": "Ładowanie...",
+    "error": "Wystąpił błąd",
+    "success": "Sukces",
+    "cancel": "Anuluj",
+    "confirm": "Potwierdź",
+    "save": "Zapisz",
+    "delete": "Usuń",
+    "edit": "Edytuj",
+    "close": "Zamknij",
+    "back": "Wróć",
+    "next": "Dalej",
+    "previous": "Poprzedni",
+    "yes": "Tak",
+    "no": "Nie"
+  },
+  "navigation": {
+    "home": "Strona główna",
+    "chat": "Chat",
+    "profile": "Profil",
+    "settings": "Ustawienia",
+    "logout": "Wyloguj"
+  },
+  "auth": {
+    "login": "Zaloguj się",
+    "register": "Zarejestruj się",
+    "email": "Email",
+    "password": "Hasło",
+    "confirmPassword": "Potwierdź hasło",
+    "forgotPassword": "Zapomniałeś hasła?",
+    "rememberMe": "Zapamiętaj mnie",
+    "loginSuccess": "Pomyślnie zalogowano",
+    "loginError": "Błąd logowania",
+    "registerSuccess": "Pomyślnie zarejestrowano",
+    "registerError": "Błąd rejestracji"
+  },
+  "chat": {
+    "title": "Chat",
+    "sendMessage": "Wyślij wiadomość",
+    "typing": "Pisze...",
+    "online": "Online",
+    "offline": "Offline",
+    "newMessage": "Nowa wiadomość",
+    "noMessages": "Brak wiadomości",
+    "searchUsers": "Szukaj użytkowników"
+  },
+  "profile": {
+    "title": "Profil",
+    "name": "Imię",
+    "username": "Nazwa użytkownika",
+    "bio": "O mnie",
+    "avatar": "Zdjęcie profilowe",
+    "updateProfile": "Zaktualizuj profil",
+    "profileUpdated": "Profil zaktualizowany"
+  },
+  "errors": {
+    "pageNotFound": "Strona nie została znaleziona",
+    "serverError": "Błąd serwera",
+    "networkError": "Błąd połączenia",
+    "invalidCredentials": "Nieprawidłowe dane logowania",
+    "requiredField": "To pole jest wymagane",
+    "invalidEmail": "Nieprawidłowy adres email"
+  }
+}

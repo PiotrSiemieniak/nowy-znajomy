@@ -1,0 +1,65 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "navigation": {
+    "home": "Home",
+    "chat": "Chat",
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "auth": {
+    "login": "Log in",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "forgotPassword": "Forgot password?",
+    "rememberMe": "Remember me",
+    "loginSuccess": "Successfully logged in",
+    "loginError": "Login error",
+    "registerSuccess": "Successfully registered",
+    "registerError": "Registration error"
+  },
+  "chat": {
+    "title": "Chat",
+    "sendMessage": "Send message",
+    "typing": "Typing...",
+    "online": "Online",
+    "offline": "Offline",
+    "newMessage": "New message",
+    "noMessages": "No messages",
+    "searchUsers": "Search users"
+  },
+  "profile": {
+    "title": "Profile",
+    "name": "Name",
+    "username": "Username",
+    "bio": "About me",
+    "avatar": "Profile picture",
+    "updateProfile": "Update profile",
+    "profileUpdated": "Profile updated"
+  },
+  "errors": {
+    "pageNotFound": "Page not found",
+    "serverError": "Server error",
+    "networkError": "Network error",
+    "invalidCredentials": "Invalid credentials",
+    "requiredField": "This field is required",
+    "invalidEmail": "Invalid email address"
+  }
+}
