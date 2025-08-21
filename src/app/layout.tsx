@@ -4,8 +4,8 @@ import "./globals.css";
 import Script from "next/script";
 import SessionProvider from "@/components/providers/SessionProvider/SessionProvider";
 import { Toaster } from "@/components/ui/Sonner";
-import { getLocale } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
+import { getMessages, getLocale } from "next-intl/server";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,6 +28,10 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const locale = await getLocale();
+  const messages = await getMessages();
+
+  // Debug: sprawdź wszystkie cookies
+  console.log("Server locale:", locale);
 
   return (
     <html lang={locale} className="dark">
@@ -55,7 +59,7 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased safe-area bg-background`}
       >
-        <NextIntlClientProvider>
+        <NextIntlClientProvider locale={locale} messages={messages}>
           <SessionProvider>{children}</SessionProvider>
           <Toaster />
         </NextIntlClientProvider>
