@@ -7,8 +7,6 @@ export async function setLocale(locale: string) {
   const cookieStore = await cookies();
   const headersList = await headers();
   
-  console.log('Setting locale to:', locale);
-  
   // Try different cookie names that next-intl might use
   const cookieNames = ['NEXT_LOCALE', 'locale', 'next-intl-locale', 'intl-locale'];
   
@@ -24,8 +22,6 @@ export async function setLocale(locale: string) {
   // Get current path from referer header to redirect back to the same page
   const referer = headersList.get('referer');
   const currentPath = referer ? new URL(referer).pathname : '/';
-  
-  console.log('Redirecting back to:', currentPath);
   
   // Redirect to current path instead of root
   redirect(currentPath);

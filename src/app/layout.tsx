@@ -30,9 +30,6 @@ export default async function RootLayout({
   const locale = await getLocale();
   const messages = await getMessages();
 
-  // Debug: sprawdź wszystkie cookies
-  console.log("Server locale:", locale);
-
   return (
     <html lang={locale} className="dark">
       <head>

@@ -26,15 +26,10 @@ export function AccountBtn() {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
-  // Debug: sprawdź aktualny locale
-  console.log("Current locale:", locale);
-
   const handleLanguageChange = (checked: boolean) => {
     const newLocale = checked ? "en" : "pl";
-    console.log("Changing locale from", locale, "to", newLocale);
 
     if (newLocale === locale) {
-      console.log("Same locale, not changing");
       return;
     }
 

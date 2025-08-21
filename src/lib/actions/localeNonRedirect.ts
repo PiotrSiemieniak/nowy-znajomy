@@ -5,8 +5,6 @@ import { cookies } from 'next/headers';
 export async function setLocaleNonRedirect(locale: string) {
   const cookieStore = await cookies();
   
-  console.log('Setting locale to:', locale, '(no redirect)');
-  
   // Try different cookie names that next-intl might use
   const cookieNames = ['NEXT_LOCALE', 'locale', 'next-intl-locale', 'intl-locale'];
   
