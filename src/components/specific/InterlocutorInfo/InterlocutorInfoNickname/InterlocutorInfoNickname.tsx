@@ -11,9 +11,10 @@ export function InterlocutorInfoNickname() {
   const interlocutorInfo = Object.values(roomUsersInfo).find(
     (user) => user !== meInfo
   );
-  console.log("roomUsersInfo", meInfo, interlocutorInfo);
 
   return (
-    <p className={NICKNAME_SX}>{interlocutorInfo?.username || "Nieznajomy"}</p>
+    <p className={NICKNAME_SX}>
+      {interlocutorInfo?.username?.value || "Nieznajomy"}
+    </p>
   );
 }

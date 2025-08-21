@@ -2,7 +2,8 @@ import { addDocumentToFirestore, deleteDocumentFromFirestore, queryFirestore, up
 import { where } from "firebase/firestore";
 import { getUUID } from "@/lib/crypto/getUUID";
 import bcrypt from "bcryptjs";
-import { AccountDetails, UserAccount } from "@/lib/globalTypes/account";
+import { UserAccount } from "@/lib/globalTypes/account";
+import { AccountDetails } from "@/lib/globalTypes/accountDetails";
 
 const COLLECTION = "accounts";
 

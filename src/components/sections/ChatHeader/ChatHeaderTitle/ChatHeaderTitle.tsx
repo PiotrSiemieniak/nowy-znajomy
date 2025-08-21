@@ -10,13 +10,13 @@ import { cn } from "@/lib/utils";
 export function ChatHeaderTitle() {
   const { chatStage } = useChatState();
 
-  const isRender =
-    chatStage === ChatStage.Connected || chatStage === ChatStage.Disconnected;
+  const isChatInitial = chatStage === ChatStage.Initial;
+  const isChatSearching = chatStage === ChatStage.Searching;
 
   return (
     <div
-      className={cn("py-2 -full flex flex-row justify-between", {
-        // "opacity-0": !isRender,
+      className={cn("py-2 w-full flex flex-row justify-between", {
+        "opacity-0": isChatInitial || isChatSearching,
       })}
     >
       <div className="flex-1">
@@ -29,7 +29,9 @@ export function ChatHeaderTitle() {
           <Flag />
         </Button>
       </div>
-      <PartnerInfo />
+      <div>
+        <PartnerInfo />
+      </div>
       <div className="flex-1"></div>
     </div>
   );

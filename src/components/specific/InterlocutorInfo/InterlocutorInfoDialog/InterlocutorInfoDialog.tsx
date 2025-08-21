@@ -18,12 +18,14 @@ import { appNotification } from "@/components/ui/Sonner/appNotification";
 import { ArrowDownToDot, ArrowUpFromDot } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { LABEL_TRANSLATIONS } from "../consts";
+import { useInterlocutorInfoActions } from "./hook";
 
 // TODO: zrobić zabezpieczenie w postaci sprawdzenia, czy jesteśmy zalogowani
 export function InterlocutorInfoDialog() {
   const { tradeDataPopoverOpen } = useChatState();
   const { changeTradeDataPopoverOpen } = useChatAction();
   const { status } = useSession();
+  const { sendTradeData } = useInterlocutorInfoActions();
 
   // Early returns validations
   if (status !== "authenticated") {
@@ -45,6 +47,9 @@ export function InterlocutorInfoDialog() {
     "Odkryj informację";
 
   const handleClose = changeTradeDataPopoverOpen.bind(null, null);
+  const handleOfferTradeData = () => {
+    sendTradeData("trade", tradeDataPopoverOpen);
+  };
 
   return (
     <Dialog onOpenChange={handleClose} open={!!tradeDataPopoverOpen}>
@@ -89,7 +94,11 @@ export function InterlocutorInfoDialog() {
               <Button variant="outline">Anuluj</Button>
             </DialogClose>
             <div className="flex w-full">
-              <Button type="submit" className="w-1/2 rounded-r-none">
+              <Button
+                onClick={handleOfferTradeData}
+                type="submit"
+                className="w-1/2 rounded-r-none"
+              >
                 <span className="inline-flex">
                   <ArrowUpFromDot />
                   <ArrowDownToDot />

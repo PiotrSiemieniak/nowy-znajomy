@@ -1,7 +1,7 @@
 "use client"
 
 import { usePresence, usePresenceListener } from "@ably/chat/react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import type { RoomUserData, RoomUsersInfo } from "../../ChatProvider/types";
 import { getSessionKey } from "@/lib/getSessionKey";
 import { useChatAction, useChatState } from "../../ChatProvider";
@@ -13,17 +13,17 @@ import { PresenceMember } from "@ably/chat";
  */
 export function useAblyRoomUsersInfo() {
   const { initializeRoomUsersInfo, updateRoomUsersInfo } = useChatAction();
-  const { chatId } = useChatState()
+  const { chatId, roomUsersInfo } = useChatState();
+  const mySessionKey = getSessionKey();
+  
+  // Ref do stabilnej referencji initializeRoomUsersInfo (unikamy efektu na każdą zmianę referencji funkcji)
+  const initRoomUsersInfoRef = useRef(initializeRoomUsersInfo);
+  useEffect(() => { initRoomUsersInfoRef.current = initializeRoomUsersInfo; }, [initializeRoomUsersInfo]);
 
   // Wywołaj hook na najwyższym poziomie
-  const { presence } = usePresence({
-    enterWithData: {
-      clientId: getSessionKey(),
-      username: 'Jacuś'
-    } satisfies RoomUserData,
-  });
+  const { presence } = usePresence({});
 
-  // Listener na update'y i wydarzenia
+  // Listener na update'y i wydarzenia -> aktualizuje stan providera
   usePresenceListener({
     listener: (presenceEvent) => {
       const { clientId, data } = presenceEvent.member;
@@ -31,21 +31,45 @@ export function useAblyRoomUsersInfo() {
     },
   });
 
-  // Inicjalizacja pełnej listy obecnych użytkowników na starcie
+  // Inicjalizacja pełnej listy obecnych użytkowników na starcie / zmianie pokoju
   useEffect(() => {
-    (async function onPresenceChange() {
-      if (!chatId) return;
-      // Early return to avoid looping, and to ensure we only run this once when connected to the room
-      // Wczesny return, żeby uniknąć pętli i zmian więcej, niż przy połączeniu z pokojem
-      const presenceData: PresenceMember[] | undefined = await presence?.get();
-      if (presenceData) {
+    if (!chatId || !presence) return;
+    let cancelled = false;
+    (async function initPresenceSnapshot() {
+      try {
+        const presenceData: PresenceMember[] | undefined = await presence.get();
+        if (!presenceData || cancelled) return;
         const roomUserInfo: RoomUsersInfo = {};
-        presenceData.forEach(({ clientId, data }) => {
+        for (const { clientId, data } of presenceData) {
           roomUserInfo[clientId] = data as RoomUserData;
-        });
-        initializeRoomUsersInfo(roomUserInfo);
+        }
+        initRoomUsersInfoRef.current(roomUserInfo);
+      } catch {
+        // opcjonalnie: log w dev
       }
-      return;
     })();
-  }, [chatId]); // <- tylko raz po zamontowaniu
+    return () => { cancelled = true; };
+  }, [chatId, presence]);
+
+  // ---==--- LOKALNA -> PRESENCE SYNC (tylko jeśli dane się zmieniły) ---==---
+  const lastSerializedRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!presence) return; // brak obiektu presence
+    const myData = roomUsersInfo[mySessionKey];
+    if (!myData) return; // jeszcze nie mamy danych lokalnych
+
+    // Serializacja do porównania głębokiego
+    const serialized = JSON.stringify(myData);
+    if (lastSerializedRef.current === serialized) return; // brak realnej zmiany
+
+    lastSerializedRef.current = serialized;
+    // Aktualizacja presence (ignoruj błędy w dev-friendly sposób)
+    Promise.resolve(presence.update(myData)).catch(() => {});
+  }, [roomUsersInfo, mySessionKey, presence]);
+
+  // Reset ref przy zmianie pokoju (aby wymusić sync po wejściu)
+  useEffect(() => {
+    lastSerializedRef.current = null;
+  }, [chatId]);
 }

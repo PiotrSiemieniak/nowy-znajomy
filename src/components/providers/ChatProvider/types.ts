@@ -1,5 +1,9 @@
-import type { AccountDetails, UserAccount } from "@/lib/globalTypes/account";
+import type { UserAccount } from "@/lib/globalTypes/account";
+import type { AccountDetails } from "@/lib/globalTypes/accountDetails";
 import { Gender } from "@/lib/globalTypes/personal/gender";
+import { SportType } from "@/lib/globalTypes/personal/sports";
+import { SpecialFeatures } from "@/lib/globalTypes/personal/specialFeatures";
+import { MusicGenre } from "@/lib/globalTypes/personal/musicGenre";
 import type { Message } from "@ably/chat";
 
 // Prosto z typu Ably
@@ -57,12 +61,14 @@ export enum ChatStage {
   Searching = "searching"
 } 
 
-
-export type RoomUserData = Partial<Pick<UserAccount, "username">> & {
-  accountId?: string;
-  clientId?: string;
-  details?: Omit<AccountDetails, "accountId">;
+// RoomUsersInfo
+export type RoomUsersAllowedValue = string | number | Gender | SportType[] | SpecialFeatures[] | MusicGenre[]
+export type RoomUsersDataField = {
+  wantToShow?: boolean
+  value?: RoomUsersAllowedValue | null
 }
+type AccountDetailsKeysButAccountId = keyof Omit<AccountDetails, "accountId">
+export type RoomUserData = Record<UsernameFromAccount, RoomUsersDataField> & Record<AccountDetailsKeysButAccountId, RoomUsersDataField>
 export type RoomUsersInfo = { [userId: string]: RoomUserData }
 export type UpdateRoomUsersInfo = (clientId: string, newData: RoomUserData) => void;
 export type InitializeRoomUsersInfo = (obj: RoomUsersInfo) => void;

@@ -4,28 +4,23 @@ import {
   AvatarImage,
 } from "@/components/ui/Avatar/Avatar";
 import { Button } from "@/components/ui/Button";
-import { FormElement } from "@/components/ui/FormElement";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/Popover";
 import { Separator } from "@/components/ui/Separator";
-import { cn } from "@/lib/utils";
-import {
-  ChevronUp,
-  LucideMessageCircleQuestion,
-  UserRound,
-  UserRoundPen,
-  UserRoundPlus,
-} from "lucide-react";
+import { UserRound, UserRoundPen, UserRoundPlus } from "lucide-react";
 import { InterlocutorInfoNickname } from "./InterlocutorInfoNickname";
 import { InterlocutorInfoDialog } from "./InterlocutorInfoDialog";
-import { useChatAction } from "@/components/providers/ChatProvider";
+import {
+  useChatAction,
+  useChatState,
+} from "@/components/providers/ChatProvider";
 import { DataRecord } from "./InterlocutorInfoNickname/partials/DataRecord";
+import { ChatStage } from "@/components/providers/ChatProvider/types";
 
 export function InterlocutorInfo() {
   const {} = useChatAction();
+  const { chatStage } = useChatState();
+
+  if (chatStage === ChatStage.Initial || chatStage === ChatStage.Searching)
+    return null;
 
   return (
     <div className="flex flex-col w-full gap-4">

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createAccount, createAccountDetails, deleteExpiredUnconfirmedAccounts, isEmailTaken, isUsernameTaken } from "@/lib/services/queries/account";
+import { createAccount, deleteExpiredUnconfirmedAccounts, isEmailTaken, isUsernameTaken } from "@/lib/services/queries/account";
+import { createAccountDetails} from "@/lib/services/queries/accountDetails";
 import { checkLimiter } from "@/lib/services/checkLimiter";
 import { validateAccountFields } from "./utils";
 import { sendRegistrationConfirmationMail } from "./utils";

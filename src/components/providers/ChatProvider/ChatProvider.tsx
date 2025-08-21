@@ -6,6 +6,7 @@ import {
   useContext,
   useEffect,
   useState,
+  useCallback,
 } from "react";
 import { generateColorPalette } from "./utils";
 import {
@@ -16,6 +17,7 @@ import {
   InitializeRoomUsersInfo,
   MessageState,
   RoomUsersInfo,
+  RoomUsersDataField,
   SelectedChannel,
   TradeDataPopoverOpen,
   UpdateRoomUsersInfo,
@@ -35,6 +37,12 @@ import {
   useDeleteRoomOnDisconnectEffect,
   useResetProviderOnSearching,
 } from "./hooks";
+import { throwDebugMessage } from "@/lib/services/throwDebugMessage";
+import { useSession } from "next-auth/react";
+import {
+  getMyAccountDetailField,
+  AccountDetailsFieldKey,
+} from "@/lib/services/api/accountDetails";
 
 type ChatStateType = {
   chatId: string | null;
@@ -76,10 +84,14 @@ type AdsListActionType = {
   updateFilters: (newValue: Partial<Filters>) => void; // Dodano updateFilters
   changeChatId: (value: string | null) => void;
   sendMessage: (msg: Omit<MessageState, "id">) => void;
+  sendInterlocutorDataMessage: (msg: Omit<MessageState, "id">) => void;
   disconnect: (message: Omit<MessageState, "id">) => void;
   updateRoomUsersInfo: UpdateRoomUsersInfo;
   initializeRoomUsersInfo: InitializeRoomUsersInfo;
   changeTradeDataPopoverOpen: ChangeTradeDataPopoverOpen;
+  getInterlocutorData: (
+    dataKey: string
+  ) => RoomUsersDataField | null | undefined;
 };
 
 export const ChatActionCtx = createContext<AdsListActionType | undefined>(
@@ -96,18 +108,21 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const [messages, setMessages] = useState<MessageState[]>([]);
   const [isPopoverOpen, setPopoverOpen] = useState<boolean>(false);
   const [tradeDataPopoverOpen, setTradeDataPopoverOpen] =
-    useState<TradeDataPopoverOpen>("nationality");
+    useState<TradeDataPopoverOpen>(null);
   const [channelsListData, setChannelsListData] = useState<ChannelsListData>(
     DEFAULT_CHANNELS_LIST_DATA
-  ); // TEMP, TODO: remove when real data is available
+  );
   const [selectedChannels, setSelectedChannels] = useState<SelectedChannel[]>(
     DEFAULT_SELECTED_CHANNELS
-  ); // TEMP, TODO: remove when real data is available
+  );
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
   const [roomUsersInfo, setRoomUsersInfo] = useState<RoomUsersInfo>(
     DEFAULT_ROOM_USERS_INFO
   );
   const isChatActive = chatStage === ChatStage.Connected;
+
+  const { status, data: session } = useSession();
+  const isLoggedIn = status === "authenticated";
 
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -175,13 +190,173 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const sendMessage = async (el: Omit<MessageState, "id">) => {
     const isMessageType = el.headers.type === "message";
 
-    if (!isMessageType || !isChatActive) return null;
+    if (!isMessageType || !isChatActive) {
+      throwDebugMessage(
+        "ChatProvider - sendMessage function: message type isn't valid or chat is not active",
+        el.headers.type
+      );
+
+      return;
+    }
 
     const newMessage: MessageState = { ...el, id: String(messages.length + 1) };
 
     setMessages((prevMessages) => [...prevMessages, newMessage]);
 
     return;
+  };
+
+  const sendInterlocutorDataMessage = async (el: Omit<MessageState, "id">) => {
+    const type = el.headers.type;
+
+    if (type === "interlocutorData") {
+      sendTradeOfferMessage(el);
+    } else if (type === "tradeAccepted") {
+      await acceptTradeOffer(el);
+    }
+  };
+
+  const sendTradeOfferMessage = (el: Omit<MessageState, "id">) => {
+    if (!isLoggedIn) return; // użytkownik niezalogowany – nic nie rób
+    if (!isChatActive) {
+      throwDebugMessage(
+        "ChatProvider - sendInterlocutorData function: message type isn't valid or chat is not active"
+      );
+    }
+
+    const myId = getSessionKey();
+
+    const newMessage: MessageState = { ...el, id: String(messages.length + 1) };
+
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
+    if (el.author === myId) {
+      // Jeśli to ja wysyłam wiadomość, to aktualizuj roomUsersInfo
+      setRoomUsersInfo((state) => {
+        const dataKey = el.headers.dataKey as string;
+        const prevData = state[myId] || {};
+        type Dyn = Record<string, RoomUsersDataField>;
+        const prevField = (prevData as Dyn)[dataKey] || {};
+
+        return {
+          ...state,
+          [myId]: {
+            ...prevData,
+            [dataKey]: {
+              ...prevField,
+              wantToShow: true,
+            },
+          },
+        };
+      });
+    }
+  };
+
+  // Helper: check if interlocutor exposed a given dataKey
+  const isInterlocutorWantToShow = (dataKey: string): boolean => {
+    const myId = getSessionKey();
+    const ids = Object.keys(roomUsersInfo || {});
+    const interlocutorId = ids.find((id) => id !== myId);
+    if (!interlocutorId) return false;
+    const field = (
+      roomUsersInfo[interlocutorId] as
+        | Record<string, RoomUsersDataField>
+        | undefined
+    )?.[dataKey];
+    return !!field?.wantToShow;
+  };
+
+  // Helper: check if I exposed a given dataKey
+  const isMeWantToShow = (dataKey: string): boolean => {
+    const myId = getSessionKey();
+    const field = (
+      roomUsersInfo[myId] as Record<string, RoomUsersDataField> | undefined
+    )?.[dataKey];
+    return !!field?.wantToShow;
+  };
+
+  // Helper: ensure my wantToShow flag is set (without overriding existing value)
+  const ensureMeWantToShow = (dataKey: string) => {
+    const myId = getSessionKey();
+    const current = (
+      roomUsersInfo[myId] as Record<string, RoomUsersDataField> | undefined
+    )?.[dataKey];
+    if (current?.wantToShow) return; // already set
+    setRoomUsersInfo((state) => {
+      const prevData = state[myId] || {};
+      type Dyn = Record<string, RoomUsersDataField>;
+      const prevField = (prevData as Dyn)[dataKey] || {};
+      return {
+        ...state,
+        [myId]: {
+          ...prevData,
+          [dataKey]: {
+            ...prevField,
+            wantToShow: true,
+            // leave value as-is (undefined) so observer/fetch can populate
+            value: prevField.value,
+          },
+        },
+      } as RoomUsersInfo;
+    });
+  };
+
+  const acceptTradeOffer = async (el: Omit<MessageState, "id">) => {
+    if (!isLoggedIn) return;
+    if (!isChatActive) {
+      throwDebugMessage("ChatProvider - acceptTradeOffer: chat is not active");
+    }
+
+    const myId = getSessionKey();
+    const dataKey = el.headers.dataKey as string;
+
+    const iAmAcceptor = el.author === myId;
+    const iAmOffererAndGotAcceptance = el.author !== myId;
+
+    // Guards depending on role
+    if (iAmAcceptor && !isInterlocutorWantToShow(dataKey)) return;
+    if (iAmOffererAndGotAcceptance && !isMeWantToShow(dataKey)) return;
+
+    // Ensure my wantToShow is marked (especially for acceptor path)
+    ensureMeWantToShow(dataKey);
+
+    const fetchedValue = await resolveMyValue(dataKey);
+
+    // IMPORTANT: first persist my data so when the message component mounts it already sees value
+    sendUserData(dataKey, fetchedValue);
+
+    // then append the message (batched with state update -> reduces flash of "Oczekiwanie…")
+    const newMessage: MessageState = { ...el, id: String(messages.length + 1) };
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
+  };
+
+  // Helper: persist my data for a given key into roomUsersInfo (idempotent)
+  const sendUserData = (
+    dataKey: string,
+    value: RoomUsersDataField["value"] | null
+  ) => {
+    const myId = getSessionKey();
+    setRoomUsersInfo((state) => {
+      const prevData = state[myId] || {};
+      type Dyn = Record<string, RoomUsersDataField>;
+      const prevField = (prevData as Dyn)[dataKey] || {};
+
+      const sameValue =
+        JSON.stringify(prevField.value) === JSON.stringify(value) &&
+        prevField.wantToShow === true;
+      if (sameValue) return state;
+
+      return {
+        ...state,
+        [myId]: {
+          ...prevData,
+          [dataKey]: {
+            ...prevField,
+            value,
+            wantToShow: true,
+          },
+        },
+      } as RoomUsersInfo;
+    });
   };
 
   const updateFilters = (newValue: Partial<Filters>) => {
@@ -223,11 +398,48 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const resetProvidersToDefault = () => {
     setMessages([]);
     setChatId(null);
+    // TODO: dodać roomUsersInfo
   };
 
   const changeTradeDataPopoverOpen: ChangeTradeDataPopoverOpen = (value) => {
     setTradeDataPopoverOpen(value);
   };
+
+  const getInterlocutorData = (dataKey: string) => {
+    const myId = getSessionKey();
+    const ids = Object.keys(roomUsersInfo || {});
+    const interlocutorId = ids.find((id) => id !== myId);
+    const valueOfInterlocutor = interlocutorId
+      ? (
+          roomUsersInfo[interlocutorId] as
+            | Record<string, RoomUsersDataField>
+            | undefined
+        )?.[dataKey]
+      : null;
+
+    return valueOfInterlocutor;
+  };
+
+  // Helper: resolve my value for a given dataKey (session for username, API for others)
+  const resolveMyValue = useCallback(
+    async (dataKey: string): Promise<RoomUsersDataField["value"] | null> => {
+      if (dataKey === "username") {
+        return (
+          typeof session?.user?.name === "string" ? session.user.name : null
+        ) as RoomUsersDataField["value"] | null;
+      }
+      // If API helpers were removed earlier, guard
+      try {
+        const fetched = await getMyAccountDetailField(
+          dataKey as unknown as AccountDetailsFieldKey
+        );
+        return (fetched ?? null) as RoomUsersDataField["value"] | null;
+      } catch {
+        return null;
+      }
+    },
+    [session?.user?.name]
+  );
 
   // ==========
   // useFX
@@ -265,6 +477,49 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
 
   useResetProviderOnSearching(chatStage, resetProvidersToDefault);
 
+  // Observer: when both wantToShow are true and interlocutor has a value, fill my value if missing
+  useEffect(() => {
+    if (!isLoggedIn || !isChatActive) return;
+
+    const myId = getSessionKey();
+    const ids = Object.keys(roomUsersInfo || {});
+    const interlocutorId = ids.find((id) => id !== myId);
+    if (!interlocutorId) return;
+
+    const myData = roomUsersInfo[myId] as
+      | Record<string, RoomUsersDataField>
+      | undefined;
+    const otherData = roomUsersInfo[interlocutorId] as
+      | Record<string, RoomUsersDataField>
+      | undefined;
+    if (!myData || !otherData) return;
+
+    const keys = Array.from(
+      new Set([...Object.keys(myData), ...Object.keys(otherData)])
+    );
+
+    let cancelled = false;
+    (async () => {
+      for (const key of keys) {
+        const meField = myData[key];
+        const otherField = otherData[key];
+        const bothWantToShow =
+          !!meField?.wantToShow && !!otherField?.wantToShow;
+        const otherHasValue = otherField && otherField.value !== undefined;
+        const meMissingValue = !meField || meField.value === undefined;
+        if (bothWantToShow && otherHasValue && meMissingValue) {
+          const value = await resolveMyValue(key);
+          if (cancelled) return;
+          sendUserData(key, value);
+        }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [roomUsersInfo, isLoggedIn, isChatActive, resolveMyValue]);
+
   return (
     <ChatStateCtx.Provider
       value={{
@@ -294,6 +549,8 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
           updateRoomUsersInfo,
           initializeRoomUsersInfo,
           changeTradeDataPopoverOpen,
+          sendInterlocutorDataMessage,
+          getInterlocutorData,
         }}
       >
         <AblyRoomProvider chatId={chatId}>{children}</AblyRoomProvider>

@@ -4,11 +4,11 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { queryFirestore } from "@/lib/services/adapters/firebase/utils/queryFirestore";
 import { where } from "firebase/firestore";
-import { UserAccount } from "@/lib/services/queries/account";
 import { addDocumentToFirestore } from "@/lib/services/adapters/firebase/utils/queryFirestore";
 import type { Session, User } from "next-auth";
 import type { JWT } from "next-auth/jwt";
 import type { Account, Profile } from "next-auth";
+import { UserAccount } from "@/lib/globalTypes/account";
 
 
 function getDiscordProfile(profile: unknown) {
@@ -50,6 +50,7 @@ async function createDiscordAccount({ username, email }: { username: string; ema
   );
 }
 
+// Tutaj sesji danych
 async function authorizeCredentials(credentials: Record<string, string> | undefined) {
   if (!credentials?.email || !credentials?.password) return null;
   const users = await queryFirestore("accounts", {
@@ -60,6 +61,7 @@ async function authorizeCredentials(credentials: Record<string, string> | undefi
   if (!user.confirmation?.isConfirmed) return null;
   const isValid = await bcrypt.compare(credentials.password, user.password);
   if (!isValid) return null;
+
   return {
     id: user.email,
     email: user.email,
