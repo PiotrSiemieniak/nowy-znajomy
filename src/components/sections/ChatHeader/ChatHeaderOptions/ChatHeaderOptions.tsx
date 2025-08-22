@@ -16,7 +16,6 @@ export function ChatHeaderOptions() {
   return (
     <div className="border-b border-border/50 py-2 flex flex-row justify-between">
       <div>
-        {chatStage}
         <AnimatePresence mode="popLayout">
           <motion.div
             key={chatStage}
