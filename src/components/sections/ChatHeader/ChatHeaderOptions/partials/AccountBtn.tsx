@@ -16,6 +16,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useTransition } from "react";
 import { setLocaleNonRedirect } from "@/lib/actions/localeNonRedirect";
 import { useRouter } from "next/navigation";
+import { Label } from "@/components/ui/Label";
 
 export function AccountBtn() {
   const { data: session, status } = useSession();
@@ -27,12 +28,8 @@ export function AccountBtn() {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
-  const handleLanguageChange = (checked: boolean) => {
-    const newLocale = checked ? "en" : "pl";
-
-    if (newLocale === locale) {
-      return;
-    }
+  const handleLanguageChange = () => {
+    const newLocale = locale === "en" ? "pl" : "en";
 
     startTransition(async () => {
       try {
@@ -72,21 +69,35 @@ export function AccountBtn() {
             <ThemeSwitcher />
             <h6>{t("autoConnections")}</h6>
           </div>
-          <div className="space-y-2 px-2">
+          <div className="space-y-2 px-2 w-full">
             <h6 className="font-medium">{t("language.title")}</h6>
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">
-                {t("language.polish")}
-              </span>
-              <Switch
-                checked={locale === "en"}
-                onCheckedChange={handleLanguageChange}
-                disabled={isPending}
-                className="mx-3"
-              />
-              <span className="text-sm font-medium">
-                {t("language.english")}
-              </span>
+            <div className="w-full flex">
+              <Button
+                variant={"ghost"}
+                onClick={handleLanguageChange}
+                className="bg-card mx-auto"
+              >
+                <Label
+                  className={cn("text-sm font-medium", {
+                    "opacity-50": locale !== "pl",
+                  })}
+                >
+                  {t("language.polish")}
+                </Label>
+                <Switch
+                  checked={locale === "en"}
+                  disabled={isPending}
+                  className="mx-3"
+                  tabIndex={-1}
+                />
+                <Label
+                  className={cn("text-sm font-medium", {
+                    "opacity-50": locale !== "en",
+                  })}
+                >
+                  {t("language.english")}
+                </Label>
+              </Button>
             </div>
           </div>
         </div>

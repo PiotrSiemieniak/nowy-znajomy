@@ -30,9 +30,9 @@
     "options": "Options",
     "autoConnections": "Auto connections",
     "language": {
-      "title": "Choose language",
-      "polish": "pl",
-      "english": "en"
+      "title": "Choose language / Wybierz język",
+      "polish": "Polski",
+      "english": "English"
     }
   },
   "theme": {
