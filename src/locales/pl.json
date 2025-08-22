@@ -19,7 +19,7 @@
       "edit": "Edytuj",
       "friends": "Znajomi",
       "messageHistory": "Historia wiadomości",
-      "upgradeToPro": "Upgrade do Pro",
+      "upgradeToPro": "Ulepsz do Pro",
       "shareApp": "Udostępnij aplikację",
       "downloadApp": "Pobierz aplikację",
       "api": "API",
@@ -83,13 +83,24 @@
     "title": "Tryb UI"
   },
   "filters": {
-    "age": "Wiek",
-    "ageUnit": "lat",
-    "gender": "Płeć",
-    "height": "Wzrost",
-    "heightUnit": "cm",
-    "weight": "Waga",
-    "weightUnit": "kg"
+    "age": {
+      "label": "Wiek",
+      "unit": "lat"
+    },
+    "height": {
+      "label": "Wzrost", 
+      "unit": "cm"
+    },
+    "weight": {
+      "label": "Waga",
+      "unit": "kg"
+    },
+    "gender": {
+      "label": "Płeć",
+      "male": "Mężczyzna",
+      "female": "Kobieta", 
+      "any": "Dowolna"
+    }
   },
   "channelCreator": {
     "trigger": "Utwórz kanał",
