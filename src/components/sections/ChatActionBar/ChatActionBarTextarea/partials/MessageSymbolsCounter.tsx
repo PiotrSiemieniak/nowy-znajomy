@@ -1,6 +1,7 @@
 import { TEXTAREA_MAX_LENGTH } from "@/configs/chatTextarea";
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
+import { useTranslations } from "next-intl";
 
 const LENGTH_TO_SHOW = TEXTAREA_MAX_LENGTH * 0.75;
 const LENGTH_TO_RED_500 = TEXTAREA_MAX_LENGTH * 0.9;
@@ -12,6 +13,8 @@ export function MessageSymbolsCounter({
 }: {
   messageLength: number;
 }) {
+  const t = useTranslations("chat.message");
+
   if (messageLength < LENGTH_TO_SHOW) return null;
 
   return (
@@ -32,7 +35,7 @@ export function MessageSymbolsCounter({
           }
         )}
       >
-        Limit znaków {messageLength}/{TEXTAREA_MAX_LENGTH}
+        {t("charLimit")} {messageLength}/{TEXTAREA_MAX_LENGTH}
       </p>
     </motion.div>
   );

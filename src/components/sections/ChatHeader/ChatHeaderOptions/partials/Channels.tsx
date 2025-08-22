@@ -25,12 +25,15 @@ import { ChannelsList } from "@/components/specific/ChannelsList";
 import { FiltersList } from "@/components/specific/FiltersList";
 import { ActiveChannelBadges } from "@/components/specific/ActiveChannelBadges/ActiveChannelBadges";
 import { ChannelCreator } from "@/components/specific/ChannelCreator";
+import { useTranslations } from "next-intl";
 
 function ChannelsTrigger() {
+  const t = useTranslations("channels");
+
   return (
     <DrawerTrigger asChild>
       <Button size={"sm"} className="rounded-xl inline-flex">
-        Filtry i kanały <SlidersHorizontal className="ml-1" />
+        {t("title")} <SlidersHorizontal className="ml-1" />
       </Button>
     </DrawerTrigger>
   );
@@ -47,6 +50,7 @@ function ChannelsPagination({
   count: number;
   current: number;
 }) {
+  const t = useTranslations("channels");
   const basicBtnSx =
     "inline-flex space-x-1 text-xs transition-opacity opacity-100 hover:bg-transparent";
 
@@ -60,7 +64,7 @@ function ChannelsPagination({
         onClick={onPrevClick}
       >
         <ChevronLeft className="size-4 my-auto" />
-        Kanały
+        {t("channels")}
       </Button>
       {/* Dots */}
       <div className="flex flex-row gap-2 flex-1 absolute left-1/2 -translate-x-1/2">
@@ -80,7 +84,7 @@ function ChannelsPagination({
         })}
         onClick={onNextClick}
       >
-        Filtry
+        {t("filters")}
         <ChevronRight className="size-4 my-auto" />
       </Button>
     </div>
@@ -88,12 +92,14 @@ function ChannelsPagination({
 }
 
 function ChannelsFooter() {
+  const t = useTranslations("channels");
+
   return (
     <DrawerFooter className="pt-0">
-      <Button>Submit</Button>
+      <Button>{t("submit")}</Button>
       <DrawerClose className="w-full">
         <Button variant="outline" className="w-full mt-2">
-          Cancel
+          {t("cancel")}
         </Button>
       </DrawerClose>
     </DrawerFooter>
@@ -102,6 +108,7 @@ function ChannelsFooter() {
 
 export function Channels() {
   const { handlePopoverOpen } = useChatAction();
+  const t = useTranslations("channels");
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
@@ -147,31 +154,24 @@ export function Channels() {
               <CarouselItem className="w-full h-full max-h-[75vh]">
                 <DrawerHeader className="space-y-2">
                   <div className="inline-flex items-center justify-between w-full">
-                    <DrawerTitle>Kanały</DrawerTitle>
+                    <DrawerTitle>{t("channels")}</DrawerTitle>
                     <ChannelCreator />
                   </div>
                   <ChannelsList />
                   <ActiveChannelBadges />
                   <DrawerDescription>
-                    Wybierz <b>kanał tematyczny</b> 1 na 1, by połączyć się z
-                    osobą o podobnych zainteresowaniach. Skorzystaj z{" "}
-                    <b>kanałów regionalnych</b>, jeśli chcesz porozmawiać z kimś
-                    z Twojej okolicy. Dołącz do <b>kanałów grupowych</b>, aby
-                    pisać wspólnie z większą liczbą użytkowników w luźniejszej
-                    atmosferze.
+                    {t.rich("channelsDescription", {
+                      b: (chunks) => <b>{chunks}</b>,
+                    })}
                   </DrawerDescription>
                 </DrawerHeader>
               </CarouselItem>
               <CarouselItem className="w-full">
                 <DrawerHeader className="space-y-2">
-                  <DrawerTitle>Filtry</DrawerTitle>
+                  <DrawerTitle>{t("filters")}</DrawerTitle>
                   <FiltersList />
                   <DrawerDescription>
-                    Filtry pozwalają Ci określić preferencje wobec rozmówcy w
-                    kanałach 1 na 1 – od wieku i płci, po zainteresowania i inne
-                    cechy. Dzięki temu trafiasz na osoby, z którymi łatwiej
-                    złapiesz wspólny język. Podczas losowania rozmówcy Twoje
-                    preferencje będą priorytetowe.
+                    {t("filtersDescription")}
                   </DrawerDescription>
                 </DrawerHeader>
               </CarouselItem>

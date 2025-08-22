@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { confirmAccount } from "@/lib/services/api/account";
 import { cn } from "@/lib/utils";
 import { appNotification } from "@/components/ui/Sonner/appNotification";
+import { useTranslations } from "next-intl";
 
 type Props = {
   email: string; // Opcjonalnie, jeśli email jest przekazywany jako prop
@@ -28,6 +29,8 @@ export function ConfirmAccountContent({ email, password, callback }: Props) {
   const [otpValue, setOtpValue] = useState("");
   const [placeholder, setPlaceholder] = useState("");
 
+  const t = useTranslations("auth.confirm");
+
   const handleOtpChange = async (value: string) => {
     setOtpValue(value);
     setError(null);
@@ -35,7 +38,7 @@ export function ConfirmAccountContent({ email, password, callback }: Props) {
       setIsFetching(true);
       const res = await confirmAccount({ email, code: value });
       setIsFetching(false);
-      let errorMsg = "Błąd potwierdzenia";
+      let errorMsg = t("errorMessage");
       if (res && typeof res === "object") {
         if ("message" in res && typeof res.message === "string") {
           errorMsg = res.message;
@@ -64,23 +67,17 @@ export function ConfirmAccountContent({ email, password, callback }: Props) {
           });
         });
       }
-      appNotification(
-        "Konto zostało pomyślnie potwierdzone! Zostałeś zalogowany.",
-        "Dziękujemy za potwierdzenie konta. Zostałeś automatycznie zalogowany.",
-        {
-          duration: 10000,
-          icon: "✅",
-        }
-      );
+      appNotification(t("notification.title"), t("notification.description"), {
+        duration: 10000,
+        icon: "✅",
+      });
     }
-  }, [isSuccess, callback, email, password]);
+  }, [isSuccess, callback, email, password, t]);
 
   return (
     <div className="flex flex-col items-center justify-center h-full gap-4">
       <Typography className="mt-0 w-full ">
-        Dokończ rejestrację konta, klikając link w e-mailu lub wpisując kod
-        potwierdzający.
-        {String(email)}dd
+        {t("description", { email })}
       </Typography>
       <div
         className={cn(
@@ -88,7 +85,7 @@ export function ConfirmAccountContent({ email, password, callback }: Props) {
           !!error && "bg-red-100 dark:bg-red-950/50"
         )}
       >
-        <Label htmlFor="otp-input">Kod potwierdzający</Label>
+        <Label htmlFor="otp-input">{t("codeLabel")}</Label>
         <InputOTP
           maxLength={6}
           id="otp-input"
@@ -123,7 +120,7 @@ export function ConfirmAccountContent({ email, password, callback }: Props) {
                 className="mx-auto text-muted-foreground animate-pulse mt-1"
                 variant={"small"}
               >
-                Trwa weryfikacja...
+                {t("verifying")}
               </Typography>
             </motion.div>
           )}
@@ -135,13 +132,11 @@ export function ConfirmAccountContent({ email, password, callback }: Props) {
         )}
       </div>
       <Typography variant={"muted"} className="text-center w-full">
-        Możesz potwierdzić konto zarówno klikając link w e-mailu, jak i wpisując
-        powyższy kod w aplikacji.
+        {t("alternativeMethod")}
       </Typography>
       <Separator />
       <Typography variant={"muted"} className="w-full">
-        Nie otrzymałeś e-maila? <br />
-        Sprawdź folder spam lub skontaktuj się z administratorem.
+        {t.rich("noEmail", { br: () => <br /> })}
       </Typography>
     </div>
   );

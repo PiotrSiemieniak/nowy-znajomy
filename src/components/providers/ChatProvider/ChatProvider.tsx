@@ -43,6 +43,7 @@ import {
   getMyAccountDetailField,
   AccountDetailsFieldKey,
 } from "@/lib/services/api/accountDetails";
+import { useTranslations } from "next-intl";
 
 type ChatStateType = {
   chatId: string | null;
@@ -102,6 +103,7 @@ export const ChatActionCtx = createContext<AdsListActionType | undefined>(
 // 2. TEN PROVIDER/KOMPONENT POWINIEN WZYWAĆ AKCJE I STAN Z TEGO PROVIDERA
 // 3. POWINIEN UŻYWAĆ AKCJE DO SWOICH WYDARZEŃ
 export const ChatProvider = ({ children }: { children: ReactNode }) => {
+  const t = useTranslations("providers");
   const [bgColors, setBgColors] = useState<string[] | null>(null);
   const [chatStage, setChatStage] = useState<ChatStage>(ChatStage.Initial);
   const [chatId, setChatId] = useState<string | null>(null);
@@ -191,10 +193,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
     const isMessageType = el.headers.type === "message";
 
     if (!isMessageType || !isChatActive) {
-      throwDebugMessage(
-        "ChatProvider - sendMessage function: message type isn't valid or chat is not active",
-        el.headers.type
-      );
+      throwDebugMessage(t("sendMessageError"), el.headers.type);
 
       return;
     }
@@ -219,9 +218,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const sendTradeOfferMessage = (el: Omit<MessageState, "id">) => {
     if (!isLoggedIn) return; // użytkownik niezalogowany – nic nie rób
     if (!isChatActive) {
-      throwDebugMessage(
-        "ChatProvider - sendInterlocutorData function: message type isn't valid or chat is not active"
-      );
+      throwDebugMessage(t("sendInterlocutorDataError"));
     }
 
     const myId = getSessionKey();
@@ -303,7 +300,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const acceptTradeOffer = async (el: Omit<MessageState, "id">) => {
     if (!isLoggedIn) return;
     if (!isChatActive) {
-      throwDebugMessage("ChatProvider - acceptTradeOffer: chat is not active");
+      throwDebugMessage(t("acceptTradeOfferError"));
     }
 
     const myId = getSessionKey();

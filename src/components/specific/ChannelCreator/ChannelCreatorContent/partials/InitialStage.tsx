@@ -11,6 +11,7 @@ import { InitialStageFormValues, initialStageSchema } from "../utils";
 import { DialogFooter, DialogClose } from "@/components/ui/Dialog";
 import { Separator } from "@/components/ui/Separator";
 import { CHANNEL_TAGS_MAX_COUNT } from "@/configs/channels";
+import { useTranslations } from "next-intl";
 
 interface InitialStageProps {
   form: ReturnType<typeof useForm<InitialStageFormValues>>;
@@ -23,6 +24,8 @@ export function InitialStage({
   onSubmit,
   randomExample,
 }: InitialStageProps) {
+  const t = useTranslations("channelCreator.initialStage");
+
   const [tagInput, setTagInput] = useState("");
   const tags = form.watch("tags");
 
@@ -69,10 +72,9 @@ export function InitialStage({
             }
           >
             <UserRoundSearch className="size-8 rounded-lg border dark:bg-background p-2" />
-            <p className="text-left">Tematyczny</p>
+            <p className="text-left">{t("thematic.title")}</p>
             <p className="text-sm text-left font-normal text-muted-foreground">
-              Utwórz kanał, w którym rozmówcy losują się nawzajem do rozmowy 1
-              na 1.
+              {t("thematic.fullDescription")}
             </p>
           </button>
           <button
@@ -87,10 +89,9 @@ export function InitialStage({
             }
           >
             <Users className="size-8 rounded-lg border dark:bg-background p-2" />
-            <p className="text-left">Grupowy</p>
+            <p className="text-left">{t("group.title")}</p>
             <p className="text-sm text-left font-normal text-muted-foreground">
-              Utwórz kanał, w którym wszyscy rozmówcy rozmawiają razem na czacie
-              grupowym.
+              {t("group.fullDescription")}
             </p>
           </button>
         </div>
@@ -98,21 +99,21 @@ export function InitialStage({
 
       {/* Nazwa kanału */}
       <FormElement
-        label="Nazwa kanału"
-        desc="Wprowadź wyświetlaną nazwę kanału"
+        label={t("channelName.label")}
+        desc={t("channelName.description")}
         errorLabel={form.formState.errors.name?.message}
       >
         <Input
           clearable
-          placeholder={`np. ${randomExample}`}
+          placeholder={`${t("channelName.placeholder")} ${randomExample}`}
           {...form.register("name")}
         />
       </FormElement>
 
       {/* Opis kanału */}
       <FormElement
-        label="Opis kanału"
-        desc="Wprowadź opis kanału"
+        label={t("channelDescription.label")}
+        desc={t("channelDescription.description")}
         errorLabel={form.formState.errors.description?.message}
       >
         <Input {...form.register("description")} />
@@ -120,8 +121,8 @@ export function InitialStage({
 
       {/* Tagi kanału */}
       <FormElement
-        label="Tagi kanału"
-        desc={`Wprowadź od 2 do 5 wyrazów kluczowych związanych z tematyką kanału`}
+        label={t("channelTags.label")}
+        desc={t("channelTags.description")}
         errorLabel={form.formState.errors.tags?.message}
       >
         <div className="flex gap-2 w-full">
@@ -139,7 +140,7 @@ export function InitialStage({
             onClick={handleAddTag}
             disabled={tags.length >= 5 || !tagInput.trim()}
           >
-            Dodaj
+            {t("channelTags.addButton")}
           </Button>
         </div>
         <div className="pt-1 flex flex-row gap-2 flex-wrap">
@@ -158,10 +159,10 @@ export function InitialStage({
       <Separator />
       <DialogFooter className="flex flex-row justify-end">
         <DialogClose asChild>
-          <Button variant={"ghost"}>Anuluj</Button>
+          <Button variant={"ghost"}>{t("cancelButton")}</Button>
         </DialogClose>
         <div className="flex flex-row justify-end">
-          <Button type="submit">Kontynuuj</Button>
+          <Button type="submit">{t("continueButton")}</Button>
         </div>
       </DialogFooter>
     </form>

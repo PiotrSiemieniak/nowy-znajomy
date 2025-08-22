@@ -2,9 +2,11 @@ import { useChatAction } from "@/components/providers/ChatProvider";
 import { ChatStage } from "@/components/providers/ChatProvider/types";
 import { Button } from "@/components/ui/Button";
 import { BadgePlus } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export function SearchingBtn() {
   const { changeChatState } = useChatAction();
+  const t = useTranslations("chat.actions");
 
   const handleClick = () => changeChatState(ChatStage.Searching);
 
@@ -15,7 +17,7 @@ export function SearchingBtn() {
       className="rounded-xl inline-flex"
     >
       <BadgePlus />
-      Nowa rozmowa
+      {t("newChat")}
     </Button>
   );
 }

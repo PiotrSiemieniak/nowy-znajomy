@@ -14,10 +14,12 @@ import {
 } from "@/components/providers/ChatProvider";
 import { DataRecord } from "./InterlocutorInfoNickname/partials/DataRecord";
 import { ChatStage } from "@/components/providers/ChatProvider/types";
+import { useTranslations } from "next-intl";
 
 export function InterlocutorInfo() {
   const {} = useChatAction();
   const { chatStage } = useChatState();
+  const t = useTranslations("interlocutorInfo");
 
   if (chatStage === ChatStage.Initial || chatStage === ChatStage.Searching)
     return null;
@@ -38,11 +40,11 @@ export function InterlocutorInfo() {
         <div className="inline-flex w-full space-x-2">
           <Button className="flex-1" variant={"outline"}>
             <UserRoundPen />
-            Zapytaj o nazwę
+            {t("askForName")}
           </Button>
           <Button className="flex-1" variant={"outline"}>
             <UserRoundPlus />
-            Dodaj do znajomych
+            {t("addToFriends")}
           </Button>
         </div>
       </div>

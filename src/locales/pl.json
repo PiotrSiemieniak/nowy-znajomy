@@ -1,65 +1,266 @@
 {
-  "common": {
-    "loading": "Ładowanie...",
-    "error": "Wystąpił błąd",
-    "success": "Sukces",
-    "cancel": "Anuluj",
-    "confirm": "Potwierdź",
-    "save": "Zapisz",
-    "delete": "Usuń",
-    "edit": "Edytuj",
-    "close": "Zamknij",
-    "back": "Wróć",
-    "next": "Dalej",
-    "previous": "Poprzedni",
-    "yes": "Tak",
-    "no": "Nie"
+  "app": {
+    "title": "Nowy znajomy",
+    "description": "Poznawaj nowych ludzi z całego świata i nawiązuj nowe znajomości w bezpiecznym środowisku."
   },
-  "navigation": {
-    "home": "Strona główna",
-    "chat": "Chat",
-    "profile": "Profil",
-    "settings": "Ustawienia",
-    "logout": "Wyloguj"
+  "debug": {
+    "chatId": "ID: {id}",
+    "sessionId": "UID: {id}",
+    "stage": "Etap: {stage}"
+  },
+  "providers": {
+    "sendMessageError": "ChatProvider - sendMessage: typ wiadomości jest nieprawidłowy lub czat jest nieaktywny",
+    "sendInterlocutorDataError": "ChatProvider - sendInterlocutorData: typ wiadomości jest nieprawidłowy lub czat jest nieaktywny",
+    "acceptTradeOfferError": "ChatProvider - acceptTradeOffer: czat jest nieaktywny"
+  },
+  "account": {
+    "title": "Konto",
+    "options": "Opcje",
+    "autoConnections": "Automatyczne połączenia",
+    "language": {
+      "title": "Wybierz język",
+      "polish": "pl",
+      "english": "en"
+    }
   },
   "auth": {
-    "login": "Zaloguj się",
-    "register": "Zarejestruj się",
-    "email": "Email",
-    "password": "Hasło",
-    "confirmPassword": "Potwierdź hasło",
-    "forgotPassword": "Zapomniałeś hasła?",
-    "rememberMe": "Zapamiętaj mnie",
-    "loginSuccess": "Pomyślnie zalogowano",
-    "loginError": "Błąd logowania",
-    "registerSuccess": "Pomyślnie zarejestrowano",
-    "registerError": "Błąd rejestracji"
+    "login": {
+      "title": "Logowanie",
+      "button": "Zaloguj",
+      "email": "Adres e-mail",
+      "password": "Hasło",
+      "error": "Nieprawidłowy email lub hasło.",
+      "loading": "Logowanie...",
+      "orWith": "lub za pomocą",
+      "cancel": "Anuluj"
+    },
+    "register": {
+      "title": "Rejestracja",
+      "button": "Zarejestruj",
+      "username": "Nazwa użytkownika",
+      "email": "Adres e-mail",
+      "password": "Hasło",
+      "confirmPassword": "Powtórz hasło",
+      "createAccount": "Utwórz konto",
+      "cancel": "Anuluj",
+      "orWith": "lub za pomocą",
+      "success": "Konto utworzone! Sprawdź e-mail w celu potwierdzenia.",
+      "usernameAvailable": "Nazwa użytkownika jest dostępna",
+      "validation": {
+        "usernameMin": "Podaj nazwę użytkownika",
+        "usernameMax": "Nazwa użytkownika może mieć maksymalnie 20 znaków",
+        "email": "Podaj poprawny adres e-mail",
+        "passwordMin": "Podaj hasło (min. 6 znaków)",
+        "confirmPasswordMin": "Powtórz hasło",
+        "passwordMatch": "Hasła muszą być takie same"
+      }
+    },
+    "confirm": {
+      "title": "Potwierdzenie konta",
+      "description": "Dokończ rejestrację konta, klikając link w e-mailu lub wpisując kod potwierdzający.",
+      "codeLabel": "Kod potwierdzający",
+      "verifying": "Trwa weryfikacja...",
+      "instructions": "Możesz potwierdzić konto zarówno klikając link w e-mailu, jak i wpisując powyższy kod w aplikacji.",
+      "noEmail": "Nie otrzymałeś e-maila?",
+      "checkSpam": "Sprawdź folder spam lub skontaktuj się z administratorem.",
+      "success": "Konto zostało pomyślnie potwierdzone! Zostałeś zalogowany.",
+      "successDescription": "Dziękujemy za potwierdzenie konta. Zostałeś automatycznie zalogowany.",
+      "error": "Błąd potwierdzenia"
+    }
+  },
+  "theme": {
+    "title": "Tryb UI"
+  },
+  "filters": {
+    "age": "Wiek",
+    "ageUnit": "lat",
+    "gender": "Płeć",
+    "height": "Wzrost",
+    "heightUnit": "cm",
+    "weight": "Waga",
+    "weightUnit": "kg"
+  },
+  "channelCreator": {
+    "trigger": "Utwórz kanał",
+    "title": "Kreator nowego kanału",
+    "description": "Utwórz nowy kanał, aby stworzyć przestrzeń skupiającą osoby o podobnym zainteresowaniu.",
+    "initialStage": {
+      "thematic": {
+        "title": "Tematyczny",
+        "description": "Przeznaczony na określony temat",
+        "fullDescription": "Utwórz kanał, w którym rozmówcy losują się nawzajem do rozmowy 1 na 1."
+      },
+      "group": {
+        "title": "Grupowy", 
+        "description": "Do rozmów grupowych z przyjaciółmi",
+        "fullDescription": "Utwórz kanał, w którym wszyscy rozmówcy rozmawiają razem na czacie grupowym."
+      },
+      "channelName": {
+        "label": "Nazwa kanału",
+        "description": "Wprowadź wyświetlaną nazwę kanału",
+        "placeholder": "np."
+      },
+      "channelDescription": {
+        "label": "Opis kanału",
+        "description": "Wprowadź opis kanału"
+      },
+      "channelTags": {
+        "label": "Tagi kanału",
+        "description": "Wprowadź od 2 do 5 wyrazów kluczowych związanych z tematyką kanału",
+        "addButton": "Dodaj"
+      },
+      "cancelButton": "Anuluj",
+      "continueButton": "Kontynuuj"
+    },
+    "detailsStage": {
+      "header": {
+        "newChannel": "Nowy kanał"
+      },
+      "maxUsers": {
+        "label": "Maksymalna liczba użytkowników",
+        "description": "Wprowadź maksymalną liczbę użytkowników, którzy mogą dołączyć do kanału lub zostaw puste, jeśli chcesz, aby nie było limitu",
+        "placeholder": "Brak limitu"
+      },
+      "adultOnly": {
+        "label": "Tylko dla dorosłych",
+        "description": "Jeśli kanał ma być oznaczony jako +18, zaznacz tę opcję"
+      },
+      "moderation": {
+        "label": "Moderacja",
+        "description": "Zaznacz, jeśli kanał ma być moderowany przez głosowanie użytkowników"
+      },
+      "showNicknames": {
+        "label": "Odkrywanie nicków",
+        "description": "Zaznacz, jeśli nazwy użytkowników mają być widoczne"
+      },
+      "onlyLoggedIn": {
+        "label": "Tylko dla zalogowanych",
+        "description": "Zaznacz, jeśli tylko zalogowani użytkownicy mogą wysyłać wiadomości"
+      },
+      "messageTimeout": {
+        "label": "Odstęp czasu pomiędzy wiadomościami",
+        "description": "Odstęp czasu pomiędzy wiadomościami (w sekundach), jeśli chcesz ograniczyć spam. Puste pole oznacza brak ograniczeń.",
+        "placeholder": "Brak przerwy czasowej pomiędzy wiadomościami"
+      },
+      "buttons": {
+        "back": "Cofnij",
+        "cancel": "Anuluj",
+        "create": "Utwórz kanał"
+      }
+    },
+    "blockedSignUp": {
+      "title": "Zaloguj się",
+      "description": "Aby utworzyć nowy kanał, musisz być zalogowany. Zaloguj się, aby uzyskać dostęp do tej funkcji.",
+      "closeButton": "Zamknij"
+    },
+    "examples": {
+      "minecraft": "Szukamy ludzi do serwera Minecraft",
+      "croatia": "Chętni do tripu do Chorwacji",
+      "football": "Mecz Real - Barcelona",
+      "stormChasers": "Chat Łowców Burz",
+      "dogWalks": "Ekipa do wspólnych psich spacerów",
+      "anime": "Fani anime i mangi",
+      "bookClub": "Książkowe wieczory",
+      "morningCoffee": "Poranna kawa online",
+      "hiking": "Miłośnicy górskich wędrówek",
+      "boardGames": "Grupa do planszówek",
+      "cookingOnline": "Wspólne gotowanie online",
+      "runnersWarsaw": "Biegacze z Warszawy",
+      "diy": "Kreatywne DIY",
+      "automotive": "Motoryzacja bez tajemnic",
+      "marvel": "Fani Marvela",
+      "gardening": "Kącik ogrodnika",
+      "fishing": "Wędkarze z Mazur",
+      "cats": "Miłośnicy kotów",
+      "photography": "Pasjonaci fotografii",
+      "cycling": "Ekipa na rowery",
+      "watchingSeries": "Wspólne oglądanie seriali",
+      "spanish": "Grupa do nauki hiszpańskiego",
+      "formula1": "Fani Formuły 1",
+      "programming": "Kącik programistów",
+      "coffeeLovers": "Miłośnicy kawy",
+      "csgo": "Wspólne granie w CS:GO",
+      "escapeRoom": "Ekipa na escape room",
+      "horror": "Fani horrorów",
+      "forestWalks": "Wspólne spacery po lesie",
+      "yoga": "Grupa do nauki jogi",
+      "pizza": "Miłośnicy pizzy",
+      "creativeWriting": "Kreatywne pisanie",
+      "starWars": "Fani Star Wars",
+      "theWeeknd": "Ekipa na koncert The Weeknd",
+      "cinema": "Wspólne wyjścia do kina",
+      "exoticAnimals": "Miłośnicy zwierząt egzotycznych",
+      "guitar": "Grupa do nauki gry na gitarze",
+      "retroGames": "Fani retro gier",
+      "paintball": "Ekipa na paintball",
+      "fitness": "Wspólne treningi fitness",
+      "astronomy": "Miłośnicy astronomii",
+      "travel": "Kącik podróżników",
+      "soccerFans": "Fani piłki nożnej",
+      "kayaking": "Ekipa na kajaki",
+      "watchingMatches": "Wspólne oglądanie meczów",
+      "sushi": "Miłośnicy sushi",
+      "french": "Grupa do nauki francuskiego",
+      "comics": "Fani komiksów",
+      "festivals": "Ekipa na festiwale",
+      "running": "Wspólne bieganie",
+      "pets": "Miłośnicy zwierząt domowych"
+    },
+    "success": {
+      "title": "Kanał został utworzony!",
+      "description": "Kanał o nazwie {name} został utworzony",
+      "canNavigate": "Możesz teraz przejść do swojego kanału.",
+      "copyLink": "Kopiuj link"
+    }
   },
   "chat": {
-    "title": "Chat",
-    "sendMessage": "Wyślij wiadomość",
-    "typing": "Pisze...",
-    "online": "Online",
-    "offline": "Offline",
-    "newMessage": "Nowa wiadomość",
-    "noMessages": "Brak wiadomości",
-    "searchUsers": "Szukaj użytkowników"
+    "searchNewFriend": "Wyszukaj nowego znajomego",
+    "message": {
+      "placeholder": "Napisz swoją wiadomość...",
+      "charLimit": "Limit znaków"
+    },
+    "actions": {
+      "newChat": "Nowa rozmowa",
+      "disconnect": "Rozłącz"
+    },
+    "states": {
+      "searching": "Szukam...",
+      "startConversation": "Rozpocznij rozmowę",
+      "disconnectedByYou": "Rozłączyłeś się",
+      "disconnectedByPeer": "Rozmówca rozłączył się",
+      "waitingForConnection": "Oczekiwanie na połączenie...",
+      "connectedToChannel": "Kanał:",
+      "writeToGreet": "Napisz coś, aby się przywitać"
+    },
+    "trade": {
+      "exchangeAccepted": "Wymiana zaakceptowana",
+      "undefined": "Niezdefiniowane",
+      "waiting": "Oczekiwanie…",
+      "offerSentTrade": "Wysłałeś ofertę wymiany",
+      "offerSentInfo": "Wysłałeś informacje",
+      "offerReceivedTrade": "Oferta wymiany informacji",
+      "offerReceivedInfo": "Wysłanie informacji",
+      "sent": "Wysłano",
+      "accept": "Akceptuj",
+      "loginRequired": "Rozmówca może zaakceptować ofertę tylko będąc zalogowanym",
+      "ignoreNote": "Jeśli nie chcesz wymienić informacji, zignoruj ofertę rozmówcy"
+    }
   },
-  "profile": {
-    "title": "Profil",
-    "name": "Imię",
-    "username": "Nazwa użytkownika",
-    "bio": "O mnie",
-    "avatar": "Zdjęcie profilowe",
-    "updateProfile": "Zaktualizuj profil",
-    "profileUpdated": "Profil zaktualizowany"
+  "channels": {
+    "title": "Filtry i kanały",
+    "channels": "Kanały",
+    "filters": "Filtry",
+    "submit": "Zatwierdź",
+    "cancel": "Anuluj",
+    "activeChannels": "Aktywne kanały:",
+    "reset": "Resetuj",
+    "channelsDescription": "Wybierz <b>kanał tematyczny</b> 1 na 1, by połączyć się z osobą o podobnych zainteresowaniach. Skorzystaj z <b>kanałów regionalnych</b>, jeśli chcesz porozmawiać z kimś z Twojej okolicy. Dołącz do <b>kanałów grupowych</b>, aby pisać wspólnie z większą liczbą użytkowników w luźniejszej atmosferze.",
+    "filtersDescription": "Filtry pozwalają Ci określić preferencje wobec rozmówcy w kanałach 1 na 1 – od wieku i płci, po zainteresowania i inne cechy. Dzięki temu trafiasz na osoby, z którymi łatwiej złapiesz wspólny język. Podczas losowania rozmówcy Twoje preferencje będą priorytetowe."
   },
-  "errors": {
-    "pageNotFound": "Strona nie została znaleziona",
-    "serverError": "Błąd serwera",
-    "networkError": "Błąd połączenia",
-    "invalidCredentials": "Nieprawidłowe dane logowania",
-    "requiredField": "To pole jest wymagane",
-    "invalidEmail": "Nieprawidłowy adres email"
+  "ui": {
+    "command": {
+      "title": "Paleta poleceń",
+      "description": "Wyszukaj polecenie do wykonania..."
+    }
   }
 }

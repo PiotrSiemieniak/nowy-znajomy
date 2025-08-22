@@ -12,7 +12,7 @@ import { UserCog } from "lucide-react";
 import { AccountTrigger } from "@/components/specific/AccountTrigger";
 import { RegisterContent } from "@/components/specific/RegisterContent";
 import { useSession } from "next-auth/react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useTransition } from "react";
 import { setLocaleNonRedirect } from "@/lib/actions/localeNonRedirect";
 import { useRouter } from "next/navigation";
@@ -23,6 +23,7 @@ export function AccountBtn() {
   const isAuthenticated = status === "authenticated" && session?.user;
 
   const locale = useLocale();
+  const t = useTranslations("account");
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
@@ -49,7 +50,7 @@ export function AccountBtn() {
     <Popover>
       <PopoverTrigger asChild>
         <Button size={"sm"} className="inline-flex">
-          Konto <UserCog className="ml-1" />
+          {t("title")} <UserCog className="ml-1" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="bg-cardGlass w-80 backdrop-blur-lg">
@@ -67,21 +68,25 @@ export function AccountBtn() {
             )}
           </div>
           <div className="space-y-2 px-2">
-            <h5 className="font-medium">Opcje</h5>
+            <h5 className="font-medium">{t("options")}</h5>
             <ThemeSwitcher />
-            <h6>Automatyczne połączenia</h6>
+            <h6>{t("autoConnections")}</h6>
           </div>
           <div className="space-y-2 px-2">
-            <h6 className="font-medium">Wybierz język</h6>
+            <h6 className="font-medium">{t("language.title")}</h6>
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">pl</span>
+              <span className="text-sm font-medium">
+                {t("language.polish")}
+              </span>
               <Switch
                 checked={locale === "en"}
                 onCheckedChange={handleLanguageChange}
                 disabled={isPending}
                 className="mx-3"
               />
-              <span className="text-sm font-medium">en</span>
+              <span className="text-sm font-medium">
+                {t("language.english")}
+              </span>
             </div>
           </div>
         </div>

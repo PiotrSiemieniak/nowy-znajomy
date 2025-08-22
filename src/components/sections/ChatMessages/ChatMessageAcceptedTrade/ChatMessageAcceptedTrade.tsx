@@ -4,6 +4,7 @@ import { useChatState } from "@/components/providers/ChatProvider";
 import { cn } from "@/lib/utils";
 import { getSessionKey } from "@/lib/getSessionKey";
 import { useEffect } from "react";
+import { useTranslations } from "next-intl";
 
 type Props = {
   isItMe: boolean;
@@ -16,6 +17,7 @@ export function ChatMessageAcceptedTrade({
   isPrevMessageSameAuthor,
 }: Props) {
   const { roomUsersInfo } = useChatState();
+  const t = useTranslations("chat.trade");
   const myId = getSessionKey();
   const ids = Object.keys(roomUsersInfo || {});
   const interlocutorId = ids.find((id) => id !== myId);
@@ -41,9 +43,9 @@ export function ChatMessageAcceptedTrade({
 
   const renderValue = () => {
     // If interlocutor already decided to show but value not sent yet, treat as Niezdefiniowane
-    if (otherField?.wantToShow && value === undefined) return "Niezdefiniowane";
-    if (value === undefined) return "Oczekiwanie…";
-    if (value === null) return "Niezdefiniowane";
+    if (otherField?.wantToShow && value === undefined) return t("undefined");
+    if (value === undefined) return t("waiting");
+    if (value === null) return t("undefined");
     if (Array.isArray(value)) return value.join(", ");
     return String(value);
   };
@@ -60,7 +62,7 @@ export function ChatMessageAcceptedTrade({
         }
       )}
     >
-      <p className="inline-flex">Wymiana zaakceptowana</p>
+      <p className="inline-flex">{t("exchangeAccepted")}</p>
       <p className="text-base font-medium">{dataKey}</p>
       <p
         className={cn(

@@ -3,8 +3,10 @@
 import { Button } from "@/components/ui/Button";
 import { useEffect, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 export function SearchStageButton({ onClick }: { onClick: () => void }) {
+  const t = useTranslations("chat");
   const controls = useAnimation();
   const [shakeTrigger, setShakeTrigger] = useState(0);
 
@@ -25,7 +27,7 @@ export function SearchStageButton({ onClick }: { onClick: () => void }) {
   return (
     <motion.div className="w-full h-fit" animate={controls}>
       <Button onClick={onClick} className="w-full">
-        Wyszukaj nowego znajomego
+        {t("searchNewFriend")}
       </Button>
     </motion.div>
   );

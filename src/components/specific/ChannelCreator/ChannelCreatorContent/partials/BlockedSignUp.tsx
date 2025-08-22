@@ -9,15 +9,17 @@ import {
 import { Separator } from "@/components/ui/Separator";
 import { ChannelCreatorTeaser } from "../../ChannelCreatorTeaser";
 import { Button } from "@/components/ui/Button";
+import { useTranslations } from "next-intl";
 
 export function BlockedSignUp() {
+  const t = useTranslations("channelCreator.blockedSignUp");
+
   return (
     <DialogContent className="overflow-hidden">
       <DialogHeader>
-        <DialogTitle className="text-left">Zaloguj się</DialogTitle>
+        <DialogTitle className="text-left">{t("title")}</DialogTitle>
         <DialogDescription className="text-left">
-          Aby utworzyć nowy kanał, musisz być zalogowany. Zaloguj się, aby
-          uzyskać dostęp do tej funkcji.
+          {t("description")}
         </DialogDescription>
       </DialogHeader>
       <Separator />
@@ -25,7 +27,7 @@ export function BlockedSignUp() {
       <Separator />
       <DialogFooter>
         <DialogClose asChild>
-          <Button>Zamknij</Button>
+          <Button>{t("closeButton")}</Button>
         </DialogClose>
       </DialogFooter>
     </DialogContent>

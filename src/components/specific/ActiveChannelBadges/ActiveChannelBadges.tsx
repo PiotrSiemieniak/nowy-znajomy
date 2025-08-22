@@ -5,10 +5,12 @@ import {
 import { Badge } from "@/components/ui/Badge";
 import { cn } from "@/lib/utils";
 import { RotateCcw, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 const COUNT_TO_SHOW_RESET = 2;
 
 export function ActiveChannelBadges({ className }: { className?: string }) {
+  const t = useTranslations("channels");
   const { selectedChannels } = useChatState();
   const { toggleChannelAsSelected } = useChatAction();
 
@@ -17,7 +19,7 @@ export function ActiveChannelBadges({ className }: { className?: string }) {
 
   return (
     <div className={cn("flex flex-row flex-wrap gap-2", className)}>
-      <p className="text-xs my-auto w-full">Aktywne kanały:</p>
+      <p className="text-xs my-auto w-full">{t("activeChannels")}</p>
       {!isAnyChannel && <Badge className="group">Cała Polska</Badge>}
       {selectedChannels.map((channel) => (
         <Badge
@@ -32,7 +34,7 @@ export function ActiveChannelBadges({ className }: { className?: string }) {
       {isShowResetCondition && (
         <Badge variant={"destructive"}>
           <RotateCcw className="mr-1" />
-          Resetuj
+          {t("reset")}
         </Badge>
       )}
     </div>

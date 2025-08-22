@@ -1,18 +1,4 @@
 {
-  "app": {
-    "title": "New Friend",
-    "description": "Meet new people from around the world and make new connections in a safe environment."
-  },
-  "debug": {
-    "chatId": "ID: {id}",
-    "sessionId": "UID: {id}",
-    "stage": "Stage: {stage}"
-  },
-  "providers": {
-    "sendMessageError": "ChatProvider - sendMessage: message type is invalid or chat is not active",
-    "sendInterlocutorDataError": "ChatProvider - sendInterlocutorData: message type is invalid or chat is not active",
-    "acceptTradeOfferError": "ChatProvider - acceptTradeOffer: chat is not active"
-  },
   "account": {
     "noEmail": "No email address",
     "dropdown": {
@@ -141,128 +127,6 @@
     "trigger": "Create Channel",
     "title": "New Channel Creator",
     "description": "Create a new channel to form a space that brings together people with similar interests.",
-    "initialStage": {
-      "thematic": {
-        "title": "Thematic",
-        "description": "Designed for a specific topic",
-        "fullDescription": "Create a channel where users are randomly matched for 1-on-1 conversations."
-      },
-      "group": {
-        "title": "Group",
-        "description": "For group chats with friends",
-        "fullDescription": "Create a channel where all users chat together in a group chat."
-      },
-      "channelName": {
-        "label": "Channel Name",
-        "description": "Enter the display name for the channel",
-        "placeholder": "e.g."
-      },
-      "channelDescription": {
-        "label": "Channel Description",
-        "description": "Enter the channel description"
-      },
-      "channelTags": {
-        "label": "Channel Tags",
-        "description": "Enter 2 to 5 keywords related to the channel's topic",
-        "addButton": "Add"
-      },
-      "cancelButton": "Cancel",
-      "continueButton": "Continue"
-    },
-    "detailsStage": {
-      "header": {
-        "newChannel": "New channel"
-      },
-      "maxUsers": {
-        "label": "Maximum number of users",
-        "description": "Enter the maximum number of users who can join the channel or leave empty if you want no limit",
-        "placeholder": "No limit"
-      },
-      "adultOnly": {
-        "label": "Adults only",
-        "description": "If the channel should be marked as +18, check this option"
-      },
-      "moderation": {
-        "label": "Moderation",
-        "description": "Check if the channel should be moderated by user voting"
-      },
-      "showNicknames": {
-        "label": "Show nicknames",
-        "description": "Check if usernames should be visible"
-      },
-      "onlyLoggedIn": {
-        "label": "Logged in users only",
-        "description": "Check if only logged in users can send messages"
-      },
-      "messageTimeout": {
-        "label": "Time interval between messages",
-        "description": "Time interval between messages (in seconds) if you want to limit spam. Empty field means no restrictions.",
-        "placeholder": "No timeout between messages"
-      },
-      "buttons": {
-        "back": "Back",
-        "cancel": "Cancel",
-        "create": "Create channel"
-      }
-    },
-    "blockedSignUp": {
-      "title": "Sign In",
-      "description": "To create a new channel, you must be signed in. Sign in to access this feature.",
-      "closeButton": "Close"
-    },
-    "examples": {
-      "minecraft": "Looking for people for Minecraft server",
-      "croatia": "Anyone for a trip to Croatia",
-      "football": "Real - Barcelona match",
-      "stormChasers": "Storm Chasers Chat",
-      "dogWalks": "Dog walking crew",
-      "anime": "Anime and manga fans",
-      "bookClub": "Book club evenings",
-      "morningCoffee": "Morning coffee online",
-      "hiking": "Mountain hiking lovers",
-      "boardGames": "Board games group",
-      "cookingOnline": "Cooking together online",
-      "runnersWarsaw": "Warsaw runners",
-      "diy": "Creative DIY",
-      "automotive": "Automotive without secrets",
-      "marvel": "Marvel fans",
-      "gardening": "Gardener's corner",
-      "fishing": "Anglers from Masuria",
-      "cats": "Cat lovers",
-      "photography": "Photography enthusiasts",
-      "cycling": "Cycling crew",
-      "watchingSeries": "Watching series together",
-      "spanish": "Spanish learning group",
-      "formula1": "Formula 1 fans",
-      "programming": "Programmers' corner",
-      "coffeeLovers": "Coffee lovers",
-      "csgo": "Playing CS:GO together",
-      "escapeRoom": "Escape room crew",
-      "horror": "Horror fans",
-      "forestWalks": "Forest walks together",
-      "yoga": "Yoga learning group",
-      "pizza": "Pizza lovers",
-      "creativeWriting": "Creative writing",
-      "starWars": "Star Wars fans",
-      "theWeeknd": "The Weeknd concert crew",
-      "cinema": "Going to cinema together",
-      "exoticAnimals": "Exotic animals lovers",
-      "guitar": "Guitar learning group",
-      "retroGames": "Retro games fans",
-      "paintball": "Paintball crew",
-      "fitness": "Fitness training together",
-      "astronomy": "Astronomy lovers",
-      "travel": "Travelers' corner",
-      "soccerFans": "Soccer fans",
-      "kayaking": "Kayaking crew",
-      "watchingMatches": "Watching matches together",
-      "sushi": "Sushi lovers",
-      "french": "French learning group",
-      "comics": "Comics fans",
-      "festivals": "Festival crew",
-      "running": "Running together",
-      "pets": "Pet lovers"
-    },
     "validation": {
       "maxUsers": {
         "number": "Enter a number or leave empty"
@@ -290,7 +154,6 @@
     "addToFriends": "Add to Friends"
   },
   "chat": {
-    "searchNewFriend": "Search for a new friend",
     "initial": {
       "title": "Find Your Perfect Match",
       "description": "Connect with people from around the world who share your interests and values. Start your conversation today!",
@@ -367,15 +230,7 @@
     "filters": "Filters",
     "submit": "Submit",
     "cancel": "Cancel",
-    "activeChannels": "Active channels:",
-    "reset": "Reset",
     "channelsDescription": "Choose a <b>thematic channel</b> 1-on-1 to connect with someone who shares similar interests. Use <b>regional channels</b> if you want to chat with someone from your area. Join <b>group channels</b> to write together with more users in a relaxed atmosphere.",
     "filtersDescription": "Filters allow you to set preferences for your conversation partner in 1-on-1 channels – from age and gender to interests and other characteristics. This helps you find people you can easily connect with. When matching conversation partners, your preferences will be prioritized."
-  },
-  "ui": {
-    "command": {
-      "title": "Command Palette",
-      "description": "Search for a command to run..."
-    }
   }
 }

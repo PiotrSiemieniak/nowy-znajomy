@@ -5,6 +5,7 @@ import { DiscordLogoIcon } from "@radix-ui/react-icons";
 import { DialogFooter, DialogClose } from "@/components/ui/Dialog";
 import type { UseFormReturn } from "react-hook-form";
 import type { RegisterFormValues } from "../RegisterContent";
+import { useTranslations } from "next-intl";
 
 interface ContentProps {
   form: UseFormReturn<RegisterFormValues>;
@@ -27,6 +28,8 @@ export function Content({
   FIELDS,
   signIn,
 }: ContentProps) {
+  const t = useTranslations("auth.register");
+
   return (
     <form onSubmit={onSubmit} className="space-y-4 mb-0">
       {/* Komunikaty globalne */}
@@ -34,9 +37,7 @@ export function Content({
         <p className="text-xs text-destructive">{registerError}</p>
       )}
       {registerSuccess && (
-        <p className="text-xs text-success">
-          Konto utworzone! Sprawdź e-mail w celu potwierdzenia.
-        </p>
+        <p className="text-xs text-success">{t("successMessage")}</p>
       )}
       <div className="space-y-4">
         {FIELDS.map((field) => (
@@ -64,16 +65,16 @@ export function Content({
             {field.name === "username" &&
               !usernameError &&
               usernameAvailable && (
-                <p className="text-xs text-success">
-                  Nazwa użytkownika jest dostępna
-                </p>
+                <p className="text-xs text-success">{t("usernameAvailable")}</p>
               )}
           </div>
         ))}
       </div>
       <div className="flex space-x-4">
         <div className="h-px flex-1 bg-muted my-auto" />
-        <p className="text-muted-foreground text-xs my-auto">lub za pomocą</p>
+        <p className="text-muted-foreground text-xs my-auto">
+          {t("oauthDivider")}
+        </p>
         <div className="h-px flex-1 bg-muted my-auto" />
       </div>
       <div className="flex justify-center gap-4">
@@ -89,10 +90,10 @@ export function Content({
       <DialogFooter className="flex flex-row justify-end mb-0">
         <DialogClose asChild>
           <Button variant="outline" type="button">
-            Anuluj
+            {t("cancel")}
           </Button>
         </DialogClose>
-        <Button type="submit">Utwórz konto</Button>
+        <Button type="submit">{t("submit")}</Button>
       </DialogFooter>
     </form>
   );

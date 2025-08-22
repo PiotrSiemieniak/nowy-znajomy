@@ -11,20 +11,18 @@ import { ChannelType, ChannelSettings } from "@/lib/globalTypes/channel";
 import { Separator } from "@/components/ui/Separator";
 import { DialogClose, DialogFooter } from "@/components/ui/Dialog";
 import { Button } from "@/components/ui/Button";
+import { useTranslations } from "next-intl";
 
 const isPremiumUser = false; // Zmień na true by przetestować wersję premium
 
 const detailsStageSchema = z.object({
-  maxUsers: z.union([
-    z.string().regex(/^\d*$/, "Podaj liczbę lub zostaw puste").optional(),
-    z.undefined(),
-  ]),
+  maxUsers: z.union([z.string().regex(/^\d*$/).optional(), z.undefined()]),
   isAdultOnly: z.boolean(),
   isModerated: z.boolean(),
   showNicknames: z.boolean(),
   onlyLoggedIn: z.boolean(),
   timeoutBetweenMessages: z.union([
-    z.string().regex(/^\d*$/, "Podaj liczbę lub zostaw puste").optional(),
+    z.string().regex(/^\d*$/).optional(),
     z.undefined(),
   ]),
 });
@@ -48,6 +46,8 @@ export function DetailsStage({
   channelType,
   onPrevStage,
 }: DetailsStageProps) {
+  const t = useTranslations("channelCreator.detailsStage");
+
   const channelTypeIcon =
     channelType === "thematic" ? (
       <UserRoundSearch className="text-muted-foreground size-4 ml-1" />
@@ -59,7 +59,8 @@ export function DetailsStage({
     <form className="flex flex-col space-y-4" onSubmit={onSubmit}>
       <div className="flex flex-col">
         <p className="text-xs text-muted-foreground inline-flex">
-          Nowy kanał <b className="ml-1">{channelType}</b> {channelTypeIcon}
+          {t("header.newChannel")} <b className="ml-1">{channelType}</b>{" "}
+          {channelTypeIcon}
         </p>
         <p className="inline-flex font-semibold">{name}</p>
         <p className="text-xs text-muted-foreground">{description}</p>
@@ -67,12 +68,12 @@ export function DetailsStage({
       <Separator />
       <div className="space-y-4">
         <FormElement
-          label="Maksymalna liczba użytkowników"
-          desc="Wprowadź maksymalną liczbę użytkowników, którzy mogą dołączyć do kanału lub zostaw puste, jeśli chcesz, aby nie było limitu"
+          label={t("maxUsers.label")}
+          desc={t("maxUsers.description")}
           errorLabel={form.formState.errors.maxUsers?.message}
         >
           <Input
-            placeholder="Brak limitu"
+            placeholder={t("maxUsers.placeholder")}
             type="number"
             min={2}
             {...form.register("maxUsers")}
@@ -80,8 +81,8 @@ export function DetailsStage({
           />
         </FormElement>
         <FormElement
-          label="Tylko dla dorosłych"
-          desc="Jeśli kanał ma być oznaczony jako +18, zaznacz tę opcję"
+          label={t("adultOnly.label")}
+          desc={t("adultOnly.description")}
           errorLabel={form.formState.errors.isAdultOnly?.message}
         >
           <Controller
@@ -93,8 +94,8 @@ export function DetailsStage({
           />
         </FormElement>
         <FormElement
-          label="Moderacja"
-          desc="Zaznacz, jeśli kanał ma być moderowany przez głosowanie użytkowników"
+          label={t("moderation.label")}
+          desc={t("moderation.description")}
           errorLabel={form.formState.errors.isModerated?.message}
         >
           <Controller
@@ -106,8 +107,8 @@ export function DetailsStage({
           />
         </FormElement>
         <FormElement
-          label="Odkrywanie nicków"
-          desc="Zaznacz, jeśli nazwy użytkowników mają być widoczne"
+          label={t("showNicknames.label")}
+          desc={t("showNicknames.description")}
           errorLabel={form.formState.errors.showNicknames?.message}
         >
           <Controller
@@ -119,8 +120,8 @@ export function DetailsStage({
           />
         </FormElement>
         <FormElement
-          label="Tylko dla zalogowanych"
-          desc="Zaznacz, jeśli tylko zalogowani użytkownicy mogą wysyłać wiadomości"
+          label={t("onlyLoggedIn.label")}
+          desc={t("onlyLoggedIn.description")}
           errorLabel={form.formState.errors.onlyLoggedIn?.message}
         >
           <Controller
@@ -132,12 +133,12 @@ export function DetailsStage({
           />
         </FormElement>
         <FormElement
-          label="Odstęp czasu pomiędzy wiadomościami"
-          desc="Odstęp czasu pomiędzy wiadomościami (w sekundach), jeśli chcesz ograniczyć spam. Puste pole oznacza brak ograniczeń."
+          label={t("messageTimeout.label")}
+          desc={t("messageTimeout.description")}
           errorLabel={form.formState.errors.timeoutBetweenMessages?.message}
         >
           <Input
-            placeholder="Brak przerwy czasowej pomiędzy wiadomościami"
+            placeholder={t("messageTimeout.placeholder")}
             type="number"
             min={1}
             {...form.register("timeoutBetweenMessages")}
@@ -148,16 +149,16 @@ export function DetailsStage({
       <DialogFooter className="flex flex-row justify-between items-center">
         <Button type="button" onClick={onPrevStage} variant={"ghost"}>
           <ArrowLeft />
-          Cofnij
+          {t("buttons.back")}
         </Button>
         <div className="flex gap-2">
           <DialogClose asChild>
             <Button type="button" variant={"ghost"}>
-              Anuluj
+              {t("buttons.cancel")}
             </Button>
           </DialogClose>
           <div className="flex flex-row justify-end">
-            <Button type="submit">Utwórz kanał</Button>
+            <Button type="submit">{t("buttons.create")}</Button>
           </div>
         </div>
       </DialogFooter>

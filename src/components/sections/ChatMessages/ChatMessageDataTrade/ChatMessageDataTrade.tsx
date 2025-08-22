@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import { Effect } from "./partials/Effect";
 import { useInterlocutorInfoActions } from "@/components/specific/InterlocutorInfo/InterlocutorInfoDialog/hook";
+import { useTranslations } from "next-intl";
 
 export function ChatMessageDataTrade({
   isItMe = false,
@@ -16,12 +17,17 @@ export function ChatMessageDataTrade({
   // Wypisać propsy, ale wcześniej upewnić się w którym polu przemycać typ danych (nazwe)
 }) {
   const { acceptTradeData } = useInterlocutorInfoActions();
-  const label =
-    (isItMe
-      ? { trade: "Wysłałeś ofertę wymiany", send: "Wysłałeś informacje" }
-      : { trade: "Oferta wymiany informacji", send: "Wysłanie informacji" })[
-      action as "trade" | "send"
-    ] || "Wiadomość";
+  const t = useTranslations("chat.trade");
+
+  const getLabel = () => {
+    if (isItMe) {
+      return action === "trade" ? t("offerSentTrade") : t("offerSentInfo");
+    } else {
+      return action === "trade"
+        ? t("offerReceivedTrade")
+        : t("offerReceivedInfo");
+    }
+  };
 
   return (
     <div
@@ -36,7 +42,7 @@ export function ChatMessageDataTrade({
       )}
     >
       <Effect />
-      <p>{label}</p>
+      <p>{getLabel()}</p>
       <p className="text-base font-medium">{dataKey}</p>
       <Button
         variant={isItMe ? "outline" : "default"}
@@ -44,12 +50,10 @@ export function ChatMessageDataTrade({
         disabled={isItMe}
         onClick={() => acceptTradeData(action as "trade" | "send", dataKey)}
       >
-        {isItMe ? "Wysłano" : "Akceptuj"}
+        {isItMe ? t("sent") : t("accept")}
       </Button>
       <p className="text-xs text-muted-foreground">
-        {isItMe
-          ? "Rozmówca może zaakceptować ofertę tylko będąc zalogowanym"
-          : "Jeśli nie chcesz wymienić informacji, zignoruj ofertę rozmówcy"}
+        {isItMe ? t("loginRequired") : t("ignoreNote")}
       </p>
     </div>
   );

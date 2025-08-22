@@ -18,56 +18,61 @@ import { Content } from "./partials/Content";
 import { ConfirmAccountContent } from "../ConfirmAccountContent";
 import { toast } from "sonner";
 import { appNotification } from "@/components/ui/Sonner/appNotification";
-
-const REGISTER_SCHEMA = z
-  .object({
-    username: z
-      .string()
-      .min(3, "Podaj nazwę użytkownika")
-      .max(20, "Nazwa użytkownika może mieć maksymalnie 20 znaków"),
-    email: z.string().email("Podaj poprawny adres e-mail"),
-    password: z.string().min(6, "Podaj hasło (min. 6 znaków)"),
-    confirmPassword: z.string().min(6, "Powtórz hasło"),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Hasła muszą być takie same",
-    path: ["confirmPassword"],
-  });
-
-const FIELDS = [
-  {
-    name: "username",
-    label: "Nazwa użytkownika",
-    type: "text",
-    autoComplete: "username",
-    clearable: true,
-  },
-  {
-    name: "email",
-    label: "Adres e-mail",
-    type: "email",
-    autoComplete: "email",
-    clearable: true,
-  },
-  {
-    name: "password",
-    label: "Hasło",
-    type: "password",
-    autoComplete: "new-password",
-    showPasswordToggle: true,
-  },
-  {
-    name: "confirmPassword",
-    label: "Powtórz hasło",
-    type: "password",
-    autoComplete: "new-password",
-    showPasswordToggle: true,
-  },
-];
-
-type RegisterFormValues = z.infer<typeof REGISTER_SCHEMA>;
+import { useTranslations } from "next-intl";
 
 export function RegisterContent() {
+  const t = useTranslations("auth.register");
+
+  const REGISTER_SCHEMA = z
+    .object({
+      username: z
+        .string()
+        .min(3, t("validation.username.min"))
+        .max(20, t("validation.username.max")),
+      email: z.string().email(t("validation.email.invalid")),
+      password: z.string().min(6, t("validation.password.min")),
+      confirmPassword: z
+        .string()
+        .min(6, t("validation.confirmPassword.required")),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: t("validation.confirmPassword.mismatch"),
+      path: ["confirmPassword"],
+    });
+
+  const FIELDS = [
+    {
+      name: "username",
+      label: t("fields.username"),
+      type: "text",
+      autoComplete: "username",
+      clearable: true,
+    },
+    {
+      name: "email",
+      label: t("fields.email"),
+      type: "email",
+      autoComplete: "email",
+      clearable: true,
+    },
+    {
+      name: "password",
+      label: t("fields.password"),
+      type: "password",
+      autoComplete: "new-password",
+      showPasswordToggle: true,
+    },
+    {
+      name: "confirmPassword",
+      label: t("fields.confirmPassword"),
+      type: "password",
+      autoComplete: "new-password",
+      showPasswordToggle: true,
+    },
+  ];
+
+  type RegisterFormValues = z.infer<typeof REGISTER_SCHEMA>;
+
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(REGISTER_SCHEMA),
     defaultValues: {
@@ -131,7 +136,7 @@ export function RegisterContent() {
     });
 
     if (!res || !res.ok) {
-      setRegisterError(res?.message || "Błąd rejestracji");
+      setRegisterError(res?.message || t("errorMessage"));
       setRegisterSuccess(false);
     } else {
       setRegisterSuccess(true);
@@ -150,12 +155,12 @@ export function RegisterContent() {
     <Dialog open={dialogOpen} onOpenChange={handleDialogOpenChange}>
       <DialogTrigger asChild>
         <Button size={"sm"} className="flex-1">
-          Zarejestruj
+          {t("trigger")}
         </Button>
       </DialogTrigger>
       <DialogContent className="space-y-4 max-w-[90vw] w-[425px]">
         <DialogHeader>
-          <DialogTitle className="text-left">Rejestracja</DialogTitle>
+          <DialogTitle className="text-left">{t("title")}</DialogTitle>
         </DialogHeader>
         {registerSuccess ? (
           <ConfirmAccountContent

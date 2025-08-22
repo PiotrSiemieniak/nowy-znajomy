@@ -4,13 +4,15 @@ import { cn } from "@/lib/utils";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/ToggleGroup";
 import { setTheme } from "@/lib/appOptions/setTheme";
 import { ComputerIcon, Moon, Sun } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export function ThemeSwitcher({ className }: { className?: string }) {
   const theme = localStorage.theme;
+  const t = useTranslations("theme");
 
   return (
     <>
-      <h6>Tryb UI</h6>
+      <h6>{t("title")}</h6>
 
       <ToggleGroup
         className={cn(

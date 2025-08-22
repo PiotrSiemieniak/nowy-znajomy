@@ -2,11 +2,14 @@
 
 import { RefObject } from "react";
 import { ChatMessages } from "../ChatMessages";
+import { useTranslations } from "next-intl";
 
 type Props = {
   scrollRef: RefObject<HTMLDivElement | null>;
 };
 export function ChatConversationScreen({ scrollRef }: Props) {
+  const t = useTranslations("chat.states");
+
   return (
     <div
       ref={scrollRef}
@@ -14,10 +17,10 @@ export function ChatConversationScreen({ scrollRef }: Props) {
     >
       <div className="flex items-center justify-center flex-col py-10">
         <p className="text-xl font-semibold text-gray-50/50">
-          Rozpoczęto rozmowę
+          {t("startConversation")}
         </p>
-        <p className="text-gray-50/50">Kanał: xxx</p>
-        <p className="text-gray-50/50 text-xs">Napisz coś, aby się przywitać</p>
+        <p className="text-gray-50/50">{t("connectedToChannel")}</p>
+        <p className="text-gray-50/50 text-xs">{t("writeToGreet")}</p>
       </div>
       <ChatMessages />
     </div>

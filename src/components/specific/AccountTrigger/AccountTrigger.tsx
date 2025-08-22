@@ -9,9 +9,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/DropdownMenu";
 import { DropdownContent } from "./partials/DropdownContent";
+import { useTranslations } from "next-intl";
 
 export function AccountTrigger({ className }: { className?: string }) {
   const { data: session } = useSession();
+  const t = useTranslations("account");
 
   if (!session) return null;
 
@@ -42,7 +44,7 @@ export function AccountTrigger({ className }: { className?: string }) {
               {user?.name}
             </Typography>
             <Typography variant={"muted"}>
-              {user?.email || "Brak adresu e-mail"}
+              {user?.email || t("noEmail")}
             </Typography>
           </div>
           <span className="ml-auto p-0 h-8 w-8 flex items-center justify-center">

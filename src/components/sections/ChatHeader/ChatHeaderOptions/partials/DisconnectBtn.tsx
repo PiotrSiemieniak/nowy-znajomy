@@ -8,10 +8,12 @@ import { useMessages, useRoom } from "@ably/chat/react";
 import { X } from "lucide-react";
 import { useEffect } from "react";
 import { useSendDisconnectOnUnload } from "../hooks";
+import { useTranslations } from "next-intl";
 
 export function DisconnectBtn() {
   const { chatStage } = useChatState();
   const { disconnect: disconnectCallback } = useChatAction();
+  const t = useTranslations("chat.actions");
   const { detach } = useRoom();
   const { send: sendDisconnect } = useMessages({
     listener: ({ message }) => {
@@ -31,7 +33,7 @@ export function DisconnectBtn() {
 
   useEffect(() => {
     if (chatStage === ChatStage.Disconnected) detach();
-  }, [chatStage]);
+  }, [chatStage, detach]);
 
   useSendDisconnectOnUnload(sendDisconnectBind);
 
@@ -42,7 +44,7 @@ export function DisconnectBtn() {
       className="rounded-xl inline-flex"
     >
       <X className="mr-0.25" />
-      Rozłącz
+      {t("disconnect")}
     </Button>
   );
 }

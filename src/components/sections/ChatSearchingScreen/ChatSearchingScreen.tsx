@@ -2,13 +2,15 @@
 
 import { motion } from "motion/react";
 import { useSearchPooling } from "./hooks";
+import { useTranslations } from "next-intl";
 
-const label = "Szukam...";
 const letterSx =
   "mix-blend-soft-light text-4xl text-center font-bold italic animate-bounce";
 
 export function ChatSearchingScreen() {
   useSearchPooling();
+  const t = useTranslations("chat.states");
+  const label = t("searching");
 
   return (
     <div className="size-full relative px-4 py-16 flex flex-col space-y-4 justify-center items-center">

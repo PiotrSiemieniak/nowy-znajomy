@@ -8,18 +8,21 @@ import {
 } from "@/configs/filters";
 import { FiltersSlider } from "./partials/FiltersSlider";
 import { GenderToggle } from "./partials/GenderToggle";
+import { useTranslations } from "next-intl";
 
 const Separator = () => <div className="my-4 px-4 w-full h-px bg-muted" />;
 
 export function FiltersList() {
+  const t = useTranslations("filters");
+
   return (
     <>
       <FiltersSlider
         filterKeyName="ageRange"
         min={MIN_AGE}
         max={MAX_AGE}
-        label="Wiek"
-        unit="lat"
+        label={t("age.label")}
+        unit={t("age.unit")}
       />
       <Separator />
       <GenderToggle />
@@ -28,16 +31,16 @@ export function FiltersList() {
         filterKeyName="heightRange"
         min={MIN_HEIGHT}
         max={MAX_HEIGHT}
-        label="Wzrost"
-        unit="cm"
+        label={t("height.label")}
+        unit={t("height.unit")}
       />
       <Separator />
       <FiltersSlider
         filterKeyName="weightRange"
         min={MIN_WAGE}
         max={MAX_WAGE}
-        label="Waga"
-        unit="kg"
+        label={t("weight.label")}
+        unit={t("weight.unit")}
       />
       <Separator />
     </>

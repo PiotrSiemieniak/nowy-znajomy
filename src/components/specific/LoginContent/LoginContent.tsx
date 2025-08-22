@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/Label/Label";
 import { DiscordLogoIcon } from "@radix-ui/react-icons";
 import { signIn, useSession } from "next-auth/react";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 export function LoginContent() {
   const [email, setEmail] = useState("");
@@ -22,6 +23,8 @@ export function LoginContent() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const { data: session, status } = useSession();
+
+  const t = useTranslations("auth.login");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,7 +38,7 @@ export function LoginContent() {
     console.log("result", result);
     setLoading(false);
     if (!result || !result.ok) {
-      setError("Nieprawidłowy email lub hasło.");
+      setError(t("errorMessage"));
     } else {
       // window.location.reload();
     }
@@ -45,16 +48,16 @@ export function LoginContent() {
     <Dialog>
       <DialogTrigger asChild>
         <Button size={"sm"} className="flex-1">
-          Zaloguj
+          {t("trigger")}
         </Button>
       </DialogTrigger>
       <DialogContent className="space-y-4 max-w-[90vw] w-[425px]">
         <DialogHeader>
-          <DialogTitle className="text-left">Logowanie</DialogTitle>
+          <DialogTitle className="text-left">{t("title")}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="login-email">Adres e-mail</Label>
+            <Label htmlFor="login-email">{t("email.label")}</Label>
             <Input
               id="login-email"
               type="email"
@@ -65,7 +68,7 @@ export function LoginContent() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="login-password">Hasło</Label>
+            <Label htmlFor="login-password">{t("password.label")}</Label>
             <Input
               id="login-password"
               type="password"
@@ -81,7 +84,7 @@ export function LoginContent() {
           <div className="flex space-x-4 items-center">
             <div className="h-px flex-1 bg-muted my-auto" />
             <p className="text-muted-foreground text-xs my-auto">
-              lub za pomocą
+              {t("oauthDivider")}
             </p>
             <div className="h-px flex-1 bg-muted my-auto" />
           </div>
@@ -98,11 +101,11 @@ export function LoginContent() {
           <DialogFooter className="flex flex-row justify-end mb-0 mt-4">
             <DialogClose asChild>
               <Button variant="outline" type="button">
-                Anuluj
+                {t("cancel")}
               </Button>
             </DialogClose>
             <Button type="submit" disabled={loading}>
-              {loading ? "Logowanie..." : "Zaloguj"}
+              {loading ? t("submitting") : t("submit")}
             </Button>
           </DialogFooter>
         </form>

@@ -11,10 +11,12 @@ import { useScrollDetection } from "@/lib/hooks/useScrollDetection";
 import { cn } from "@/lib/utils";
 import { ChatConversationScreen } from "@/components/sections/ChatConversationScreen";
 import { getSessionKey } from "@/lib/getSessionKey";
+import { useTranslations } from "next-intl";
 
 export function ChatPageContent() {
   const { isAtBottom, scrollToBottom, scrollRef } = useScrollDetection();
   const { chatStage, chatId } = useChatState();
+  const t = useTranslations("debug");
 
   const isChatInitial = chatStage === ChatStage.Initial;
   const isChatConnected = chatStage === ChatStage.Connected;
@@ -33,9 +35,13 @@ export function ChatPageContent() {
         {/* TOP */}
         <ChatHeader />
         {/* MIDDLE */}
-        {"ID: " + String(chatId) + "  " + chatStage}
-        <br />
-        {"UID: " + String(getSessionKey())}
+        {process.env.NODE_ENV === "development" && (
+          <div className="text-white text-xs p-2">
+            {t("chatId", { id: chatId ?? "" })} <br />
+            {t("sessionId", { id: getSessionKey() })} <br />
+            {t("stage", { stage: chatStage })}
+          </div>
+        )}
         {isChatInitial && <ChatInitialScreen />}
         {!!(isChatConnected || isChatDisconnected) && (
           <ChatConversationScreen scrollRef={scrollRef} />

@@ -34,40 +34,43 @@ import { initialStageSchema, InitialStageFormValues } from "./utils";
 import { z } from "zod";
 import { AnimatePresence, motion } from "motion/react";
 import { Copy } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 const BlockedSignUp = dynamic(() =>
   import("./partials/BlockedSignUp").then((m) => m.BlockedSignUp)
 );
 
-const detailsStageSchema = z.object({
-  maxUsers: z.union([
-    z.string().regex(/^\d*$/, "Podaj liczbę lub zostaw puste").optional(),
-    z.undefined(),
-  ]),
-  isAdultOnly: z.boolean(),
-  isModerated: z.boolean(),
-  showNicknames: z.boolean(),
-  onlyLoggedIn: z.boolean(),
-  timeoutBetweenMessages: z.union([
-    z.string().regex(/^\d*$/, "Podaj liczbę lub zostaw puste").optional(),
-    z.undefined(),
-  ]),
-});
-type DetailsStageFormValues = z.infer<typeof detailsStageSchema>;
-
 export function ChannelCreatorContent() {
   const { status } = useSession();
+  const t = useTranslations("channelCreator");
+
+  const detailsStageSchema = z.object({
+    maxUsers: z.union([
+      z.string().regex(/^\d*$/, t("validation.maxUsers.number")).optional(),
+      z.undefined(),
+    ]),
+    isAdultOnly: z.boolean(),
+    isModerated: z.boolean(),
+    showNicknames: z.boolean(),
+    onlyLoggedIn: z.boolean(),
+    timeoutBetweenMessages: z.union([
+      z.string().regex(/^\d*$/, t("validation.timeout.number")).optional(),
+      z.undefined(),
+    ]),
+  });
+  type DetailsStageFormValues = z.infer<typeof detailsStageSchema>;
+
   const [stage, setStage] = useState<"initial" | "details" | "success">(
     "initial"
   );
   const [success, setSuccess] = useState<string | null>(null);
-  const randomExample =
+  const randomExampleKey =
     CHANNEL_NAME_EXAMPLES[
       Math.floor(Math.random() * CHANNEL_NAME_EXAMPLES.length)
     ];
-  const [initialStageData, setInitialStageData] = useState<
-    null | import("./partials/initialStageSchema").InitialStageFormValues
-  >(null);
+  const randomExample = t(`examples.${randomExampleKey}`);
+  const [initialStageData, setInitialStageData] =
+    useState<null | InitialStageFormValues>(null);
 
   const initialForm = useForm<InitialStageFormValues>({
     resolver: zodResolver(initialStageSchema),
@@ -101,17 +104,20 @@ export function ChannelCreatorContent() {
     });
     if (res && typeof res === "object" && "ok" in res && !res.ok) {
       // Obsługa błędów backendu w polu Nazwa kanału
-      if (res.code === "NAME_TAKEN" || res.code === "INVALID_NAME") {
+      if (
+        (res as any).code === "NAME_TAKEN" ||
+        (res as any).code === "INVALID_NAME"
+      ) {
         initialForm.setError("name", {
           type: "manual",
-          message: "Nazwa kanału jest zajęta lub nieprawidłowa.",
+          message: t("errors.nameTaken"),
         });
         return;
       }
       // Obsługa innych błędów
       initialForm.setError("name", {
         type: "manual",
-        message: "Błąd walidacji.",
+        message: t("errors.validation"),
       });
       return;
     }
@@ -138,7 +144,7 @@ export function ChannelCreatorContent() {
       setSuccess((res as { id: string }).id);
       setStage("success");
     } else {
-      alert("Nie udało się utworzyć kanału. Spróbuj ponownie.");
+      alert(t("errors.createFailed"));
     }
   };
 
@@ -167,10 +173,9 @@ export function ChannelCreatorContent() {
   return (
     <DialogContent className="overflow-hidden">
       <DialogHeader>
-        <DialogTitle className="text-left">Kreator nowego kanału</DialogTitle>
+        <DialogTitle className="text-left">{t("title")}</DialogTitle>
         <DialogDescription className="text-left">
-          Utwórz nowy kanał, aby stworzyć przestrzeń skupiającą osoby o podobnym
-          zainteresowaniu.
+          {t("description")}
         </DialogDescription>
       </DialogHeader>
       <AnimatePresence mode="wait" initial={false}>
@@ -199,21 +204,21 @@ export function ChannelCreatorContent() {
               form={detailsForm}
               onSubmit={handleDetailsStageSubmit}
               onPrevStage={handleSetInitialStage}
-              name={initialStageData.name}
-              channelType={String(initialStageData.channelType)}
-              description={initialStageData.description}
+              name={initialStageData?.name || ""}
+              channelType={String(initialStageData?.channelType || "")}
+              description={initialStageData?.description || ""}
             />
           </motion.div>
         )}
         {stage === "success" && (
           <div className="flex flex-col items-center justify-center py-8 border rounded-lg">
-            <h2 className="text-lg font-bold mb-2">Kanał został utworzony!</h2>
+            <h2 className="text-lg font-bold mb-2">{t("success.title")}</h2>
             <div className="mb-4">
               <p className="text-muted-foreground text-center">
-                Kanał o nazwie {initialForm.getValues("name")} został utworzony
+                {t("success.message", { name: initialForm.getValues("name") })}
               </p>
               <p className="text-muted-foreground text-center">
-                Możesz teraz przejść do swojego kanału.
+                {t("success.nextStep")}
               </p>
             </div>
             {/* TODO: zrobić kopiowanie linku */}
@@ -224,7 +229,7 @@ export function ChannelCreatorContent() {
                 setStage("initial");
               }}
             >
-              Kopiuj link <Copy />
+              {t("success.copyLink")} <Copy />
             </Button>
           </div>
         )}

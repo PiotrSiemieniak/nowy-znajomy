@@ -10,10 +10,12 @@ import { useState } from "react";
 import { MessageSymbolsCounter } from "./partials/MessageSymbolsCounter";
 import { SendButton } from "./partials/SendButton";
 import { useMessages } from "@ably/chat/react";
+import { useTranslations } from "next-intl";
 
 export function ChatActionBarTextarea() {
   const { isChatActive } = useChatState();
   const { sendMessage } = useChatAction();
+  const t = useTranslations("chat.message");
   const { send } = useMessages({
     listener: async ({ message }) => {
       sendMessage({
@@ -84,7 +86,7 @@ export function ChatActionBarTextarea() {
         onFocus={handleTextareaFocus}
         onBlur={handleTextareaBlur}
         maxLength={TEXTAREA_MAX_LENGTH}
-        placeholder="Napisz swoją wiadomość..."
+        placeholder={t("placeholder")}
         className="max-h-48 bg-card/50 min-h-[2.5rem] h-fit backdrop-blur-sm"
         onKeyDown={handleTextareaKeyDown}
       />
