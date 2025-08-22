@@ -228,6 +228,19 @@
       "running": "Wspólne bieganie",
       "pets": "Miłośnicy zwierząt domowych"
     },
+    "validation": {
+      "maxUsers": {
+        "number": "Podaj liczbę lub zostaw puste"
+      },
+      "timeout": {
+        "number": "Podaj liczbę lub zostaw puste"
+      }
+    },
+    "errors": {
+      "nameTaken": "Nazwa kanału jest zajęta lub nieprawidłowa.",
+      "validation": "Błąd walidacji.",
+      "createFailed": "Nie udało się utworzyć kanału. Spróbuj ponownie."
+    },
     "success": {
       "title": "Kanał został utworzony!",
       "description": "Kanał o nazwie {name} został utworzony",
