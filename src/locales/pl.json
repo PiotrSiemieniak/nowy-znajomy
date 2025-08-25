@@ -36,35 +36,55 @@
   },
   "auth": {
     "login": {
+      "trigger": "Zaloguj się",
       "title": "Logowanie",
+      "email": {
+        "label": "Adres e-mail"
+      },
+      "password": {
+        "label": "Hasło"
+      },
+      "errorMessage": "Nieprawidłowy email lub hasło.",
+      "oauthDivider": "lub za pomocą",
+      "cancel": "Anuluj",
+      "submit": "Zaloguj się",
+      "submitting": "Logowanie...",
       "button": "Zaloguj",
-      "email": "Adres e-mail",
-      "password": "Hasło",
       "error": "Nieprawidłowy email lub hasło.",
       "loading": "Logowanie...",
-      "orWith": "lub za pomocą",
-      "cancel": "Anuluj"
+      "orWith": "lub za pomocą"
     },
     "register": {
+      "trigger": "Zarejestruj się",
       "title": "Rejestracja",
-      "button": "Zarejestruj",
-      "username": "Nazwa użytkownika",
-      "email": "Adres e-mail",
-      "password": "Hasło",
-      "confirmPassword": "Powtórz hasło",
-      "createAccount": "Utwórz konto",
-      "cancel": "Anuluj",
-      "orWith": "lub za pomocą",
-      "success": "Konto utworzone! Sprawdź e-mail w celu potwierdzenia.",
-      "usernameAvailable": "Nazwa użytkownika jest dostępna",
+      "fields": {
+        "username": "Nazwa użytkownika",
+        "email": "Adres e-mail",
+        "password": "Hasło",
+        "confirmPassword": "Powtórz hasło"
+      },
       "validation": {
-        "usernameMin": "Podaj nazwę użytkownika",
-        "usernameMax": "Nazwa użytkownika może mieć maksymalnie 20 znaków",
-        "email": "Podaj poprawny adres e-mail",
-        "passwordMin": "Podaj hasło (min. 6 znaków)",
-        "confirmPasswordMin": "Powtórz hasło",
-        "passwordMatch": "Hasła muszą być takie same"
-      }
+        "username": {
+          "min": "Podaj nazwę użytkownika",
+          "max": "Nazwa użytkownika może mieć maksymalnie 20 znaków"
+        },
+        "email": {
+          "invalid": "Podaj poprawny adres e-mail"
+        },
+        "password": {
+          "min": "Podaj hasło (min. 6 znaków)"
+        },
+        "confirmPassword": {
+          "required": "Powtórz hasło",
+          "mismatch": "Hasła muszą być identyczne"
+        }
+      },
+      "errorMessage": "Błąd rejestracji",
+      "successMessage": "Konto utworzone! Sprawdź e-mail w celu potwierdzenia.",
+      "usernameAvailable": "Nazwa użytkownika jest dostępna",
+      "oauthDivider": "lub za pomocą",
+      "cancel": "Anuluj",
+      "submit": "Utwórz konto"
     },
     "confirm": {
       "title": "Potwierdzenie konta",

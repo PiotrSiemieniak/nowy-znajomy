@@ -54,7 +54,7 @@ export function AccountBtn() {
         <div className={cn("grid gap-4")}>
           <div className="flex space-x-4 min-h-[56px] items-center justify-center">
             {isLoading ? (
-              <div className="w-full flex justify-center items-center animate-pulse bg-muted rounded-xl h-[72px]"></div>
+              <div className="w-full flex justify-center items-center animate-pulse bg-muted rounded-xl h-[72px]" />
             ) : isAuthenticated ? (
               <AccountTrigger />
             ) : (
