@@ -23,7 +23,9 @@
       "shareApp": "Udostępnij aplikację",
       "downloadApp": "Pobierz aplikację",
       "api": "API",
-      "logout": "Wyloguj się"
+      "logout": "Wyloguj się",
+      "logoutSuccessTitle": "Pomyślnie wylogowano",
+      "logoutSuccessDescription": "Kontynuujesz jako niezalogowany rozmówca"
     },
     "title": "Konto",
     "options": "Opcje",
@@ -49,6 +51,8 @@
       "cancel": "Anuluj",
       "submit": "Zaloguj się",
       "submitting": "Logowanie...",
+      "successTitle": "Pomyślnie zalogowano",
+      "successDescription": "Pomyślnie zalogowano jako <b>{username}</b>",
       "button": "Zaloguj",
       "error": "Nieprawidłowy email lub hasło.",
       "loading": "Logowanie...",

@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label/Label";
 import { DiscordLogoIcon } from "@radix-ui/react-icons";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 
@@ -22,7 +22,7 @@ export function LoginContent() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const { data: session, status } = useSession();
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const t = useTranslations("auth.login");
 
@@ -35,17 +35,17 @@ export function LoginContent() {
       password,
       redirect: false,
     });
-    console.log("result", result);
     setLoading(false);
     if (!result || !result.ok) {
       setError(t("errorMessage"));
     } else {
-      // window.location.reload();
+      // Zamknij dialog po pomyślnym zalogowaniu
+      setDialogOpen(false);
     }
   };
 
   return (
-    <Dialog>
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
         <Button size={"sm"} className="flex-1">
           {t("trigger")}

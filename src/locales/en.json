@@ -24,7 +24,9 @@
       "shareApp": "Share App",
       "downloadApp": "Download App",
       "api": "API",
-      "logout": "Log Out"
+      "logout": "Log Out",
+      "logoutSuccessTitle": "Successfully logged out",
+      "logoutSuccessDescription": "You have been successfully logged out and continue as a guest user"
     },
     "title": "Account",
     "options": "Options",
@@ -53,6 +55,8 @@
       "cancel": "Cancel",
       "submit": "Log In",
       "submitting": "Logging in...",
+      "successTitle": "Successfully logged in",
+      "successDescription": "Successfully logged in as <b>{username}</b>",
       "button": "Log in",
       "error": "Invalid email or password.",
       "loading": "Logging in...",
