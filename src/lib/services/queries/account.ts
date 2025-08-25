@@ -114,7 +114,10 @@ export async function deleteExpiredUnconfirmedAccounts(): Promise<number> {
     // @ts-expect-error
     const id = user.id;
     if (id) {
+      // Usuń z kolekcji accounts
       await deleteDocumentFromFirestore(COLLECTION, id);
+      // Usuń z kolekcji accountDetails używając tego samego klucza
+      await deleteDocumentFromFirestore("accountDetails", id);
       deleted++;
     }
   }
