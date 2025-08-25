@@ -1,6 +1,9 @@
 "use client";
 
-import { useChatState } from "@/components/providers/ChatProvider";
+import {
+  useContextSelector,
+  ChatStateCtx,
+} from "@/components/providers/ChatProvider";
 import { ChatMessageElement } from "./ChatMessageElement";
 import { ChatMessageDisconectLabel } from "./ChatMessageDisconectLabel";
 import { getSessionKey } from "@/lib/getSessionKey";
@@ -10,7 +13,10 @@ import { ChatMessageAcceptedTrade } from "./ChatMessageAcceptedTrade";
 type Props = Record<string, never>;
 
 export function ChatMessages({}: Props) {
-  const { messages } = useChatState();
+  const messages = useContextSelector(
+    ChatStateCtx,
+    (state) => state.messages || []
+  );
   const sessionKey = getSessionKey();
 
   return messages.map((message, index) => {

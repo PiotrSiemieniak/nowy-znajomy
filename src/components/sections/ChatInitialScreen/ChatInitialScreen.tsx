@@ -1,9 +1,7 @@
-import { useChatAction } from "@/components/providers/ChatProvider";
 import { ActiveChannelBadges } from "@/components/specific/ActiveChannelBadges/ActiveChannelBadges";
 import { useTranslations } from "next-intl";
 
 export function ChatInitialScreen() {
-  const { changeChatState } = useChatAction();
   const t = useTranslations("chat.states");
 
   return (

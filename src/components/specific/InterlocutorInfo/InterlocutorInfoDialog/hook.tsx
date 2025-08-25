@@ -1,4 +1,7 @@
-import { useChatAction } from "@/components/providers/ChatProvider";
+import {
+  useContextSelector,
+  ChatActionCtx,
+} from "@/components/providers/ChatProvider";
 import { useMessages } from "@ably/chat/react";
 import { useCallback } from "react";
 import { useSession } from "next-auth/react";
@@ -7,8 +10,11 @@ export type InterlocutorDataAction = "trade" | "send";
 
 export function useInterlocutorInfoActions() {
   // Hook do obsługi wiadomości Ably typu interlocutorData
-  const { sendInterlocutorDataMessage } = useChatAction();
-  const { send, update } = useMessages({
+  const sendInterlocutorDataMessage = useContextSelector(
+    ChatActionCtx,
+    (actions) => actions.sendInterlocutorDataMessage
+  );
+  const { send } = useMessages({
     listener: async ({ message }) => {
       sendInterlocutorDataMessage({
         ...message,

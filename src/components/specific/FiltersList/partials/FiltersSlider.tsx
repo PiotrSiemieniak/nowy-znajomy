@@ -1,9 +1,9 @@
 import {
-  useChatAction,
-  useChatState,
+  useContextSelector,
+  ChatStateCtx,
+  ChatActionCtx,
 } from "@/components/providers/ChatProvider";
 import { Filters } from "@/components/providers/ChatProvider/types";
-import { Button } from "@/components/ui/Button";
 import { Slider } from "@/components/ui/Slider/Slider";
 
 const getLabel = (
@@ -53,8 +53,14 @@ export function FiltersSlider({
   unit: string;
   filterKeyName: keyof Filters;
 }) {
-  const { filters } = useChatState();
-  const { updateFilters } = useChatAction();
+  const filters = useContextSelector(
+    ChatStateCtx,
+    (state) => state.filters || {}
+  );
+  const updateFilters = useContextSelector(
+    ChatActionCtx,
+    (actions) => actions.updateFilters
+  );
   const filterValue = filters[filterKeyName];
   const range = Array.isArray(filterValue) // Check czy wartość jest tablicą [0, 1].
     ? [filterValue[0], filterValue[1]]

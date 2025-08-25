@@ -1,8 +1,9 @@
 "use client";
 
 import {
-  useChatAction,
-  useChatState,
+  useContextSelector,
+  ChatStateCtx,
+  ChatActionCtx,
 } from "@/components/providers/ChatProvider";
 import { SelectedChannel } from "@/components/providers/ChatProvider/types";
 import {
@@ -20,8 +21,18 @@ import { cn } from "@/lib/utils";
 const SEARCH_PLACEHOLDER = "Tutaj wyszukaj kanał lub region...";
 
 export function ChannelsList() {
-  const { channelsListData, selectedChannels } = useChatState();
-  const { toggleChannelAsSelected } = useChatAction();
+  const channelsListData = useContextSelector(
+    ChatStateCtx,
+    (state) => state.channelsListData
+  );
+  const selectedChannels = useContextSelector(
+    ChatStateCtx,
+    (state) => state.selectedChannels
+  );
+  const toggleChannelAsSelected = useContextSelector(
+    ChatActionCtx,
+    (actions) => actions.toggleChannelAsSelected
+  );
 
   const noChannelSelected = selectedChannels.length === 0;
   const channelsListKeys = Object.keys(channelsListData);
@@ -30,8 +41,9 @@ export function ChannelsList() {
     if (noChannelSelected) return Boolean(id === "0");
     return Boolean(selectedChannels.find((channel) => channel.id === id));
   }
-  const handleCommandItemClick = (channel: SelectedChannel) =>
+  const handleCommandItemClick = (channel: SelectedChannel) => {
     toggleChannelAsSelected(channel);
+  };
 
   return (
     <Command className="rounded-lg border shadow-md md:min-w-[450px]">

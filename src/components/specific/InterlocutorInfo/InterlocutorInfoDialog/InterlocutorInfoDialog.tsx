@@ -1,8 +1,8 @@
 import {
-  useChatAction,
-  useChatState,
+  useContextSelector,
+  ChatStateCtx,
+  ChatActionCtx,
 } from "@/components/providers/ChatProvider";
-import { TradeDataPopoverOpen } from "@/components/providers/ChatProvider/types";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import {
@@ -22,8 +22,14 @@ import { useInterlocutorInfoActions } from "./hook";
 
 // TODO: zrobić zabezpieczenie w postaci sprawdzenia, czy jesteśmy zalogowani
 export function InterlocutorInfoDialog() {
-  const { tradeDataPopoverOpen } = useChatState();
-  const { changeTradeDataPopoverOpen } = useChatAction();
+  const tradeDataPopoverOpen = useContextSelector(
+    ChatStateCtx,
+    (state) => state.tradeDataPopoverOpen
+  );
+  const changeTradeDataPopoverOpen = useContextSelector(
+    ChatActionCtx,
+    (actions) => actions.changeTradeDataPopoverOpen
+  );
   const { status } = useSession();
   const { sendTradeData } = useInterlocutorInfoActions();
 

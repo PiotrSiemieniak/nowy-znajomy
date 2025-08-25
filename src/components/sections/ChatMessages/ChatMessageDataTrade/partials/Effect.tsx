@@ -10,7 +10,10 @@ import {
   Tag,
   User,
 } from "lucide-react";
-import { useChatState } from "@/components/providers/ChatProvider";
+import {
+  useContextSelector,
+  ChatStateCtx,
+} from "@/components/providers/ChatProvider";
 
 export function Effect() {
   return (
@@ -22,7 +25,7 @@ export function Effect() {
 
 // TODO: Dodać losowanie ikonek z obiektu, który ma wszystkie ikony pod tytuły
 const Skeleton = () => {
-  const { bgColors } = useChatState();
+  const bgColors = useContextSelector(ChatStateCtx, (state) => state.bgColors);
   const RANDOM_BG_COLORS = useMemo(
     () =>
       bgColors ? [...bgColors].sort(() => 0.5 - Math.random()).slice(0, 5) : [],

@@ -1,6 +1,9 @@
 "use client";
 
-import { useChatState } from "@/components/providers/ChatProvider";
+import {
+  useContextSelector,
+  ChatStateCtx,
+} from "@/components/providers/ChatProvider";
 import { cn } from "@/lib/utils";
 import { getSessionKey } from "@/lib/getSessionKey";
 import { useEffect } from "react";
@@ -16,7 +19,10 @@ export function ChatMessageAcceptedTrade({
   dataKey,
   isPrevMessageSameAuthor,
 }: Props) {
-  const { roomUsersInfo } = useChatState();
+  const roomUsersInfo = useContextSelector(
+    ChatStateCtx,
+    (state) => state.roomUsersInfo || {}
+  );
   const t = useTranslations("chat.trade");
   const myId = getSessionKey();
   const ids = Object.keys(roomUsersInfo || {});

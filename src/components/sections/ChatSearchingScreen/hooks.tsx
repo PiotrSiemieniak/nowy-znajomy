@@ -1,7 +1,8 @@
 import { WaitingRoomStatuses } from "@/app/api/waiting-room/route";
 import {
-  useChatAction,
-  useChatState,
+  useContextSelector,
+  ChatStateCtx,
+  ChatActionCtx,
 } from "@/components/providers/ChatProvider";
 import { ChatStage } from "@/components/providers/ChatProvider/types";
 import { getSessionKey } from "@/lib/getSessionKey";
@@ -9,8 +10,22 @@ import { createWaitingRoom } from "@/lib/services/api/waitingRoom";
 import { useEffect, useRef } from "react";
 
 export const useSearchPooling = () => {
-  const { changeChatState, changeChatId, setNewBgColors } = useChatAction();
-  const { filters } = useChatState();
+  const changeChatState = useContextSelector(
+    ChatActionCtx,
+    (actions) => actions.changeChatState
+  );
+  const changeChatId = useContextSelector(
+    ChatActionCtx,
+    (actions) => actions.changeChatId
+  );
+  const setNewBgColors = useContextSelector(
+    ChatActionCtx,
+    (actions) => actions.setNewBgColors
+  );
+  const filters = useContextSelector(
+    ChatStateCtx,
+    (state) => state.filters || {}
+  );
 
   const retryCountRef = useRef(0);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -56,5 +71,5 @@ export const useSearchPooling = () => {
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
-  }, [changeChatState, filters]); // zostaw filters, ale pamiętaj: one muszą być stabilne
+  }, [changeChatState, changeChatId, setNewBgColors, filters]); // zostaw filters, ale pamiętaj: one muszą być stabilne
 };

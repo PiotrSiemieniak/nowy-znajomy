@@ -2,8 +2,9 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import {
-  useChatAction,
-  useChatState,
+  useContextSelector,
+  ChatStateCtx,
+  ChatActionCtx,
 } from "@/components/providers/ChatProvider";
 import { ChatStage } from "@/components/providers/ChatProvider/types";
 import { SearchStageButton } from "./partials/SearchStageButton";
@@ -16,10 +17,18 @@ type Props = {
 };
 
 export function ChatActionBar({ isAtBottom, onScrollToBottom }: Props) {
-  const { chatStage, chatId } = useChatState();
-  const { changeChatState } = useChatAction();
+  const chatStage = useContextSelector(
+    ChatStateCtx,
+    (state) => state.chatStage
+  );
+  const chatId = useContextSelector(ChatStateCtx, (state) => state.chatId);
+  const changeChatState = useContextSelector(
+    ChatActionCtx,
+    (actions) => actions.changeChatState
+  );
 
-  const handleSetSearchingState = () => changeChatState(ChatStage.Searching);
+  const handleSetSearchingState = () =>
+    changeChatState.bind(null, ChatStage.Searching);
 
   const isChatInitial = chatStage === ChatStage.Initial;
   const isChatConnected = chatStage === ChatStage.Connected;

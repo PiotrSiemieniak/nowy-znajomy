@@ -1,6 +1,7 @@
 import {
-  useChatAction,
-  useChatState,
+  useContextSelector,
+  ChatStateCtx,
+  ChatActionCtx,
 } from "@/components/providers/ChatProvider";
 import { ChatStage } from "@/components/providers/ChatProvider/types";
 import { Button } from "@/components/ui/Button";
@@ -11,8 +12,14 @@ import { useSendDisconnectOnUnload } from "../hooks";
 import { useTranslations } from "next-intl";
 
 export function DisconnectBtn() {
-  const { chatStage } = useChatState();
-  const { disconnect: disconnectCallback } = useChatAction();
+  const chatStage = useContextSelector(
+    ChatStateCtx,
+    (state) => state.chatStage
+  );
+  const disconnectCallback = useContextSelector(
+    ChatActionCtx,
+    (actions) => actions.disconnect
+  );
   const t = useTranslations("chat.actions");
   const { detach } = useRoom();
   const { send: sendDisconnect } = useMessages({

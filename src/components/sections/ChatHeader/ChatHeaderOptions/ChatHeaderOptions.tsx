@@ -1,13 +1,19 @@
 import { Channels } from "./partials/Channels";
 import { DisconnectBtn } from "./partials/DisconnectBtn";
-import { useChatState } from "@/components/providers/ChatProvider";
+import {
+  useContextSelector,
+  ChatStateCtx,
+} from "@/components/providers/ChatProvider";
 import { ChatStage } from "@/components/providers/ChatProvider/types";
 import { SearchingBtn } from "./partials/SearchingBtn";
 import { AnimatePresence, motion } from "motion/react";
 import { AccountBtn } from "./partials/AccountBtn";
 
 export function ChatHeaderOptions() {
-  const { chatStage } = useChatState();
+  const chatStage = useContextSelector(
+    ChatStateCtx,
+    (state) => state.chatStage
+  );
 
   const isChatConnected = chatStage === ChatStage.Connected;
   const isChatDisconnected = chatStage === ChatStage.Disconnected;

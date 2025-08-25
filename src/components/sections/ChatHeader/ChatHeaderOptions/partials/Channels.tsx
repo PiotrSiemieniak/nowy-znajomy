@@ -19,7 +19,10 @@ import {
   CarouselItem,
 } from "@/components/ui/Carousel";
 import { useEffect, useState } from "react";
-import { useChatAction } from "@/components/providers/ChatProvider";
+import {
+  useContextSelector,
+  ChatActionCtx,
+} from "@/components/providers/ChatProvider";
 import { cn } from "@/lib/utils";
 import { ChannelsList } from "@/components/specific/ChannelsList";
 import { FiltersList } from "@/components/specific/FiltersList";
@@ -107,7 +110,10 @@ function ChannelsFooter() {
 }
 
 export function Channels() {
-  const { handlePopoverOpen } = useChatAction();
+  const handlePopoverOpen = useContextSelector(
+    ChatActionCtx,
+    (actions) => actions.handlePopoverOpen
+  );
   const t = useTranslations("channels");
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [api, setApi] = useState<CarouselApi>();

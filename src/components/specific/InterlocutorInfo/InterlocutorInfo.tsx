@@ -9,16 +9,18 @@ import { UserRound, UserRoundPen, UserRoundPlus } from "lucide-react";
 import { InterlocutorInfoNickname } from "./InterlocutorInfoNickname";
 import { InterlocutorInfoDialog } from "./InterlocutorInfoDialog";
 import {
-  useChatAction,
-  useChatState,
+  useContextSelector,
+  ChatStateCtx,
 } from "@/components/providers/ChatProvider";
 import { DataRecord } from "./InterlocutorInfoNickname/partials/DataRecord";
 import { ChatStage } from "@/components/providers/ChatProvider/types";
 import { useTranslations } from "next-intl";
 
 export function InterlocutorInfo() {
-  const {} = useChatAction();
-  const { chatStage } = useChatState();
+  const chatStage = useContextSelector(
+    ChatStateCtx,
+    (state) => state.chatStage
+  );
   const t = useTranslations("interlocutorInfo");
 
   if (chatStage === ChatStage.Initial || chatStage === ChatStage.Searching)

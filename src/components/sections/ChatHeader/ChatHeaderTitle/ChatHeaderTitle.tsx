@@ -3,12 +3,18 @@
 import { Button } from "@/components/ui/Button";
 import { Flag } from "lucide-react";
 import { PartnerInfo } from "./partials/PartnerInfo";
-import { useChatState } from "@/components/providers/ChatProvider";
+import {
+  useContextSelector,
+  ChatStateCtx,
+} from "@/components/providers/ChatProvider";
 import { ChatStage } from "@/components/providers/ChatProvider/types";
 import { cn } from "@/lib/utils";
 
 export function ChatHeaderTitle() {
-  const { chatStage } = useChatState();
+  const chatStage = useContextSelector(
+    ChatStateCtx,
+    (state) => state.chatStage
+  );
 
   const isChatInitial = chatStage === ChatStage.Initial;
   const isChatSearching = chatStage === ChatStage.Searching;

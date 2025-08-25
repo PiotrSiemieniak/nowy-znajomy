@@ -2,8 +2,9 @@
 
 import { TEXTAREA_MAX_LENGTH } from "@/configs/chatTextarea";
 import {
-  useChatAction,
-  useChatState,
+  useContextSelector,
+  ChatStateCtx,
+  ChatActionCtx,
 } from "@/components/providers/ChatProvider";
 import { Textarea } from "@/components/ui/Textarea";
 import { useState } from "react";
@@ -13,8 +14,14 @@ import { useMessages } from "@ably/chat/react";
 import { useTranslations } from "next-intl";
 
 export function ChatActionBarTextarea() {
-  const { isChatActive } = useChatState();
-  const { sendMessage } = useChatAction();
+  const isChatActive = useContextSelector(
+    ChatStateCtx,
+    (state) => state.isChatActive
+  );
+  const sendMessage = useContextSelector(
+    ChatActionCtx,
+    (actions) => actions.sendMessage
+  );
   const t = useTranslations("chat.message");
   const { send } = useMessages({
     listener: async ({ message }) => {

@@ -1,6 +1,7 @@
 import {
-  useChatState,
-  useChatAction,
+  useContextSelector,
+  ChatStateCtx,
+  ChatActionCtx,
 } from "@/components/providers/ChatProvider";
 import { Badge } from "@/components/ui/Badge";
 import { cn } from "@/lib/utils";
@@ -11,8 +12,14 @@ const COUNT_TO_SHOW_RESET = 2;
 
 export function ActiveChannelBadges({ className }: { className?: string }) {
   const t = useTranslations("channels");
-  const { selectedChannels } = useChatState();
-  const { toggleChannelAsSelected } = useChatAction();
+  const selectedChannels = useContextSelector(
+    ChatStateCtx,
+    (state) => state.selectedChannels
+  );
+  const toggleChannelAsSelected = useContextSelector(
+    ChatActionCtx,
+    (actions) => actions.toggleChannelAsSelected
+  );
 
   const isShowResetCondition = selectedChannels.length >= COUNT_TO_SHOW_RESET;
   const isAnyChannel = selectedChannels.length;
@@ -25,7 +32,7 @@ export function ActiveChannelBadges({ className }: { className?: string }) {
         <Badge
           key={channel.id}
           className="group"
-          onClick={toggleChannelAsSelected.bind(null, channel)}
+          onClick={() => toggleChannelAsSelected(channel)}
         >
           {channel.name}{" "}
           <X className="ml-1 opacity-25 group-hover::opacity-100" />

@@ -1,6 +1,9 @@
 "use client";
 
-import { useChatState } from "@/components/providers/ChatProvider";
+import {
+  useContextSelector,
+  ChatStateCtx,
+} from "@/components/providers/ChatProvider";
 import { ChatStage } from "@/components/providers/ChatProvider/types";
 import { AuroraBlurBackground } from "@/components/sections/AuroraBlurBackground";
 import { ChatHeader } from "@/components/sections/ChatHeader";
@@ -15,7 +18,11 @@ import { useTranslations } from "next-intl";
 
 export function ChatPageContent() {
   const { isAtBottom, scrollToBottom, scrollRef } = useScrollDetection();
-  const { chatStage, chatId } = useChatState();
+  const chatStage = useContextSelector(
+    ChatStateCtx,
+    (state) => state.chatStage
+  );
+  const chatId = useContextSelector(ChatStateCtx, (state) => state.chatId);
   const t = useTranslations("debug");
 
   const isChatInitial = chatStage === ChatStage.Initial;

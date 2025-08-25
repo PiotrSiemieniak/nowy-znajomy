@@ -1,12 +1,18 @@
 "use client";
 
-import { useChatState } from "@/components/providers/ChatProvider";
+import {
+  useContextSelector,
+  ChatStateCtx,
+} from "@/components/providers/ChatProvider";
 import { getSessionKey } from "@/lib/getSessionKey";
 
 const NICKNAME_SX = "text-xs font-medium my-auto";
 
 export function InterlocutorInfoNickname() {
-  const { roomUsersInfo } = useChatState();
+  const roomUsersInfo = useContextSelector(
+    ChatStateCtx,
+    (state) => state.roomUsersInfo || {}
+  );
   const meInfo = roomUsersInfo[getSessionKey()];
   const interlocutorInfo = Object.values(roomUsersInfo).find(
     (user) => user !== meInfo

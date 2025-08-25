@@ -4,7 +4,7 @@ import { usePresence, usePresenceListener } from "@ably/chat/react";
 import { useEffect, useRef } from "react";
 import type { RoomUserData, RoomUsersInfo } from "../../ChatProvider/types";
 import { getSessionKey } from "@/lib/getSessionKey";
-import { useChatAction, useChatState } from "../../ChatProvider";
+import { useContextSelector, ChatStateCtx, ChatActionCtx } from "../../ChatProvider";
 import { PresenceMember } from "@ably/chat";
 
 /**
@@ -12,8 +12,10 @@ import { PresenceMember } from "@ably/chat";
  * Wywołuje updateRoomUsersInfo oraz initializeRoomUsersInfo na podstawie zmian presence.
  */
 export function useAblyRoomUsersInfo() {
-  const { initializeRoomUsersInfo, updateRoomUsersInfo } = useChatAction();
-  const { chatId, roomUsersInfo } = useChatState();
+  const initializeRoomUsersInfo = useContextSelector(ChatActionCtx, (actions) => actions.initializeRoomUsersInfo);
+  const updateRoomUsersInfo = useContextSelector(ChatActionCtx, (actions) => actions.updateRoomUsersInfo);
+  const chatId = useContextSelector(ChatStateCtx, (state) => state.chatId);
+  const roomUsersInfo = useContextSelector(ChatStateCtx, (state) => state.roomUsersInfo);
   const mySessionKey = getSessionKey();
   
   // Ref do stabilnej referencji initializeRoomUsersInfo (unikamy efektu na każdą zmianę referencji funkcji)
