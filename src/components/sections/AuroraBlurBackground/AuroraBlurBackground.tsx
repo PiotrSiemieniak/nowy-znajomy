@@ -6,20 +6,24 @@ import { AuroraElement } from "./partials/AuroraElement";
 
 export function AuroraBlurBackground() {
   const { bgColors } = useChatState();
-
+  console.log("🎨 AuroraBlurBackground re-render:");
   const mainColor = bgColors ? bgColors[7] : "transparent";
 
   return (
-    <>
-      <AnimatePresence mode="wait">
+    <div className="absolute inset-0 w-full h-full -z-[9999] -translate-y-5">
+      <div
+        className="grid grid-cols-3 size-full grid-rows-5 bg-transparent dark:brightness-50"
+        style={{
+          filter: "blur(100px)",
+          willChange: "transform", // iOS optimization
+          transform: "translateZ(0)", // Force hardware acceleration
+        }}
+      >
         <div
-          className="grid grid-cols-3 absolute size-screen
-     grid-rows-5 w-full h-full -z-50 -translate-y-5 bg-transparent dark:brightness-50"
-        >
-          <div
-            style={{ backgroundColor: mainColor }}
-            className="-z-40 absolute size-full"
-          />
+          style={{ backgroundColor: mainColor }}
+          className="-z-[9998] absolute size-full"
+        />
+        <AnimatePresence mode="popLayout">
           {Array.from({ length: 15 }).map((_, index) => {
             const bgColor = bgColors ? bgColors[index] : "transparent";
 
@@ -27,9 +31,8 @@ export function AuroraBlurBackground() {
               <AuroraElement key={index} bgColor={bgColor} index={index} />
             );
           })}
-        </div>
-      </AnimatePresence>
-      <div className="size-full absolute -z-50 backdrop-blur-[100px]" />
-    </>
+        </AnimatePresence>
+      </div>
+    </div>
   );
 }

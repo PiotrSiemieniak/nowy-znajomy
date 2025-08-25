@@ -13,14 +13,10 @@ export function generateColorPalette(gridSize: number): string[] {
     }
   );
 
-  // Funkcja pomocnicza do losowania odcieni w zakresie +/- 3
-  const getRandomShade = (color: AuroraColor, baseShade: number): string => {
+  // Funkcja pomocnicza do losowania odcieni z całej palety
+  const getRandomShade = (color: AuroraColor): string => {
     const shades = Object.keys(auroraBackgroundColors[color]).map(Number);
-    const validShades = shades.filter(
-      (shade) => Math.abs(shade - baseShade) <= 200
-    );
-    const randomShade =
-      validShades[Math.floor(Math.random() * validShades.length)];
+    const randomShade = shades[Math.floor(Math.random() * shades.length)];
 
     return auroraBackgroundColors[color][randomShade as keyof typeof auroraBackgroundColors[AuroraColor]];
   };
@@ -30,8 +26,7 @@ export function generateColorPalette(gridSize: number): string[] {
   for (let i = 0; i < gridSize; i++) {
     const randomBaseColor =
       baseColors[Math.floor(Math.random() * baseColors.length)];
-    const randomBaseShade = 500; // Bazowy odcień (np. 500)
-    palette.push(getRandomShade(randomBaseColor, randomBaseShade));
+    palette.push(getRandomShade(randomBaseColor));
   }
 
   return palette;
