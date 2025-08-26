@@ -376,6 +376,14 @@
     "channelsDescription": "Choose a <b>thematic channel</b> 1-on-1 to connect with someone who shares similar interests. Use <b>regional channels</b> if you want to chat with someone from your area. Join <b>group channels</b> to write together with more users in a relaxed atmosphere.",
     "filtersDescription": "Filters allow you to set preferences for your conversation partner in 1-on-1 channels – from age and gender to interests and other characteristics. This helps you find people you can easily connect with. When matching conversation partners, your preferences will be prioritized."
   },
+  "navigation": {
+    "leaveChat": {
+      "title": "Leave chat?",
+      "description": "You are currently connected to a conversation partner. Are you sure you want to leave the chat?",
+      "cancel": "Cancel",
+      "confirm": "Leave chat"
+    }
+  },
   "ui": {
     "command": {
       "title": "Command Palette",

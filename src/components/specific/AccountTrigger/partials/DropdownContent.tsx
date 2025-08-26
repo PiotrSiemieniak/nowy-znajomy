@@ -9,6 +9,7 @@ import {
 import { signOut } from "next-auth/react";
 import React from "react";
 import { useTranslations } from "next-intl";
+import { AppLink } from "@/components/ui/AppLink";
 
 export function DropdownContent() {
   const t = useTranslations("account.dropdown");
@@ -17,9 +18,8 @@ export function DropdownContent() {
     <DropdownMenuContent className="w-56" align="start">
       <DropdownMenuLabel>{t("title")}</DropdownMenuLabel>
       <DropdownMenuGroup>
-        <DropdownMenuItem>
-          {t("edit")}
-          <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+        <DropdownMenuItem asChild>
+          <AppLink href={"/chat/account"}>{t("edit")}</AppLink>
         </DropdownMenuItem>
         <DropdownMenuItem>
           {t("friends")}

@@ -355,6 +355,14 @@
     "channelsDescription": "Wybierz <b>kanał tematyczny</b> 1 na 1, by połączyć się z osobą o podobnych zainteresowaniach. Skorzystaj z <b>kanałów regionalnych</b>, jeśli chcesz porozmawiać z kimś z Twojej okolicy. Dołącz do <b>kanałów grupowych</b>, aby pisać wspólnie z większą liczbą użytkowników w luźniejszej atmosferze.",
     "filtersDescription": "Filtry pozwalają Ci określić preferencje wobec rozmówcy w kanałach 1 na 1 – od wieku i płci, po zainteresowania i inne cechy. Dzięki temu trafiasz na osoby, z którymi łatwiej złapiesz wspólny język. Podczas losowania rozmówcy Twoje preferencje będą priorytetowe."
   },
+  "navigation": {
+    "leaveChat": {
+      "title": "Opuścić czat?",
+      "description": "Jesteś obecnie połączony z rozmówcą. Czy na pewno chcesz opuścić czat?",
+      "cancel": "Anuluj",
+      "confirm": "Opuść czat"
+    }
+  },
   "ui": {
     "command": {
       "title": "Paleta poleceń",
