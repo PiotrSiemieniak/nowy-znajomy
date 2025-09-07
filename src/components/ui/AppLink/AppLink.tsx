@@ -11,7 +11,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/Dialog";
 import { Button } from "@/components/ui/Button";
 import { ChatStage } from "@/components/providers/ChatProvider/types";
@@ -35,18 +34,18 @@ export function AppLink({
   ...props
 }: AppLinkProps) {
   const t = useTranslations("navigation.leaveChat");
-  const [dialogOpen, setDialogOpen] = useState(true);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const router = useRouter();
   const { changeChatState } = useChatAction();
 
   // Pobieramy chatId do rozłączenia
   const chatId = useContextSelector(ChatStateCtx, (state) => state.chatId);
-
-  // Używamy useContextSelector dla wydajności - pobieramy tylko chatStage
   const chatStage = useContextSelector(
     ChatStateCtx,
     (state) => state.chatStage
   );
+
+  if (!href) throw new Error("<AppLink /> wymaga href");
 
   const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
     // Jeśli użytkownik jest podłączony do chatu, zatrzymaj nawigację i pokaż dialog
@@ -84,32 +83,28 @@ export function AppLink({
 
   return (
     <>
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogTrigger asChild>
-          <Link
-            href={href}
-            className={className}
-            onClick={handleClick}
-            {...props}
-          >
-            {children}
-          </Link>
-        </DialogTrigger>
-        <DialogContent className="max-w-[90vw] w-[425px]">
-          <DialogHeader>
-            <DialogTitle>{t("title")}</DialogTitle>
-            <DialogDescription>{t("description")}</DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="flex flex-row justify-end gap-2">
-            <Button variant="outline" onClick={handleCancel}>
-              {t("cancel")}
-            </Button>
-            <Button variant="destructive" onClick={handleConfirmLeave}>
-              {t("confirm")}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <Link href={href} className={className} onClick={handleClick} {...props}>
+        {children}
+      </Link>
+
+      {chatStage === ChatStage.Connected && (
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <DialogContent className="max-w-[90vw] w-[425px]">
+            <DialogHeader>
+              <DialogTitle>{t("title")}</DialogTitle>
+              <DialogDescription>{t("description")}</DialogDescription>
+            </DialogHeader>
+            <DialogFooter className="flex flex-row justify-end gap-2">
+              <Button variant="outline" onClick={handleCancel}>
+                {t("cancel")}
+              </Button>
+              <Button variant="destructive" onClick={handleConfirmLeave}>
+                {t("confirm")}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
     </>
   );
 }
