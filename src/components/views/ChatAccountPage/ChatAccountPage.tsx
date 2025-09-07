@@ -1,6 +1,6 @@
 import { Heading } from "@/components/ui/Heading";
-import { useSession } from "next-auth/react";
 import { ChatAccountPageDetails } from "./ChatAccountPageDetails";
+import { ChatAccountPageAvatar } from "./ChatAccountPageAvatar";
 
 export function ChatAccountPage() {
   // const { data: session } = useServers();
@@ -9,6 +9,7 @@ export function ChatAccountPage() {
       <Heading as="h1" className="text-left">
         Witaj
       </Heading>
+      <ChatAccountPageAvatar />
       <ChatAccountPageDetails />
     </div>
   );

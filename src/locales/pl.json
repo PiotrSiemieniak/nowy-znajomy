@@ -14,6 +14,8 @@
     "acceptTradeOfferError": "ChatProvider - acceptTradeOffer: czat jest nieaktywny"
   },
   "account": {
+    "noName": "Brak imienia",
+    "noEmail": "Brak adresu email",
     "dropdown": {
       "title": "Moje konto",
       "edit": "Edytuj",
