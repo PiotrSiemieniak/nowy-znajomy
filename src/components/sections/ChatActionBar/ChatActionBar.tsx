@@ -27,8 +27,7 @@ export function ChatActionBar({ isAtBottom, onScrollToBottom }: Props) {
     (actions) => actions.changeChatState
   );
 
-  const handleSetSearchingState = () =>
-    changeChatState.bind(null, ChatStage.Searching);
+  const handleSetSearchingState = () => changeChatState(ChatStage.Searching);
 
   const isChatInitial = chatStage === ChatStage.Initial;
   const isChatConnected = chatStage === ChatStage.Connected;
