@@ -26,9 +26,15 @@ interface DetailsCardProps {
     contentType: string;
   };
   value?: AccountDetailValue; // Wartość pola z API
+  onEdit?: () => void; // Callback gdy kliknięto Edit/Uzupełnij
 }
 
-export function DetailsCard({ fieldKey, config, value }: DetailsCardProps) {
+export function DetailsCard({
+  fieldKey,
+  config,
+  value,
+  onEdit,
+}: DetailsCardProps) {
   const t = useTranslations("account.details");
 
   // Dynamicznie pobieraj tłumaczenie na podstawie fieldKey
@@ -123,7 +129,11 @@ export function DetailsCard({ fieldKey, config, value }: DetailsCardProps) {
       </CardHeader>
       <CardContent className="w-full space-y-2">{renderContent()}</CardContent>
       <CardFooter>
-        <Button className="w-full" variant={hasValue ? "outline" : "default"}>
+        <Button
+          className="w-full"
+          variant={hasValue ? "outline" : "default"}
+          onClick={onEdit}
+        >
           {hasValue ? "Edytuj" : "Uzupełnij"}
         </Button>
       </CardFooter>

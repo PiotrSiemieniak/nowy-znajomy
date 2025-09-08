@@ -19,7 +19,7 @@ export function DropdownContent() {
       <DropdownMenuLabel>{t("title")}</DropdownMenuLabel>
       <DropdownMenuGroup>
         <DropdownMenuItem asChild>
-          <AppLink href={"/chat/account"}>{t("edit")}</AppLink>
+          <AppLink href={"/dashboard"}>{t("edit")}</AppLink>
         </DropdownMenuItem>
         <DropdownMenuItem>
           {t("friends")}
