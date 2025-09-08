@@ -11,14 +11,14 @@ import { useState } from "react";
 import type { AccountDetailsFieldKey } from "@/lib/services/api/accountDetails";
 
 export function ChatAccountPageDetails() {
-  const { data, loading, error, refetch } = useAllAccountDetails();
+  const { data, isLoading, error, refetch } = useAllAccountDetails();
   const configEntries = Object.entries(accountDetailsDataCardsConfig);
 
   // State dla edycji - null lub fieldKey
   const [editingField, setEditingField] = useState<string | null>(null);
 
-  const isSkeletonCond = loading && !data && !error;
-  const isErrorCond = !loading && !!error && !data;
+  const isSkeletonCond = isLoading && !data && !error;
+  const isErrorCond = !isLoading && !!error && !data;
 
   return (
     <div className="space-y-2">
@@ -35,7 +35,7 @@ export function ChatAccountPageDetails() {
         })}
       >
         {isSkeletonCond && <Skeleton />}
-        {isErrorCond && <Error refetch={refetch} />}
+        {isErrorCond && <Error refetch={() => refetch()} />}
         {data &&
           configEntries.map(([fieldKey, config]) => (
             <DetailsCard

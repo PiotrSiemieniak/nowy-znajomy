@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { 
   getMyAccountDetailField, 
   getMyAllAccountDetails,
@@ -8,83 +8,59 @@ import {
 } from "@/lib/services/api/accountDetails";
 import type { AccountDetails } from "@/lib/globalTypes/accountDetails";
 
-interface UseAccountDetailFieldResult<K extends AccountDetailsFieldKey> {
-  data: AccountDetails[K] | null;
-  loading: boolean;
-  error: string | null;
-  refetch: () => Promise<void>;
-}
+// Query keys dla React Query
+export const accountDetailsKeys = {
+  all: ['accountDetails'] as const,
+  allData: () => [...accountDetailsKeys.all, 'all'] as const,
+  field: (field: AccountDetailsFieldKey) => [...accountDetailsKeys.all, 'field', field] as const,
+};
 
-// Hook do pobierania pojedynczego pola AccountDetails
-export function useAccountDetailField<K extends AccountDetailsFieldKey>(
-  field: K
-): UseAccountDetailFieldResult<K> {
-  const [data, setData] = useState<AccountDetails[K] | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchField = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      
+// Hook do pobierania pojedynczego pola AccountDetails z React Query
+export function useAccountDetailField<K extends AccountDetailsFieldKey>(field: K) {
+  return useQuery({
+    queryKey: accountDetailsKeys.field(field),
+    queryFn: async () => {
       const result = await getMyAccountDetailField(field);
-      setData(result);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Wystąpił błąd podczas pobierania danych');
-      setData(null);
-    } finally {
-      setLoading(false);
-    }
-  }, [field]);
-
-  useEffect(() => {
-    fetchField();
-  }, [fetchField]);
-
-  return {
-    data,
-    loading,
-    error,
-    refetch: fetchField,
-  };
+      return result;
+    },
+    staleTime: 5 * 60 * 1000, // 5 minut
+    retry: 2,
+  });
 }
 
-// Hook do pobierania wszystkich pól AccountDetails na raz (ZOPTYMALIZOWANY - jeden strzał do API)
+// Hook do pobierania wszystkich pól AccountDetails na raz z React Query
 export function useAllAccountDetails() {
-  const [data, setData] = useState<Partial<AccountDetails>>({});
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchAllFields = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      
-      // JEDEN strzał do API zamiast 10 osobnych
+  return useQuery({
+    queryKey: accountDetailsKeys.allData(),
+    queryFn: async () => {
       const accountDetails = await getMyAllAccountDetails();
+      return accountDetails || {};
+    },
+    staleTime: 5 * 60 * 1000, // 5 minut
+    retry: 2,
+  });
+}
+
+// Hook do aktualizacji pola AccountDetails (mutation)
+export function useUpdateAccountDetail() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ field, value }: { field: AccountDetailsFieldKey; value: AccountDetails[AccountDetailsFieldKey] }) => {
+      // TODO: Implementacja API call do aktualizacji
+      // const result = await updateMyAccountDetailField(field, value);
+      // return result;
       
-      if (accountDetails) {
-        setData(accountDetails);
-      } else {
-        setData({});
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Wystąpił błąd podczas pobierania danych');
-      setData({});
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchAllFields();
-  }, [fetchAllFields]);
-
-  return {
-    data,
-    loading,
-    error,
-    refetch: fetchAllFields,
-  };
+      // Tymczasowo zwracamy sukces
+      return { success: true, field, value };
+    },
+    onSuccess: (data) => {
+      // Invalidacja cache po pomyślnej aktualizacji
+      queryClient.invalidateQueries({ queryKey: accountDetailsKeys.allData() });
+      queryClient.invalidateQueries({ queryKey: accountDetailsKeys.field(data.field) });
+    },
+    onError: (error) => {
+      console.error('Błąd podczas aktualizacji:', error);
+    },
+  });
 }

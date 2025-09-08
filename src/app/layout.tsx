@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
 import SessionProvider from "@/components/providers/SessionProvider/SessionProvider";
+import { QueryClientProvider } from "@/components/providers/QueryClientProvider";
 import { Toaster } from "@/components/ui/Sonner";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getLocale, getTranslations } from "next-intl/server";
@@ -61,7 +62,9 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased safe-area bg-background`}
       >
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <SessionProvider>{children}</SessionProvider>
+          <QueryClientProvider>
+            <SessionProvider>{children}</SessionProvider>
+          </QueryClientProvider>
           <Toaster />
         </NextIntlClientProvider>
       </body>
