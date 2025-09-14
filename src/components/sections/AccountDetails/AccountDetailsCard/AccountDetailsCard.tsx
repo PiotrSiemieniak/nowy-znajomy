@@ -202,7 +202,7 @@ export function AccountDetailsCard({
       exit={{ opacity: 0, y: -10 }}
       layout
     >
-      <Card className="max-w-96 min-w-72">
+      <Card className="max-w-96 min-w-72 h-full">
         <CardHeader className="w-full">
           <CardTitle>{title}</CardTitle>
           <CardDescription>{description}</CardDescription>
