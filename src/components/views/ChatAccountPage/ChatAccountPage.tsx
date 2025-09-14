@@ -9,6 +9,7 @@ export function ChatAccountPage() {
       <Heading as="h1" className="text-left">
         Witaj
       </Heading>
+
       <ChatAccountPageAvatar />
       <AccountDetails />
     </div>

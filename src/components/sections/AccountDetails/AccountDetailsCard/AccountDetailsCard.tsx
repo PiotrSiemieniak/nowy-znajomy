@@ -17,6 +17,7 @@ import type { AccountDetails } from "@/lib/globalTypes/accountDetails";
 import { formatMonthYear } from "@/lib/utils/dateFormatter";
 import { useLocale } from "next-intl";
 import { Gender } from "@/lib/globalTypes/personal/gender";
+import { motion } from "framer-motion";
 
 // Typ dla wartości pola AccountDetails
 type AccountDetailValue = AccountDetails[keyof AccountDetails];
@@ -195,19 +196,28 @@ export function AccountDetailsCard({
   };
 
   return (
-    <Card className="max-w-96 min-w-72">
-      <CardHeader className="w-full">
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent className="w-full space-y-2">{renderContent()}</CardContent>
-      <CardFooter>
-        {canEdit && (
-          <Button className="w-full" variant="default" onClick={onEdit}>
-            Uzupełnij
-          </Button>
-        )}
-      </CardFooter>
-    </Card>
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      layout
+    >
+      <Card className="max-w-96 min-w-72">
+        <CardHeader className="w-full">
+          <CardTitle>{title}</CardTitle>
+          <CardDescription>{description}</CardDescription>
+        </CardHeader>
+        <CardContent className="w-full space-y-2">
+          {renderContent()}
+        </CardContent>
+        <CardFooter>
+          {canEdit && (
+            <Button className="w-full" variant="default" onClick={onEdit}>
+              Uzupełnij
+            </Button>
+          )}
+        </CardFooter>
+      </Card>
+    </motion.div>
   );
 }
