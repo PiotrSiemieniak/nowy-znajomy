@@ -1,4 +1,6 @@
-export const MIN_AGE = 16;
+import { MIN_AGE } from "./accountDetails";
+
+export { MIN_AGE };
 export const MAX_AGE = 100;
 
 export const MIN_HEIGHT = 120;

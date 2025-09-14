@@ -1,5 +1,5 @@
 import { Heading } from "@/components/ui/Heading";
-import { ChatAccountPageDetails } from "./ChatAccountPageDetails";
+import { AccountDetails } from "@/components/sections/AccountDetails";
 import { ChatAccountPageAvatar } from "./ChatAccountPageAvatar";
 
 export function ChatAccountPage() {
@@ -10,7 +10,7 @@ export function ChatAccountPage() {
         Witaj
       </Heading>
       <ChatAccountPageAvatar />
-      <ChatAccountPageDetails />
+      <AccountDetails />
     </div>
   );
 }

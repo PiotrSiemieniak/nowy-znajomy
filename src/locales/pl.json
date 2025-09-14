@@ -147,6 +147,7 @@
     },
     "gender": {
       "label": "Płeć",
+      "undefined": "Nieokreślone",
       "male": "Mężczyzna",
       "female": "Kobieta", 
       "any": "Dowolna"
@@ -388,6 +389,20 @@
       "cancel": "Anuluj",
       "confirm": "Opuść czat"
     }
+  },
+  "specialFeatures": {
+    "Glasses": "Okulary",
+    "Beard": "Broda",
+    "Mustache": "Wąsy",
+    "Freckles": "Piegi",
+    "Birthmark": "Znamię",
+    "Tattoo": "Tatuaż",
+    "Piercing": "Piercing",
+    "Braces": "Aparat na zęby",
+    "Dimples": "Dołeczki w policzkach",
+    "Scar": "Blizna",
+    "None": "Brak",
+    "Other": "Inne"
   },
   "ui": {
     "command": {

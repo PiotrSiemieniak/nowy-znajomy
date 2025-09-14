@@ -161,6 +161,7 @@
     },
     "gender": {
       "label": "Gender",
+      "undefined": "Undefined",
       "male": "Male",
       "female": "Female",
       "any": "Any"
@@ -408,6 +409,20 @@
       "cancel": "Cancel",
       "confirm": "Leave chat"
     }
+  },
+  "specialFeatures": {
+    "Glasses": "Glasses",
+    "Beard": "Beard",
+    "Mustache": "Mustache",
+    "Freckles": "Freckles",
+    "Birthmark": "Birthmark",
+    "Tattoo": "Tattoo",
+    "Piercing": "Piercing",
+    "Braces": "Braces",
+    "Dimples": "Dimples",
+    "Scar": "Scar",
+    "None": "None",
+    "Other": "Other"
   },
   "ui": {
     "command": {
