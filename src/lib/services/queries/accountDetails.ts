@@ -4,7 +4,12 @@ import { queryFirestore } from "../adapters/firebase/utils/queryFirestore";
 import { throwDebugMessage } from "../throwDebugMessage";
 
 export async function createAccountDetails(details: AccountDetails): Promise<{ ok: boolean; code?: string; message?: string }> {
-  const id = await addDocumentToFirestore("accountDetails", details, details.accountId);
+  // Usuń pola z undefined przed wysłaniem do Firestore
+  const cleanedDetails = Object.fromEntries(
+    Object.entries(details).filter(([, value]) => value !== undefined)
+  ) as AccountDetails;
+  
+  const id = await addDocumentToFirestore("accountDetails", cleanedDetails, details.accountId);
   if (!id) {
     return { ok: false, code: "CREATE_DETAILS_FAILED", message: "Nie udało się utworzyć szczegółów konta" };
   }
@@ -55,16 +60,6 @@ export async function updateAccountDetailsField<T extends keyof Omit<AccountDeta
       // Jeśli nie istnieje, utwórz nowy dokument z tylko tym polem
       const newDetails: AccountDetails = {
         accountId,
-        birthDate: undefined,
-        firstName: undefined,
-        lastName: undefined,
-        height: undefined,
-        nationality: undefined,
-        weight: undefined,
-        sports: undefined,
-        specialFeatures: undefined,
-        musicGenres: undefined,
-        gender: undefined,
         [field]: value
       } as AccountDetails;
 
@@ -78,7 +73,12 @@ export async function updateAccountDetailsField<T extends keyof Omit<AccountDeta
       [field]: value
     };
 
-    const updateResult = await addDocumentToFirestore("accountDetails", updatedDetails, accountId);
+    // Usuń pola z undefined przed wysłaniem do Firestore
+    const cleanedUpdatedDetails = Object.fromEntries(
+      Object.entries(updatedDetails).filter(([, value]) => value !== undefined)
+    ) as AccountDetails;
+
+    const updateResult = await addDocumentToFirestore("accountDetails", cleanedUpdatedDetails, accountId);
     
     if (!updateResult) {
       return { ok: false, code: "UPDATE_FAILED", message: "Nie udało się zaktualizować pola" };
